@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quick Quiz - Demo Interactivo</title>
+    <link rel="stylesheet" href="test.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <header>
+        <h1>Quick Quiz Demo</h1>
+        <p class="subtitle">
+          Un componente interactivo para evaluaciones rápidas. Selecciona las
+          respuestas para simular la funcionalidad.
+        </p>
+      </header>
+
+      <div class="quiz-container">
+        <div class="wrap">
+          <main
+            class="card"
+            role="region"
+            aria-label="Evaluación de conocimientos"
+          >
+            <div class="content">
+              <div aria-hidden="true" class="progress">
+                <div class="bar" style="width: 0%"></div>
+              </div>
+
+              <div
+                id="div-stack"
+                class="stack"
+                aria-label="Listado de preguntas"
+              ></div>
+
+              <div class="footer-global">
+                <div class="left">
+                  <div class="summary"></div>
+                </div>
+
+                <div class="right">
+                  <div class="summary"></div>
+                  <button id="btn-reiniciar" class="primary">
+                    Reiniciar test
+                  </button>
+                </div>
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+
+    </div>
+
+    <script src="test.js"></script>
+    <script src="test-service.js"></script>
+  </body>
+</html>

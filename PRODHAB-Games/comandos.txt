@@ -1,0 +1,20 @@
+//Crear una plantilla para web APIs
+dotnet new webapi -o APIJuegos
+
+// Certificado para ejecutar en https
+dotnet  dev-certs https --trust
+
+// Para que se refresque los cambios aunque este corriendo sin tener que reiniciar
+dotnet watch run 
+
+// Para instalar framework ORM EntityFrameworkCore
+dotnet add package Microsoft.EntityFrameworkCore.Design
+
+// Herramientas necesarias
+dotnet tool install --global dotnet-ef 
+dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+
+
+// Generar modelos a partir de las tablas que hay en la base de datos
+
+dotnet ef dbcontext scaffold 'Server=prodhabpractica.database.windows.net;Database=practicaJuegosUCR;User Id=prodhabpractica;Password=Master;Encrypt=False;' Microsoft.EntityFrameworkCore.SqlServer --context-dir ./Data --output-dir ./Data/Modelos --force

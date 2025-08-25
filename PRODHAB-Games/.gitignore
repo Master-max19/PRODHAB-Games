@@ -1,0 +1,8 @@
+# Backend
+ApiJuegos/bin/
+ApiJuegos/obj/
+ApiJuegos/appsettings.json
+# Frontend
+Frontend/bin/
+Frontend/obj/
+

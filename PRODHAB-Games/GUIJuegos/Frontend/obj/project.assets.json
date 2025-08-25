@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\50683\\Downloads\\prodhab\\PRODHAB-Games\\GUIJuegos\\Frontend\\Frontend.csproj",
+      "projectUniqueName": "C:\\Users\\50683\\Downloads\\prodhab\\Prodhab-games\\prodhab-games\\GUIJUEGOS\\FRONTEND\\Frontend.csproj",
       "projectName": "Frontend",
-      "projectPath": "C:\\Users\\50683\\Downloads\\prodhab\\PRODHAB-Games\\GUIJuegos\\Frontend\\Frontend.csproj",
+      "projectPath": "C:\\Users\\50683\\Downloads\\prodhab\\Prodhab-games\\prodhab-games\\GUIJUEGOS\\FRONTEND\\Frontend.csproj",
       "packagesPath": "C:\\Users\\50683\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\50683\\Downloads\\prodhab\\PRODHAB-Games\\GUIJuegos\\Frontend\\obj\\",
+      "outputPath": "C:\\Users\\50683\\Downloads\\prodhab\\Prodhab-games\\prodhab-games\\GUIJUEGOS\\FRONTEND\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\50683\\AppData\\Roaming\\NuGet\\NuGet.Config",

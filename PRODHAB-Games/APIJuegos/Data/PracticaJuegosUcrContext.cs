@@ -13,11 +13,10 @@ public class PracticaJuegosUcrContext : DbContext
     // Añadir el modelo en Dbset
     public DbSet<Juegos> Juegos { get; set; }
     public DbSet<Frutas> Frutas { get; set; }
-<<<<<<< HEAD
+
     public DbSet<Preguntas> Preguntas { get; set; }
     public DbSet<Respuestas> Respuestas{ get; set; }
-=======
->>>>>>> fc197293d377b5c4aff6d6fc7e645c1f70482542
+
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -41,7 +40,7 @@ public class PracticaJuegosUcrContext : DbContext
 
 
 
-<<<<<<< HEAD
+
         // Añadir la tabla como entidad
         modelBuilder.Entity<Preguntas>(entity =>
         {
@@ -55,9 +54,6 @@ public class PracticaJuegosUcrContext : DbContext
             entity.HasKey(e => e.id);
             entity.Property(e => e.texto).HasMaxLength(255);
         });
-=======
 
-
->>>>>>> fc197293d377b5c4aff6d6fc7e645c1f70482542
     }
 }

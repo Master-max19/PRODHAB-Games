@@ -14,15 +14,19 @@ class Test {
 
         const opcion = pregunta.opciones.find(o => o.id === idOpcion);
         if (!opcion) return;
+        const index = this.respuestasUsuario.findIndex(r => r.idPregunta === idPregunta);
 
-        const yaRespondida = this.respuestasUsuario.some(r => r.idPregunta === idPregunta);
-        if (yaRespondida) return;
-
-        this.respuestasUsuario.push({
+        const nuevaRespuesta = {
             idPregunta,
             idOpcion,
             correcta: opcion.correcta
-        });
+        };
+
+        if (index !== -1) {
+            this.respuestasUsuario[index] = nuevaRespuesta;
+        } else {
+            this.respuestasUsuario.push(nuevaRespuesta);
+        }
     }
 
 
@@ -74,13 +78,14 @@ const crearBotones = (index, total) => {
 };
 
 const mezclarOpciones = (pregunta) => {
-    const opciones = [...pregunta.opciones];
+    const opciones = pregunta.opciones; // <-- sin copiar, usamos el original
     for (let i = opciones.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [opciones[i], opciones[j]] = [opciones[j], opciones[i]];
+        [opciones[i], opciones[j]] = [opciones[j], opciones[i]]; // intercambio in-place
     }
-    return opciones;
+    return opciones; // devuelve el mismo array pero ahora mezclado
 };
+
 
 const obtenerOpcionesHTML = (pregunta) => {
     const opciones = mezclarOpciones(pregunta);
@@ -166,6 +171,8 @@ const configurarEventosPregunta = (preguntaElement, index) => {
             const partes = id.split("-");
             const idOpcion = partes[1];
             const idPregunta = partes[2];
+            console.log(idOpcion)
+            console.log(test.obtenerRespuestas())
 
             test.responder(idPregunta, idOpcion);
         };

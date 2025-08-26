@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "zq4HkqIOPZlij12WFtayIW9Z1ELz7UU56BLiCEeTSXI=",
+  "Hash": "tONLCRyrEafYNZA96+VHyVqr3sRB/hd7eVSwyPRDyBw=",
   "Source": "Frontend",
   "BasePath": "_content/Frontend",
   "Mode": "Default",
@@ -110,25 +110,6 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.ico"
-    },
-    {
-      "Identity": "C:\\Users\\50683\\Downloads\\prodhab\\PRODHAB-Games\\PRODHAB-Games\\GUIJuegos\\Frontend\\wwwroot\\js\\quiz-quiz.js",
-      "SourceId": "Frontend",
-      "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\50683\\Downloads\\prodhab\\PRODHAB-Games\\PRODHAB-Games\\GUIJuegos\\Frontend\\wwwroot\\",
-      "BasePath": "_content/Frontend",
-      "RelativePath": "js/quiz-quiz.js",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\js\\quiz-quiz.js"
     },
     {
       "Identity": "C:\\Users\\50683\\Downloads\\prodhab\\PRODHAB-Games\\PRODHAB-Games\\GUIJuegos\\Frontend\\wwwroot\\js\\site.js",

@@ -41,7 +41,7 @@ if (app.Environment.IsDevelopment())
 // 🔹 Activar CORS globalmente
 app.UseCors("AllowAll");
 
-app.UseHttpsRedirection();
+///app.UseHttpsRedirection();
 app.MapControllers();
    app.UseSwaggerUI(c =>
     {
@@ -50,7 +50,7 @@ app.MapControllers();
 
 
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.MapControllers(); // esto es importante
 
 

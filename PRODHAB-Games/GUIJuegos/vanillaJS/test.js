@@ -15,6 +15,9 @@ class Test {
         const opcion = pregunta.opciones.find(o => o.id === idOpcion);
         if (!opcion) return;
 
+        const yaRespondida = this.respuestasUsuario.some(r => r.idPregunta === idPregunta);
+        if (yaRespondida) return;
+
         this.respuestasUsuario.push({
             idPregunta,
             idOpcion,
@@ -22,10 +25,14 @@ class Test {
         });
     }
 
+
     calificar() {
         const total = this.preguntas.length;
         const correctas = this.respuestasUsuario.filter(r => r.correcta).length;
         const porcentaje = (correctas / total) * 100;
+
+        console.log('soluciones')
+        console.log(this.obtenerRespuestas())
 
         return {
             total,
@@ -33,6 +40,7 @@ class Test {
             incorrectas: total - correctas,
             porcentaje: porcentaje.toFixed(2)
         };
+
     }
 
     obtenerRespuestas() {
@@ -102,7 +110,7 @@ const mostrarError = (preguntaElement) => {
         preguntaElement.querySelector('.q-footer').prepend(errorElement);
     }
     errorElement.textContent = 'Por favor, selecciona una opción antes de continuar';
-    
+
     setTimeout(() => {
         errorElement.textContent = '';
     }, 3000);
@@ -114,7 +122,7 @@ const configurarEventosPregunta = (preguntaElement, index) => {
     const btnFinish = preguntaElement.querySelector(".finish");
     const options = preguntaElement.querySelectorAll(".option");
 
-    const tieneOpcionSeleccionada = () => 
+    const tieneOpcionSeleccionada = () =>
         preguntaElement.querySelector('.option.selected') !== null;
 
     if (btnNext) {
@@ -137,7 +145,7 @@ const configurarEventosPregunta = (preguntaElement, index) => {
         btnFinish.onclick = () => {
             if (tieneOpcionSeleccionada()) {
                 const calificacion = test.calificar();
-               // alert(`¡Cuestionario completado! ${calificacion.porcentaje}%`);
+                // alert(`¡Cuestionario completado! ${calificacion.porcentaje}%`);
                 listarPreguntasVerticalConRespuestas(test.obtenerRespuestas());
                 actualizarResumen(calificacion.incorrectas, calificacion.porcentaje);
             } else {
@@ -150,15 +158,15 @@ const configurarEventosPregunta = (preguntaElement, index) => {
         option.onclick = () => {
             options.forEach((opt) => opt.classList.remove("selected"));
             option.classList.add("selected");
-            
+
             const errorElement = preguntaElement.querySelector('.error-message');
             if (errorElement) errorElement.textContent = '';
-            
+
             const id = option.id;
             const partes = id.split("-");
             const idOpcion = partes[1];
             const idPregunta = partes[2];
-            
+
             test.responder(idPregunta, idOpcion);
         };
     });
@@ -188,7 +196,7 @@ const mostrarPregunta = (listaPreguntas, posicionPregunta) => {
     const preguntas = divStack.querySelectorAll(".q-block");
     preguntas.forEach((pregunta, index) => {
         pregunta.classList.remove("active", "exit-left", "exit-right");
-        
+
         if (index === posicionPregunta) {
             pregunta.classList.add("active");
             configurarEventosPregunta(pregunta, index);
@@ -205,14 +213,14 @@ const listarPreguntasVerticalConRespuestas = (respuestasUsuario = []) => {
 
     listaPreguntas.forEach((pregunta, index) => {
         const respuestaSeleccionada = respuestasUsuario.find(r => r.idPregunta === pregunta.id);
-        
+
         const opcionesHTML = pregunta.opciones.map(op => {
             const esSeleccionada = respuestaSeleccionada && respuestaSeleccionada.idOpcion === op.id;
             let textoExtra = "";
-            
+
             if (op.correcta) textoExtra = " (Correcta)";
             if (esSeleccionada && !op.correcta) textoExtra = " (Incorrecta)";
-            
+
             return `
                 <div class="option ${esSeleccionada ? "selected" : ""}" data-id="${op.id}">
                     <span class="bullet"><span class="dot-small"></span></span>
@@ -248,22 +256,30 @@ const listarPreguntasVerticalConRespuestas = (respuestasUsuario = []) => {
     });
 };
 
-const actualizarResumen = (fallos, calificacion) => {
+
+const actualizarResumen = (fallos, calificacion, reiniciar = false) => {
+    if (reiniciar) {
+        summaryDiv.innerHTML = ``;
+        return;
+    }
+
     summaryDiv.innerHTML = `Total de fallos: ${fallos} </br> Calificación: ${calificacion}%`;
-};
+}
+
 
 const reiniciarExamen = async () => {
     if (test) test.reiniciar();
     divStack.innerHTML = '';
-    
+
     const preguntasAPI = await obtenerPreguntas(5);
     listaPreguntas = preguntasAPI.map(mapearPreguntaAPI);
-    
+
     test = new Test(listaPreguntas);
     posicionPregunta = 0;
-    
+
     mostrarPregunta(listaPreguntas, 0);
     actualizarBarraProgreso(posicionPregunta);
+    actualizarResumen(0, 0, true)
 };
 
 
@@ -281,7 +297,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }, 150);
         });
     });
-    
+
     iniciarTest();
 });
 
@@ -293,4 +309,6 @@ const iniciarTest = async () => {
     divStack.innerHTML = '';
     mostrarPregunta(listaPreguntas, 0);
     actualizarBarraProgreso(posicionPregunta);
+    actualizarResumen(0, 0, true)
+
 };

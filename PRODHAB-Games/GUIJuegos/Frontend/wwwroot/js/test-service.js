@@ -1,4 +1,4 @@
-const obtenerPreguntas = async (cantidad = 5) => {
+const obtenerPreguntas = async (cantidad = 2) => {
     try {
         const res = await fetch(`http://localhost:5133/api/Preguntas/aleatorias?cantidad=${cantidad}`);
         if (!res.ok) throw new Error('Error al obtener preguntas');

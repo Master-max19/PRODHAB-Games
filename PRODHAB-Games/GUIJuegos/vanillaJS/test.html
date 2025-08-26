@@ -28,30 +28,32 @@
               <div aria-hidden="true" class="progress">
                 <div class="bar" style="width: 0%"></div>
               </div>
-
+              <div class="left">
+                <div class="summary"></div>
+              </div>
               <div
                 id="div-stack"
                 class="stack"
                 aria-label="Listado de preguntas"
-              ></div>
+              >
+                <div class="spinner"></div>
+                <span class="cargando">Cargando... </span>
+              </div>
 
               <div class="footer-global">
-                <div class="left">
-                  <div class="summary"></div>
-                </div>
-
                 <div class="right">
-                  <div class="summary"></div>
                   <button id="btn-reiniciar" class="primary">
                     Reiniciar test
                   </button>
+                </div>
+                <div class="left">
+                  <div class="summary"></div>
                 </div>
               </div>
             </div>
           </main>
         </div>
       </div>
-
     </div>
 
     <script src="test.js"></script>

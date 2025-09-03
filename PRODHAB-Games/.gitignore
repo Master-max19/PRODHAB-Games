@@ -2,6 +2,6 @@
 ApiJuegos/bin/
 ApiJuegos/obj/
 # Frontend
-Frontend/bin/
-Frontend/obj/
+GUIJuegos/Frontend/bin/
+GUIJuegos/Frontend/obj/
 

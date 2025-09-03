@@ -1,3 +1,4 @@
+
 const divStack = document.getElementById("div-stack");
 const summaryDiv = document.querySelector(".summary");
 const btnReiniciar = document.getElementById("btn-reiniciar");
@@ -14,20 +15,46 @@ class Test {
 
         const opcion = pregunta.opciones.find(o => o.id === idOpcion);
         if (!opcion) return;
-        const index = this.respuestasUsuario.findIndex(r => r.idPregunta === idPregunta);
 
-        const nuevaRespuesta = {
-            idPregunta,
-            idOpcion,
-            correcta: opcion.correcta
-        };
 
-        if (index !== -1) {
-            this.respuestasUsuario[index] = nuevaRespuesta;
+
+        if (pregunta.categoria === 'multiple') {
+            let respuesta = this.respuestasUsuario.find(r => r.idPregunta === idPregunta);
+            if (!respuesta) {
+                respuesta = { idPregunta, idOpciones: [], correcta: false };
+                this.respuestasUsuario.push(respuesta);
+            }
+
+            const idx = respuesta.idOpciones.indexOf(idOpcion);
+            if (idx === -1) {
+                respuesta.idOpciones.push(idOpcion);
+            } else {
+                respuesta.idOpciones.splice(idx, 1);
+            }
+            const opcionesCorrectas = pregunta.opciones.filter(o => o.correcta).map(o => o.id);
+            respuesta.correcta =
+                respuesta.idOpciones.length === opcionesCorrectas.length &&
+                respuesta.idOpciones.every(id => opcionesCorrectas.includes(id));
+
+            console.log(opcionesCorrectas)
+
         } else {
-            this.respuestasUsuario.push(nuevaRespuesta);
+            // Pregunta única
+            const index = this.respuestasUsuario.findIndex(r => r.idPregunta === idPregunta);
+            const nuevaRespuesta = {
+                idPregunta,
+                idOpcion,
+                correcta: opcion.correcta
+            };
+            if (index !== -1) {
+                this.respuestasUsuario[index] = nuevaRespuesta;
+            } else {
+                this.respuestasUsuario.push(nuevaRespuesta);
+            }
+
         }
     }
+
 
 
     calificar() {
@@ -46,18 +73,20 @@ class Test {
         };
 
     }
-
     obtenerRespuestas() {
         return this.respuestasUsuario.map(r => {
             const pregunta = this.preguntas.find(p => p.id === r.idPregunta);
             return {
                 idPregunta: r.idPregunta,
-                idOpcion: r.idOpcion,
+                // Para preguntas múltiples devolvemos idOpciones, para únicas idOpcion
+                idOpcion: r.idOpcion || null,
+                idOpciones: r.idOpciones || null,
                 pregunta: pregunta ? pregunta.titulo : r.idPregunta,
                 correcta: r.correcta
             };
         });
     }
+
 
     reiniciar() {
         this.respuestasUsuario = [];
@@ -126,7 +155,6 @@ const configurarEventosPregunta = (preguntaElement, index) => {
     const btnPrev = preguntaElement.querySelector(".prev");
     const btnFinish = preguntaElement.querySelector(".finish");
     const options = preguntaElement.querySelectorAll(".option");
-
     const tieneOpcionSeleccionada = () =>
         preguntaElement.querySelector('.option.selected') !== null;
 
@@ -149,10 +177,16 @@ const configurarEventosPregunta = (preguntaElement, index) => {
     if (btnFinish) {
         btnFinish.onclick = () => {
             if (tieneOpcionSeleccionada()) {
-                const calificacion = test.calificar();
-                // alert(`¡Cuestionario completado! ${calificacion.porcentaje}%`);
-                listarPreguntasVerticalConRespuestas(test.obtenerRespuestas());
-                actualizarResumen(calificacion.incorrectas, calificacion.porcentaje);
+                divStack.innerHTML = `      <div class="spinner"></div>
+                <span class="cargando">Cargando... </span>`;
+
+                setTimeout(() => {
+                    const calificacion = test.calificar();
+                    mostrarResultados(test.obtenerRespuestas());
+                    actualizarResumen(calificacion.incorrectas, calificacion.correctas, calificacion.porcentaje);
+                }, 1000); // 4000 ms = 4 segundos
+
+
             } else {
                 mostrarError(preguntaElement);
             }
@@ -161,23 +195,34 @@ const configurarEventosPregunta = (preguntaElement, index) => {
 
     options.forEach((option) => {
         option.onclick = () => {
-            options.forEach((opt) => opt.classList.remove("selected"));
-            option.classList.add("selected");
+            const tipo = preguntaElement.getAttribute("data-tipo");
+
+            if (tipo === "unica") {
+                // deselecciona todas y selecciona solo esta
+                options.forEach((opt) => opt.classList.remove("selected"));
+                option.classList.add("selected");
+            } else if (tipo === "multiple") {
+                // alterna selección para múltiple
+                option.classList.toggle("selected");
+            }
 
             const errorElement = preguntaElement.querySelector('.error-message');
             if (errorElement) errorElement.textContent = '';
 
             const id = option.id;
             const partes = id.split("-");
-            const idOpcion = partes[1];
-            const idPregunta = partes[2];
-            console.log(idOpcion)
-            console.log(test.obtenerRespuestas())
-
+            const idOpcion = String(partes[1]);
+            const idPregunta = String(partes[2]);
             test.responder(idPregunta, idOpcion);
+
         };
     });
 };
+
+
+function mostrarTipoPregunta(categoria) {
+    return categoria === 'multiple' ? 'Selección múltiple' : 'Selección única';
+}
 
 const mostrarPregunta = (listaPreguntas, posicionPregunta) => {
     actualizarBarraProgreso(posicionPregunta);
@@ -185,10 +230,10 @@ const mostrarPregunta = (listaPreguntas, posicionPregunta) => {
     if (divStack.innerHTML === "") {
         listaPreguntas.forEach((pregunta, index) => {
             divStack.innerHTML += `
-                <section id="pregunta-${index}" class="q-block">
+                <section id="pregunta-${index}" class="q-block" data-tipo="${pregunta.categoria}">
                     <div class="q-meta">
                         <span class="pill">Pregunta ${index + 1}/${listaPreguntas.length}</span>
-                        <span class="muted">Categoría: ${pregunta.categoria}</span>
+                        <span class="muted">${mostrarTipoPregunta(pregunta.categoria)}</span>
                     </div>
                     <h2 class="q-title">${pregunta.titulo}</h2>
                     <div class="options">${obtenerOpcionesHTML(pregunta)}</div>
@@ -215,39 +260,62 @@ const mostrarPregunta = (listaPreguntas, posicionPregunta) => {
     });
 };
 
-const listarPreguntasVerticalConRespuestas = (respuestasUsuario = []) => {
+
+const mostrarResultados = (respuestasUsuario = []) => {
     divStack.innerHTML = "";
 
     listaPreguntas.forEach((pregunta, index) => {
         const respuestaSeleccionada = respuestasUsuario.find(r => r.idPregunta === pregunta.id);
 
         const opcionesHTML = pregunta.opciones.map(op => {
-            const esSeleccionada = respuestaSeleccionada && respuestaSeleccionada.idOpcion === op.id;
-            let textoExtra = "";
+            // Para múltiples: idOpciones es array; para única: es un valor
+            const esSeleccionada = respuestaSeleccionada && (
+                (respuestaSeleccionada.idOpciones && respuestaSeleccionada.idOpciones.includes(op.id))
+                || respuestaSeleccionada.idOpcion === op.id
+            );
 
-            if (op.correcta) textoExtra = " (Correcta)";
-            if (esSeleccionada && !op.correcta) textoExtra = " (Incorrecta)";
+
+            let iconoExtra = "";
+
+            if (op.correcta) {
+                iconoExtra = `<img src="correcta.svg" alt="Correcto" class="icono-respuesta" 
+        onerror="this.outerHTML='✔️'">`;
+            }
+
+            if (esSeleccionada && !op.correcta) {
+                iconoExtra = `<img src="incorrecta.svg" alt="Incorrecto" class="icono-respuesta" 
+        onerror="this.outerHTML='❌'">`;
+            }
 
             return `
                 <div class="option ${esSeleccionada ? "selected" : ""}" data-id="${op.id}">
                     <span class="bullet"><span class="dot-small"></span></span>
-                    <span class="option-text">${op.texto}<strong>${textoExtra}</strong></span>
+                    <span class="option-text">${op.texto}<strong>${iconoExtra}</strong></span>
                 </div>`;
         }).join("");
 
+        // Retroalimentación: mostrar la de cada opción marcada
         let retroHTML = "";
         if (respuestaSeleccionada) {
-            const opcionElegida = pregunta.opciones.find(o => o.id === respuestaSeleccionada.idOpcion);
-            if (opcionElegida && opcionElegida.retroalimentacion) {
-                retroHTML = `<div class="retroalimentacion">${opcionElegida.retroalimentacion}</div>`;
-            }
+            const opcionesMarcadas = respuestaSeleccionada.idOpciones ||
+                (respuestaSeleccionada.idOpcion ? [respuestaSeleccionada.idOpcion] : []);
+
+
+            const retroArray = opcionesMarcadas.map(idOp => {
+                const opcion = pregunta.opciones.find(o => o.id === idOp);
+                return opcion && opcion.retroalimentacion
+                    ? `<div class="retroalimentacion">${opcion.retroalimentacion}</div>`
+                    : "";
+            });
+
+            retroHTML = retroArray.join("");
         }
 
         divStack.innerHTML += `
             <section id="${pregunta.id}" class="q-block" style="margin-bottom: 20px;">
                 <div class="q-meta">
                     <span class="pill">Pregunta ${index + 1}/${listaPreguntas.length}</span>
-                    <span class="muted">Categoría: ${pregunta.categoria}</span>
+                    <span class="muted">${mostrarTipoPregunta(pregunta.categoria)}</span>
                 </div>
                 <h2 class="q-title">${pregunta.titulo}</h2>
                 <div class="options">${opcionesHTML}</div>
@@ -261,16 +329,33 @@ const listarPreguntasVerticalConRespuestas = (respuestasUsuario = []) => {
         p.style.left = "0";
         p.style.opacity = "1";
     });
+
+    console.log(test.obtenerRespuestas());
 };
 
 
-const actualizarResumen = (fallos, calificacion, reiniciar = false) => {
+const actualizarResumen = (fallos, correctas, calificacion, reiniciar = false) => {
     if (reiniciar) {
         summaryDiv.innerHTML = ``;
+        document.getElementById('pet-test-text').innerHTML = '¿Listo para alcanzar el 100%?';
         return;
     }
 
-    summaryDiv.innerHTML = `Total de fallos: ${fallos} </br> Calificación: ${calificacion}%`;
+    summaryDiv.innerHTML = `Respuestas correctas: ${correctas} </br> Total de fallos: ${fallos} </br> Calificación: ${calificacion}%`;
+    const nota = parseInt(calificacion);
+    let mensaje = ``;
+    if (nota === 100) {
+        mensaje = "¡Excelente! lograste el 100%";
+    } else if (nota >= 80) {
+        mensaje = `Muy bueno has obtenido ${calificacion}%`;
+    } else if (nota >= 70) {
+        mensaje = `Bien has obtenido ${calificacion}%`;
+    } else {
+        mensaje = `Has obtenido ${calificacion}%, aún puedes mejorar`;
+    }
+
+
+    document.getElementById('pet-test-text').innerHTML = mensaje;
 }
 
 
@@ -279,14 +364,17 @@ const reiniciarExamen = async () => {
     divStack.innerHTML = '';
 
     const preguntasAPI = await obtenerPreguntas(5);
-    listaPreguntas = preguntasAPI.map(mapearPreguntaAPI);
+    listaPreguntas = preguntasAPI
+        .map(mapearPreguntaAPI)
+        .filter(p => p !== null);
+
 
     test = new Test(listaPreguntas);
     posicionPregunta = 0;
 
     mostrarPregunta(listaPreguntas, 0);
     actualizarBarraProgreso(posicionPregunta);
-    actualizarResumen(0, 0, true)
+    actualizarResumen(0, 0, 0, true)
 };
 
 
@@ -310,12 +398,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
 const iniciarTest = async () => {
     const preguntasAPI = await obtenerPreguntas(5);
-    listaPreguntas = preguntasAPI.map(mapearPreguntaAPI);
-    test = new Test(listaPreguntas);
-    posicionPregunta = 0;
-    divStack.innerHTML = '';
-    mostrarPregunta(listaPreguntas, 0);
-    actualizarBarraProgreso(posicionPregunta);
-    actualizarResumen(0, 0, true)
+    if (preguntasAPI.length > 0) {
+        listaPreguntas = preguntasAPI
+            .map(mapearPreguntaAPI)
+            .filter(p => p !== null);
 
+        test = new Test(listaPreguntas);
+        posicionPregunta = 0;
+        divStack.innerHTML = '';
+        mostrarPregunta(listaPreguntas, 0);
+        actualizarBarraProgreso(posicionPregunta);
+        actualizarResumen(0, 0, 0, true)
+    } else {
+        divStack.innerHTML = '<p>Error al cargar el test</p>';
+    }
 };

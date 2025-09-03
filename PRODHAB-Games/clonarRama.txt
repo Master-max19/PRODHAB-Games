@@ -1,0 +1,17 @@
+# 1️⃣ Ir a la carpeta donde quieres clonar el repositorio
+cd C:\Users\50683\Downloads\prodhab
+
+# 2️⃣ Clonar solo la rama 'albin'
+git clone --branch albin --single-branch https://github.com/Master-max19/PRODHAB-Games.git
+
+# 3️⃣ Entrar al repositorio clonado
+cd PRODHAB-Games
+
+# 4️⃣ Verificar en qué rama estás
+git branch
+
+
+
+
+
+git clone --branch albin --single-branch https://github.com/Master-max19/PRODHAB-Games.git

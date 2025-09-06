@@ -1,6 +1,13 @@
 using APIJuegos.Data;
 using Microsoft.EntityFrameworkCore;
 
+//John---------------------------------------------------
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+//-----------------------------------------------
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -24,6 +31,40 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod();
     });
 });
+
+//John-----------------------------------------------
+
+// 🔹 Configuración de JWT
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+        };
+
+        // 🔹 Leer JWT desde la cookie
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                if (context.Request.Cookies.ContainsKey("jwt"))
+                {
+                    context.Token = context.Request.Cookies["jwt"];
+                }
+                return Task.CompletedTask;
+            }
+        };
+    });
+
+//-----------------------------------------------------
 
 
 var app = builder.Build();
@@ -51,6 +92,12 @@ app.MapControllers();
 
 
 app.UseHttpsRedirection();
+
+//John--------------------------------------------
+app.UseAuthentication();
+app.UseAuthorization();
+//-----------------------------------------------
+
 app.MapControllers(); // esto es importante
 
 

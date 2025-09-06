@@ -1,14 +1,19 @@
 using APIJuegos.Data;
 
 using APIJuegos.Data.Modelos;
-    using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 using System.Text.Json;
 
+//John--------------------------------------------------
+using Microsoft.AspNetCore.Authorization;
+//---------------------------------------------------
+
 namespace APIJuegos.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class PreguntasController : ControllerBase

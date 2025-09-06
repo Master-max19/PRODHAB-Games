@@ -1,14 +1,14 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\jberm\\OneDrive\\Desktop\\a\\PRODHAB\\Juego\\PRODHAB-Games\\APIJuegos\\",
+  "WorkspaceRootPath": "C:\\Users\\jberm\\OneDrive\\Desktop\\a\\PRODHAB\\Juego\\PRODHAB-Games\\PRODHAB-Games\\APIJuegos\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{53DAF4F1-3FE5-78AB-E77B-A6E5F5068DC0}|APIJuegos.csproj|c:\\users\\jberm\\onedrive\\desktop\\a\\prodhab\\juego\\prodhab-games\\apijuegos\\data\\modelos\\respuestas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{53DAF4F1-3FE5-78AB-E77B-A6E5F5068DC0}|APIJuegos.csproj|solutionrelative:data\\modelos\\respuestas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{53DAF4F1-3FE5-78AB-E77B-A6E5F5068DC0}|APIJuegos.csproj|c:\\users\\jberm\\onedrive\\desktop\\a\\prodhab\\juego\\prodhab-games\\prodhab-games\\apijuegos\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{53DAF4F1-3FE5-78AB-E77B-A6E5F5068DC0}|APIJuegos.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{53DAF4F1-3FE5-78AB-E77B-A6E5F5068DC0}|APIJuegos.csproj|c:\\users\\jberm\\onedrive\\desktop\\a\\prodhab\\juego\\prodhab-games\\apijuegos\\controllers\\preguntascontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{53DAF4F1-3FE5-78AB-E77B-A6E5F5068DC0}|APIJuegos.csproj|solutionrelative:controllers\\preguntascontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{53DAF4F1-3FE5-78AB-E77B-A6E5F5068DC0}|APIJuegos.csproj|c:\\users\\jberm\\onedrive\\desktop\\a\\prodhab\\juego\\prodhab-games\\prodhab-games\\apijuegos\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{53DAF4F1-3FE5-78AB-E77B-A6E5F5068DC0}|APIJuegos.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,32 +18,32 @@
       "DocumentGroups": [
         {
           "DockedWidth": 1119,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "PreguntasController.cs",
-              "DocumentMoniker": "C:\\Users\\jberm\\OneDrive\\Desktop\\a\\PRODHAB\\Juego\\PRODHAB-Games\\APIJuegos\\Controllers\\PreguntasController.cs",
-              "RelativeDocumentMoniker": "Controllers\\PreguntasController.cs",
-              "ToolTip": "C:\\Users\\jberm\\OneDrive\\Desktop\\a\\PRODHAB\\Juego\\PRODHAB-Games\\APIJuegos\\Controllers\\PreguntasController.cs",
-              "RelativeToolTip": "Controllers\\PreguntasController.cs",
-              "ViewState": "AgIAAB8AAAAAAAAAAAAjwDEAAAAgAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-24T03:56:37.417Z",
+              "DocumentIndex": 0,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\jberm\\OneDrive\\Desktop\\a\\PRODHAB\\Juego\\PRODHAB-Games\\PRODHAB-Games\\APIJuegos\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "C:\\Users\\jberm\\OneDrive\\Desktop\\a\\PRODHAB\\Juego\\PRODHAB-Games\\PRODHAB-Games\\APIJuegos\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AgIAAAQAAAAAAAAAAAAIwA8AAAADAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-09-06T09:00:22.288Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Respuestas.cs",
-              "DocumentMoniker": "C:\\Users\\jberm\\OneDrive\\Desktop\\a\\PRODHAB\\Juego\\PRODHAB-Games\\APIJuegos\\Data\\Modelos\\Respuestas.cs",
-              "RelativeDocumentMoniker": "Data\\Modelos\\Respuestas.cs",
-              "ToolTip": "C:\\Users\\jberm\\OneDrive\\Desktop\\a\\PRODHAB\\Juego\\PRODHAB-Games\\APIJuegos\\Data\\Modelos\\Respuestas.cs",
-              "RelativeToolTip": "Data\\Modelos\\Respuestas.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAuwA4AAAABAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\jberm\\OneDrive\\Desktop\\a\\PRODHAB\\Juego\\PRODHAB-Games\\PRODHAB-Games\\APIJuegos\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\jberm\\OneDrive\\Desktop\\a\\PRODHAB\\Juego\\PRODHAB-Games\\PRODHAB-Games\\APIJuegos\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAFkAAAAAAAAAAADwv2gAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-24T03:55:47.105Z",
+              "WhenOpened": "2025-09-04T03:04:42.369Z",
               "EditorCaption": ""
             }
           ]

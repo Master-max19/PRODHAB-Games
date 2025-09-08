@@ -17,7 +17,8 @@ public class PracticaJuegosUcrContext : DbContext
     public DbSet<Preguntas> Preguntas { get; set; }
     public DbSet<Respuestas> Respuestas{ get; set; }
 
-
+    public DbSet<Usuario> Usuarios { get; set; }
+    public DbSet<Rol> Roles { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -50,7 +50,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
         };
 
-        // 🔹 Leer JWT desde la cookie
         options.Events = new JwtBearerEvents
         {
             OnMessageReceived = context =>

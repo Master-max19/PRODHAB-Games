@@ -1,5 +1,8 @@
-﻿using APIJuegos.Data.Modelos;
+﻿using APIJuegos.Data;
+using APIJuegos.Data.Helpers;
+using APIJuegos.Data.Modelos;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -12,33 +15,41 @@ namespace APIJuegos.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IConfiguration _config;
+        private readonly PracticaJuegosUcrContext _context;
 
-        public AuthController(IConfiguration config)
+        public AuthController(IConfiguration config, PracticaJuegosUcrContext context)
         {
             _config = config;
+            _context = context;
+
         }
 
-        [HttpPost("login")]
+
+     [HttpPost("login")]
         public IActionResult Login([FromBody] LoginRequest request)
         {
-            // 🔹 Aquí deberías validar el usuario con tu BD
-            if (request.Username == "admin" && request.Password == "1234")
+            var usuario = _context.Usuarios.Include(u => u.Rol).FirstOrDefault(u => u.Correo == request.Username);
+            
+            if (usuario == null) return Unauthorized(new { message = "Usuario no encontrado" });
+
+            var hashedInput = PasswordHelper.HashPassword(request.Password, usuario.Salt);
+
+            if (!hashedInput.SequenceEqual(usuario.Clave))
+                return Unauthorized(new { message = "Contraseña incorrecta" });
+
+            var token = GenerateJwtToken(usuario);
+
+            // 🔹 Guardar JWT en cookie
+            Response.Cookies.Append("jwt", token, new CookieOptions
             {
-                var token = GenerateJwtToken(request.Username);
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.None
+            });
 
-                // 🔹 Guardar el token en una cookie
-                Response.Cookies.Append("jwt", token, new CookieOptions
-                {
-                    HttpOnly = true,
-                    Secure = true, // si usas HTTPS
-                    SameSite = SameSiteMode.None
-                });
-
-                return Ok(new { message = "Login exitoso" });
-            }
-
-            return Unauthorized(new { message = "Credenciales inválidas" });
+            return Ok(new { message = "Login exitoso" });
         }
+
 
         [HttpPost("logout")]
         public IActionResult Logout()
@@ -47,15 +58,15 @@ namespace APIJuegos.Controllers
             return Ok(new { message = "Sesión cerrada" });
         }
 
-        private string GenerateJwtToken(string username)
+        private string GenerateJwtToken(Usuario usuario)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name, username),
-                new Claim("role", "admin") // puedes cambiar el rol
+                new Claim(ClaimTypes.Name, usuario.Correo),
+                new Claim(ClaimTypes.Role, usuario.Rol.Nombre) // si tienes roles
             };
 
             var token = new JwtSecurityToken(
@@ -68,5 +79,6 @@ namespace APIJuegos.Controllers
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
     }
 }

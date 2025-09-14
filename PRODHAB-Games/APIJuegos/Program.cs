@@ -30,33 +30,48 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
+
+    //John-------------------------------------------------
+    options.AddPolicy("FrontWithCookies", policy =>
+    {
+        policy
+            .WithOrigins("http://localhost:5165")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+    //-----------------------------------------------------
 });
 
 //John-----------------------------------------------
 
+var jwtKey = builder.Configuration["Jwt:Key"];        
+var jwtIssuer = builder.Configuration["Jwt:Issuer"];
+
 // 🔹 Configuración de JWT
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
+        options.SaveToken = true;
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
-            ValidateAudience = true,
+            ValidateAudience = false, // si quieres, agrega audience y valídala
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            ValidAudience = builder.Configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+            ValidIssuer = jwtIssuer,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey!))
         };
 
+        // Leer el token desde la cookie HttpOnly "jwt"
         options.Events = new JwtBearerEvents
         {
-            OnMessageReceived = context =>
+            OnMessageReceived = ctx =>
             {
-                if (context.Request.Cookies.ContainsKey("jwt"))
+                if (ctx.Request.Cookies.ContainsKey("jwt"))
                 {
-                    context.Token = context.Request.Cookies["jwt"];
+                    ctx.Token = ctx.Request.Cookies["jwt"];
                 }
                 return Task.CompletedTask;
             }
@@ -79,7 +94,11 @@ if (app.Environment.IsDevelopment())
 }
 
 // 🔹 Activar CORS globalmente
-app.UseCors("AllowAll");
+
+//app.UseCors("AllowAll");   LOS LLAME ESPESIFICAMENTE EN LAS CLASES QUE LOS VOY A USAR
+//app.UseCors("FrontWithCookies");       LOS LLAME ESPESIFICAMENTE EN LAS CLASES QUE LOS VOY A USAR
+
+app.UseCors();
 
 app.UseHttpsRedirection();
 app.MapControllers();

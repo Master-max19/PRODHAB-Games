@@ -3,18 +3,6 @@
   "WorkspaceRootPath": "C:\\Users\\jberm\\OneDrive\\Desktop\\a\\PRODHAB\\Juego\\PRODHAB-Games\\PRODHAB-Games\\APIJuegos\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{53DAF4F1-3FE5-78AB-E77B-A6E5F5068DC0}|APIJuegos.csproj|c:\\users\\jberm\\onedrive\\desktop\\a\\prodhab\\juego\\prodhab-games\\prodhab-games\\apijuegos\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{53DAF4F1-3FE5-78AB-E77B-A6E5F5068DC0}|APIJuegos.csproj|solutionrelative:controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{53DAF4F1-3FE5-78AB-E77B-A6E5F5068DC0}|APIJuegos.csproj|c:\\users\\jberm\\onedrive\\desktop\\a\\prodhab\\juego\\prodhab-games\\prodhab-games\\apijuegos\\data\\helpers\\passwordhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{53DAF4F1-3FE5-78AB-E77B-A6E5F5068DC0}|APIJuegos.csproj|solutionrelative:data\\helpers\\passwordhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{53DAF4F1-3FE5-78AB-E77B-A6E5F5068DC0}|APIJuegos.csproj|c:\\users\\jberm\\onedrive\\desktop\\a\\prodhab\\juego\\prodhab-games\\prodhab-games\\apijuegos\\data\\modelos\\usuarios.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{53DAF4F1-3FE5-78AB-E77B-A6E5F5068DC0}|APIJuegos.csproj|solutionrelative:data\\modelos\\usuarios.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{53DAF4F1-3FE5-78AB-E77B-A6E5F5068DC0}|APIJuegos.csproj|c:\\users\\jberm\\onedrive\\desktop\\a\\prodhab\\juego\\prodhab-games\\prodhab-games\\apijuegos\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{53DAF4F1-3FE5-78AB-E77B-A6E5F5068DC0}|APIJuegos.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
@@ -26,56 +14,17 @@
       "DocumentGroups": [
         {
           "DockedWidth": 1119,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "PasswordHelper.cs",
-              "DocumentMoniker": "C:\\Users\\jberm\\OneDrive\\Desktop\\a\\PRODHAB\\Juego\\PRODHAB-Games\\PRODHAB-Games\\APIJuegos\\Data\\Helpers\\PasswordHelper.cs",
-              "RelativeDocumentMoniker": "Data\\Helpers\\PasswordHelper.cs",
-              "ToolTip": "C:\\Users\\jberm\\OneDrive\\Desktop\\a\\PRODHAB\\Juego\\PRODHAB-Games\\PRODHAB-Games\\APIJuegos\\Data\\Helpers\\PasswordHelper.cs",
-              "RelativeToolTip": "Data\\Helpers\\PasswordHelper.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAoAAAAzAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-08T10:25:52.312Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Usuarios.cs",
-              "DocumentMoniker": "C:\\Users\\jberm\\OneDrive\\Desktop\\a\\PRODHAB\\Juego\\PRODHAB-Games\\PRODHAB-Games\\APIJuegos\\Data\\Modelos\\Usuarios.cs",
-              "RelativeDocumentMoniker": "Data\\Modelos\\Usuarios.cs",
-              "ToolTip": "C:\\Users\\jberm\\OneDrive\\Desktop\\a\\PRODHAB\\Juego\\PRODHAB-Games\\PRODHAB-Games\\APIJuegos\\Data\\Modelos\\Usuarios.cs",
-              "RelativeToolTip": "Data\\Modelos\\Usuarios.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAmAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-08T10:23:47.448Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "AuthController.cs",
-              "DocumentMoniker": "C:\\Users\\jberm\\OneDrive\\Desktop\\a\\PRODHAB\\Juego\\PRODHAB-Games\\PRODHAB-Games\\APIJuegos\\Controllers\\AuthController.cs",
-              "RelativeDocumentMoniker": "Controllers\\AuthController.cs",
-              "ToolTip": "C:\\Users\\jberm\\OneDrive\\Desktop\\a\\PRODHAB\\Juego\\PRODHAB-Games\\PRODHAB-Games\\APIJuegos\\Controllers\\AuthController.cs",
-              "RelativeToolTip": "Controllers\\AuthController.cs",
-              "ViewState": "AgIAABYAAAAAAAAAAAAQwCMAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-08T10:23:19.327Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\jberm\\OneDrive\\Desktop\\a\\PRODHAB\\Juego\\PRODHAB-Games\\PRODHAB-Games\\APIJuegos\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
               "ToolTip": "C:\\Users\\jberm\\OneDrive\\Desktop\\a\\PRODHAB\\Juego\\PRODHAB-Games\\PRODHAB-Games\\APIJuegos\\Program.cs",
               "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAE4AAAAAAAAAAAAAAD8AAAAHAAAAAAAAAA==",
+              "ViewState": "AgIAABUAAAAAAAAAAAAQwCcAAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-08T10:10:46.154Z",
               "EditorCaption": ""

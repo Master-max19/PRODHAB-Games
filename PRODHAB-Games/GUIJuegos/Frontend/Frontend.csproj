@@ -6,4 +6,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <!-- EXCLUIR precomprimidos para evitar la colisión -->
+  <ItemGroup>
+    <Content Remove="wwwroot\**\*.gz" />
+    <Content Remove="wwwroot\**\*.br" />
+  </ItemGroup>
 </Project>

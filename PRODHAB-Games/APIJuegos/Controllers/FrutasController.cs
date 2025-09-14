@@ -1,11 +1,16 @@
-using Microsoft.AspNetCore.Mvc;
 using APIJuegos.Data;
 using APIJuegos.Data.Modelos;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 
 namespace APIJuegos.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+
+    [EnableCors("AllowAll")]
+
     public class FrutasController : ControllerBase
     {
     private readonly PracticaJuegosUcrContext _context;

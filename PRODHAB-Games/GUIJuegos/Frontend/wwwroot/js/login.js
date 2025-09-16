@@ -42,3 +42,4 @@ document.getElementById("btn-juegos").onclick = async () => {
     show(e.message);
   }
 };
+

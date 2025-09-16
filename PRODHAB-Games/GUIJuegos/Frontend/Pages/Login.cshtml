@@ -5,35 +5,40 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf8" />
+  <meta charset="utf-8" />
   <title>Login</title>
+  <link rel="stylesheet" href="~/css/login.css">
 </head>
 <body>
-  <h1>Registro / Login</h1>
+  <div class="container">
+    <h1 class="title">Registro / Login</h1>
 
-  <div>
-    <h3>Register</h3>
-    <input id="reg-email" placeholder="correo" />
-    <input id="reg-pass" placeholder="password" type="password" />
-    <select id="reg-rol">
-      <option value="2">usuario</option>
-      <option value="1">admin</option>
-    </select>
-    <button id="btn-register">Crear</button>
-  </div>
+    <div class="card">
+      <h3>Registro</h3>
+      <input id="reg-email" placeholder="Correo" type="email" />
+      <input id="reg-pass" placeholder="Contraseña" type="password" />
+      <select id="reg-rol">
+        <option value="2">Usuario</option>
+        <option value="1">Admin</option>
+      </select>
+      <button id="btn-register" class="btn">Crear</button>
+    </div>
 
-  <div style="margin-top:1rem;">
-    <h3>Login</h3>
-    <input id="log-email" placeholder="correo" />
-    <input id="log-pass" placeholder="password" type="password" />
-    <button id="btn-login">Entrar</button>
-    <button id="btn-logout">Salir</button>
-  </div>
+    <div class="card">
+      <h3>Login</h3>
+      <input id="log-email" placeholder="Correo" type="email" />
+      <input id="log-pass" placeholder="Contraseña" type="password" />
+      <div class="actions">
+        <button id="btn-login" class="btn">Entrar</button>
+        <button id="btn-logout" class="btn btn-secondary">Salir</button>
+      </div>
+    </div>
 
-  <div style="margin-top:1rem;">
-    <h3>Juegos (protegido admin)</h3>
-    <button id="btn-juegos">Cargar</button>
-    <pre id="out"></pre>
+    <div class="card">
+      <h3>Juegos (solo admin)</h3>
+      <button id="btn-juegos" class="btn">Cargar</button>
+      <pre id="out"></pre>
+    </div>
   </div>
 
   <script type="module" src="~/js/login.js"></script>

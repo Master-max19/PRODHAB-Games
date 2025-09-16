@@ -7,7 +7,7 @@ async function apiFetch(path, options = {}) {
       "Content-Type": "application/json",
       ...(options.headers || {})
     },
-    credentials: "include",            // <-- clave: envía/recibe cookies
+    credentials: "include",           
     body: options.body ? JSON.stringify(options.body) : undefined
   });
 

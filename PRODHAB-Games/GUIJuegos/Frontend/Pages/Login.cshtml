@@ -14,17 +14,6 @@
     <h1 class="title">Registro / Login</h1>
 
     <div class="card">
-      <h3>Registro</h3>
-      <input id="reg-email" placeholder="Correo" type="email" />
-      <input id="reg-pass" placeholder="Contraseña" type="password" />
-      <select id="reg-rol">
-        <option value="2">Usuario</option>
-        <option value="1">Admin</option>
-      </select>
-      <button id="btn-register" class="btn">Crear</button>
-    </div>
-
-    <div class="card">
       <h3>Login</h3>
       <input id="log-email" placeholder="Correo" type="email" />
       <input id="log-pass" placeholder="Contraseña" type="password" />
@@ -32,13 +21,9 @@
         <button id="btn-login" class="btn">Entrar</button>
         <button id="btn-logout" class="btn btn-secondary">Salir</button>
       </div>
+        <div id="login-msg"></div>
     </div>
 
-    <div class="card">
-      <h3>Juegos (solo admin)</h3>
-      <button id="btn-juegos" class="btn">Cargar</button>
-      <pre id="out"></pre>
-    </div>
   </div>
 
   <script type="module" src="~/js/login.js"></script>

@@ -1,6 +1,6 @@
 ﻿namespace APIJuegos.Data.Modelos
 {
-    public class Usuario
+    public class Usuarios
     {
         public int Id { get; set; }
         public string Correo { get; set; } = string.Empty;
@@ -11,8 +11,10 @@
 
         // 🔹 Relación con Rol (FK)
         public int RolId { get; set; }
-        public Rol Rol { get; set; }
+        public Roles Rol { get; set; }
 
         public DateTime FechaCreacion { get; set; } = DateTime.Now;
+
+        public bool Activo { get; set; }
     }
 }

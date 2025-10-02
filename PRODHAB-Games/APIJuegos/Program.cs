@@ -97,6 +97,7 @@ if (app.Environment.IsDevelopment())
 
 //app.UseCors("AllowAll");   LOS LLAME ESPESIFICAMENTE EN LAS CLASES QUE LOS VOY A USAR
 //app.UseCors("FrontWithCookies");       LOS LLAME ESPESIFICAMENTE EN LAS CLASES QUE LOS VOY A USAR
+app.UseRouting();
 
 app.UseCors();
 

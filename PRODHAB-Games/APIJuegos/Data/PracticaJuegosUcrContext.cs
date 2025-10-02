@@ -17,8 +17,8 @@ public class PracticaJuegosUcrContext : DbContext
     public DbSet<Preguntas> Preguntas { get; set; }
     public DbSet<Respuestas> Respuestas{ get; set; }
 
-    public DbSet<Usuario> Usuarios { get; set; }
-    public DbSet<Rol> Roles { get; set; }
+    public DbSet<Usuarios> Usuarios { get; set; }
+    public DbSet<Roles> Roles { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -54,6 +54,12 @@ public class PracticaJuegosUcrContext : DbContext
         {
             entity.HasKey(e => e.id);
             entity.Property(e => e.texto).HasMaxLength(255);
+        });
+
+        modelBuilder.Entity<Usuarios>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Correo).HasMaxLength(255);
         });
 
     }

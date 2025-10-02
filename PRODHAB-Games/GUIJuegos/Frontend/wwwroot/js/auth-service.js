@@ -22,8 +22,8 @@ async function apiFetch(path, options = {}) {
 }
 
 // --------- Auth
-export async function register(email, password, rolId = 2) { // por defecto "usuario"
-  return apiFetch("/Auth/register", { method: "POST", body: { correo: email, password, rolId } });
+export async function register(email, password, rolId = 2, activo = 1) { // por defecto "usuario"
+  return apiFetch("/Auth/register", { method: "POST", body: { correo: email, password, rolId, activo} });
 }
 
 export async function login(email, password) {

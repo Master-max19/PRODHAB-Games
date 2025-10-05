@@ -5,3 +5,9 @@ ApiJuegos/obj/
 GUIJuegos/Frontend/bin/
 GUIJuegos/Frontend/obj/
 
+.vs/
+*.user
+*.suo
+*.cache
+*.db
+*.log

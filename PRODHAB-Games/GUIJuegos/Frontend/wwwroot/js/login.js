@@ -32,13 +32,13 @@ document.getElementById("btn-login").onclick = async () => {
   }
 };
 
-document.getElementById("btn-logout").onclick = async () => {
+/*document.getElementById("btn-logout").onclick = async () => {
   try {
     show(await logout() || "Logout ok");
   } catch (e) {
     show(e.message);
   }
-};
+};*/
 
 /*document.getElementById("btn-juegos").onclick = async () => {
   try {

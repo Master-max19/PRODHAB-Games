@@ -1,16 +1,12 @@
 ﻿using APIJuegos.Data;
 using APIJuegos.Data.Helpers;
 using APIJuegos.Data.Modelos;
-using Azure.Core;
 
 //John--------------------------------------------------
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using System.Data;
-using System.Text.Json;
 //---------------------------------------------------
 
 namespace APIJuegos.Controllers
@@ -154,12 +150,18 @@ namespace APIJuegos.Controllers
         }
 
 
-        [HttpPut("desactivar/{id}")]
-        public async Task<IActionResult> DesactivarUsuario(int id)
+        [HttpPut("desactivar/{correo}")]
+        public async Task<IActionResult> DesactivarUsuario(string correo)
         {
-            var usuario = await _context.Usuarios.FindAsync(id);
+            // Buscar el usuario por correo (sin distinguir mayúsculas/minúsculas)
+            var usuario = await _context.Usuarios
+                .FirstOrDefaultAsync(u => u.Correo.ToLower() == correo.ToLower());
+
             if (usuario == null)
                 return NotFound(new { message = "Usuario no encontrado" });
+
+            if (!usuario.Activo)
+                return BadRequest(new { message = "El usuario ya está desactivado" });
 
             usuario.Activo = false;
             await _context.SaveChangesAsync();
@@ -183,10 +185,12 @@ namespace APIJuegos.Controllers
         public record CambiarClaveRequest(string NuevaClave);
 
 
-        [HttpPut("actualizar-clave/{id}")]
-        public async Task<IActionResult> ActualizarClave(int id, [FromBody] CambiarClaveRequest request)
+        [HttpPut("actualizar-clave/{correo}")]
+        public async Task<IActionResult> ActualizarClave(string correo, [FromBody] CambiarClaveRequest request)
         {
-            var usuario = await _context.Usuarios.FindAsync(id);
+            var usuario = await _context.Usuarios
+                .FirstOrDefaultAsync(u => u.Correo.ToLower() == correo.ToLower());
+
             if (usuario == null)
                 return NotFound(new { message = "Usuario no encontrado" });
 

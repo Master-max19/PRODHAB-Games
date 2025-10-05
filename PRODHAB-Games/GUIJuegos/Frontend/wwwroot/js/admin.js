@@ -17,35 +17,38 @@ const show = (v) => out.textContent = typeof v === "string" ? v : JSON.stringify
 const contentArea = document.getElementById("content-area");
 
 document.querySelectorAll(".nav-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
+  btn.addEventListener("click", async () => {
     const section = btn.dataset.section;
 
     switch (section) {
       case "usuarios":
         contentArea.innerHTML = `
-    <h2>Gestión de Usuarios</h2>
-    <div class="user-actions">
-      <button id="crearUsuarioBtn">Crear Usuario</button>
-      <button id="cambiarClaveBtn">Cambiar Contraseña</button>
-      <button id="eliminarUsuarioBtn">Eliminar Usuario</button>
+    <div class="user-section">
+      <h2>Gestión de Usuarios</h2>
+      <div class="user-actions">
+        <button id="crearUsuarioBtn">Crear Usuario</button>
+        <button id="cambiarClaveBtn">Cambiar Contraseña</button>
+        <button id="eliminarUsuarioBtn">Desactivar Usuario</button>
+      </div>
+      <div id="userFormArea"></div>
     </div>
-    <div id="userFormArea"></div>
   `;
 
         // 🔹 Crear Usuario
         document.getElementById("crearUsuarioBtn").addEventListener("click", () => {
           document.getElementById("userFormArea").innerHTML = `
-      <h3>Crear Usuario</h3>
-      <form id="crearUsuarioForm">
-        <input type="email" id="correo" placeholder="Correo" required /><br>
-        <input type="password" id="password" placeholder="Contraseña" required /><br>
+      <form id="crearUsuarioForm" class="user-form">
+        <h3>Crear Usuario</h3>
+        <input type="email" id="correo" placeholder="Correo electrónico" required />
+        <input type="password" id="password" placeholder="Contraseña" required />
         <select id="rolId" required>
-          <option value="1">Admin</option>
+          <option value="">Seleccionar rol...</option>
+          <option value="1">Administrador</option>
           <option value="2">Usuario</option>
-        </select><br>
+        </select>
         <button type="submit">Registrar</button>
+        <div id="crearUsuarioMsg" class="user-message"></div>
       </form>
-      <div id="crearUsuarioMsg"></div>
     `;
 
           document.getElementById("crearUsuarioForm").addEventListener("submit", async (e) => {
@@ -63,9 +66,13 @@ document.querySelectorAll(".nav-btn").forEach(btn => {
               });
 
               const data = await res.json();
-              document.getElementById("crearUsuarioMsg").textContent = data.message || "Usuario creado";
-            } catch (err) {
-              document.getElementById("crearUsuarioMsg").textContent = "Error al crear usuario";
+              const msg = document.getElementById("crearUsuarioMsg");
+              msg.textContent = data.message || "Usuario creado";
+              msg.className = "user-message success";
+            } catch {
+              const msg = document.getElementById("crearUsuarioMsg");
+              msg.textContent = "Error al crear usuario";
+              msg.className = "user-message error";
             }
           });
         });
@@ -73,61 +80,69 @@ document.querySelectorAll(".nav-btn").forEach(btn => {
         // 🔹 Cambiar Contraseña
         document.getElementById("cambiarClaveBtn").addEventListener("click", () => {
           document.getElementById("userFormArea").innerHTML = `
-      <h3>Cambiar Contraseña</h3>
-      <form id="cambiarClaveForm">
-        <input type="number" id="idUsuarioClave" placeholder="ID Usuario" required /><br>
-        <input type="password" id="nuevaClave" placeholder="Nueva Contraseña" required /><br>
+      <form id="cambiarClaveForm" class="user-form">
+        <h3>Cambiar Contraseña</h3>
+        <input type="email" id="correoUsuarioClave" placeholder="Correo del usuario" required />
+        <input type="password" id="nuevaClave" placeholder="Nueva contraseña" required />
         <button type="submit">Actualizar</button>
+        <div id="cambiarClaveMsg" class="user-message"></div>
       </form>
-      <div id="cambiarClaveMsg"></div>
     `;
 
           document.getElementById("cambiarClaveForm").addEventListener("submit", async (e) => {
             e.preventDefault();
-            const id = document.getElementById("idUsuarioClave").value;
+            const correo = document.getElementById("correoUsuarioClave").value.trim();
             const nuevaClave = document.getElementById("nuevaClave").value;
 
             try {
-              const res = await fetch(`https://localhost:7006/api/usuarios/actualizar-clave/${id}`, {
+              const res = await fetch(`https://localhost:7006/api/usuarios/actualizar-clave/${encodeURIComponent(correo)}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
-                body: JSON.stringify({NuevaClave: nuevaClave })
+                body: JSON.stringify({ NuevaClave: nuevaClave })
               });
 
               const data = await res.json();
-              document.getElementById("cambiarClaveMsg").textContent = data.message || "Clave actualizada";
-            } catch (err) {
-              document.getElementById("cambiarClaveMsg").textContent = "Error al actualizar clave";
+              const msg = document.getElementById("cambiarClaveMsg");
+              msg.textContent = data.message || "Clave actualizada";
+              msg.className = "user-message success";
+            } catch {
+              const msg = document.getElementById("cambiarClaveMsg");
+              msg.textContent = "Error de conexión al actualizar clave";
+              msg.className = "user-message error";
             }
           });
         });
 
-        // 🔹 Eliminar Usuario (desactivar)
+        // 🔹 Desactivar Usuario
         document.getElementById("eliminarUsuarioBtn").addEventListener("click", () => {
           document.getElementById("userFormArea").innerHTML = `
-      <h3>Eliminar Usuario</h3>
-      <form id="eliminarUsuarioForm">
-        <input type="number" id="idUsuarioEliminar" placeholder="ID Usuario" required /><br>
+      <form id="eliminarUsuarioForm" class="user-form">
+        <h3>Desactivar Usuario</h3>
+        <input type="email" id="correoUsuarioEliminar" placeholder="Correo del usuario" required />
         <button type="submit">Desactivar</button>
+        <div id="eliminarUsuarioMsg" class="user-message"></div>
       </form>
-      <div id="eliminarUsuarioMsg"></div>
     `;
 
           document.getElementById("eliminarUsuarioForm").addEventListener("submit", async (e) => {
             e.preventDefault();
-            const id = document.getElementById("idUsuarioEliminar").value;
+            const correo = document.getElementById("correoUsuarioEliminar").value.trim();
 
             try {
-              const res = await fetch(`https://localhost:7006/api/usuarios/desactivar/${id}`, {
+              const res = await fetch(`https://localhost:7006/api/usuarios/desactivar/${encodeURIComponent(correo)}`, {
                 method: "PUT",
                 credentials: "include"
               });
 
+              const msg = document.getElementById("eliminarUsuarioMsg");
               const data = await res.json();
-              document.getElementById("eliminarUsuarioMsg").textContent = data.message || "Usuario desactivado";
-            } catch (err) {
-              document.getElementById("eliminarUsuarioMsg").textContent = "Error al desactivar usuario";
+              msg.textContent = data.message || "Usuario desactivado correctamente";
+              msg.className = res.ok ? "user-message success" : "user-message error";
+            } catch {
+              const msg = document.getElementById("eliminarUsuarioMsg");
+              msg.textContent = "Error de conexión al desactivar usuario";
+              msg.className = "user-message error";
             }
           });
         });
@@ -139,11 +154,34 @@ document.querySelectorAll(".nav-btn").forEach(btn => {
         contentArea.innerHTML = "<h2>Modificar Preguntas/Respuestas</h2><p>Listado para seleccionar y editar.</p>";
         break;
       case "logout":
-        contentArea.innerHTML = "<h2>Cerrando Sesión...</h2>";
+        contentArea.innerHTML = "<h2>Cerrando sesión...</h2>";
+
+        try {
+          // 🔹 Llama al backend para borrar la cookie JWT
+          const res = await fetch("https://localhost:7006/api/Auth/logout", {
+            method: "POST",
+            credentials: "include"
+          });
+
+          if (res.ok) {
+            const data = await res.json();
+            console.log(data.message || "Logout exitoso");
+          } else {
+            console.warn("El servidor no confirmó el cierre de sesión");
+          }
+        } catch (err) {
+          console.error("Error al cerrar sesión:", err);
+        }
+        contentArea.innerHTML = `
+          <h2>Cerrando sesión...</h2>
+          <p>Por favor espera un momento...</p>
+        `;
+        // 🔹 Redirige después de 1 segundo
         setTimeout(() => {
           window.location.href = "/login";
         }, 1000);
         break;
+
       default:
         contentArea.innerHTML = "<h2>Bienvenido, Admin</h2><p>Selecciona una opción.</p>";
     }

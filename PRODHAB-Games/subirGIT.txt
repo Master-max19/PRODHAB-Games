@@ -1,0 +1,17 @@
+# Inicializar Git si no está hecho
+git init
+
+# Conectar al remoto
+git remote add origin https://github.com/Master-max19/PRODHAB-Games.git
+
+# Crear la rama albin localmente
+git checkout -b albin
+
+# Agregar todos los archivos de tu carpeta actual
+git add .
+
+# Hacer commit
+git commit -m "Subiendo carpeta completa a la rama albin"
+
+# Subir a la rama albin y sobrescribir la remota
+git push -u origin albin --force

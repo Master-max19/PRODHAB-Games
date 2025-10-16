@@ -1,0 +1,30 @@
+@page "/login"
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Login</title>
+  <link rel="stylesheet" href="~/css/login.css">
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">Registro / Login</h1>
+
+    <div class="card">
+      <h3>Login</h3>
+      <input id="log-email" placeholder="Correo" type="email" />
+      <input id="log-pass" placeholder="Contraseña" type="password" />
+      <div class="actions">
+        <button id="btn-login" class="btn">Entrar</button>
+      </div>
+        <div id="login-msg"></div>
+    </div>
+
+  </div>
+
+  <script type="module" src="~/js/login.js"></script>
+</body>
+</html>

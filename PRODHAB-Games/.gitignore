@@ -1,0 +1,19 @@
+# Backend
+ApiJuegos/bin/
+ApiJuegos/obj/
+# Frontend
+GUIJuegos/Frontend/bin/
+GUIJuegos/Frontend/obj/
+
+GUIJuegos/vanillaJS/node_modules
+
+APIJuegos/appsettings.json
+GUIJuegos/vanillaJS/server.js
+
+
+.vs/
+*.user
+*.suo
+*.cache
+*.db
+*.log

@@ -1,0 +1,55 @@
+@page "/test"
+@using System
+@using System.Collections.Generic
+
+     <div class="quiz-container">
+        <div class="wrap">
+          <main
+            class="card"
+            role="region"
+            aria-label="Evaluación de conocimientos"
+          >
+            <div class="content">
+              <div aria-hidden="true" class="progress">
+                <div class="bar" style="width: 0%"></div>
+              </div>
+              <div class="left">
+                <div class="summary"></div>
+              </div>
+              <div
+                id="div-stack"
+                class="stack"
+                aria-label="Listado de preguntas"
+              >
+                <div class="spinner"></div>
+                <span class="cargando">Cargando... </span>
+              </div>
+
+              <div class="footer-global">
+                <div class="right">
+                  <button id="btn-reiniciar" class="primary">
+                    Reiniciar test
+                  </button>
+                </div>
+                <div class="left">
+                  <div class="content-pet">
+                    <p id="pet-test-text">¿Listo para alcanzar el 100%?</p>
+                    <img
+                      src="images/superdato_2.png"
+                      alt="Ilustración del test PRODHAB"
+                      class="pet-icon"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+
+
+@* Importa tus estilos y scripts *@
+<link href="css/test.css" rel="stylesheet" />
+<script src="js/test.js"></script>
+<script src="js/test-service.js"></script>

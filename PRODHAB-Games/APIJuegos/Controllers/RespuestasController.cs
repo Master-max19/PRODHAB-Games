@@ -1,20 +1,20 @@
-using APIJuegos.Data;
-using APIJuegos.Data.Modelos;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using APIJuegos.Data;
+using APIJuegos.Modelos;
+using Microsoft.AspNetCore.Cors;
+
 
 namespace APIJuegos.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-
     [EnableCors("AllowAll")]
 
     public class RespuestasController : ControllerBase
     {
-    private readonly PracticaJuegosUcrContext _context;
+        private readonly JuegosProdhabContext _context;
 
-        public RespuestasController(PracticaJuegosUcrContext context)
+        public RespuestasController(JuegosProdhabContext context)
         {
             _context = context;
         }
@@ -28,7 +28,7 @@ namespace APIJuegos.Controllers
 
         // GET: api/Respuestas/5
         [HttpGet("{idRespuestas}")]
-        public ActionResult<Respuestas> GetById(int idRespuestas)
+        public ActionResult<Respuestas> GetById(long idRespuestas)
         {
             var respuesta = _context.Respuestas.Find(idRespuestas);
             if (respuesta == null)
@@ -40,26 +40,26 @@ namespace APIJuegos.Controllers
         [HttpPost]
         public ActionResult<Respuestas> Create(Respuestas nuevaRespuestas)
         {
-            if (nuevaRespuestas == null || string.IsNullOrWhiteSpace(nuevaRespuestas.texto))
+            if (nuevaRespuestas == null || string.IsNullOrWhiteSpace(nuevaRespuestas.Texto))
                 return BadRequest("La respuesta debe tener un texto.");
 
             _context.Respuestas.Add(nuevaRespuestas);
             _context.SaveChanges();
 
-            return CreatedAtAction(nameof(GetById), new { idRespuestas = nuevaRespuestas.id }, nuevaRespuestas);
+            return CreatedAtAction(nameof(GetById), new { IdRespuestas = nuevaRespuestas.Id }, nuevaRespuestas);
         }
 
         // PUT: api/Respuestas/5
         [HttpPut("{idRespuesta}")]
-        public ActionResult Update(int id, Respuestas respuestaActualizada)
+        public ActionResult Update(long id, Respuestas respuestaActualizada)
         {
             var respuesta = _context.Respuestas.Find(id);
             if (respuesta == null)
                 return NotFound();
 
-            respuesta.idPregunta = respuestaActualizada.idPregunta;
-            respuesta.texto = respuestaActualizada.texto;
-            respuesta.retroalimentacion = respuestaActualizada.retroalimentacion;
+            respuesta.IdPregunta = respuestaActualizada.IdPregunta;
+            respuesta.Texto = respuestaActualizada.Texto;
+            respuesta.Retroalimentacion = respuestaActualizada.Retroalimentacion;
 
             _context.SaveChanges();
             return Ok(respuesta);
@@ -67,7 +67,7 @@ namespace APIJuegos.Controllers
 
         // DELETE: api/Respuestas/5
         [HttpDelete("{idRespuesta}")]
-        public ActionResult Delete(int idRespuesta)
+        public ActionResult Delete(long idRespuesta)
         {
             var respuesta = _context.Respuestas.Find(idRespuesta);
             if (respuesta == null)

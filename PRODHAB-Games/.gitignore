@@ -5,6 +5,12 @@ ApiJuegos/obj/
 GUIJuegos/Frontend/bin/
 GUIJuegos/Frontend/obj/
 
+GUIJuegos/vanillaJS/node_modules
+
+APIJuegos/appsettings.json
+GUIJuegos/vanillaJS/server.js
+
+
 .vs/
 *.user
 *.suo

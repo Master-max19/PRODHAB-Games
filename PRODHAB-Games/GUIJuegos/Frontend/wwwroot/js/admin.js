@@ -58,7 +58,7 @@ document.querySelectorAll(".nav-btn").forEach(btn => {
             const rolId = parseInt(document.getElementById("rolId").value);
 
             try {
-              const res = await fetch("https://localhost:7006/api/usuarios/register", {
+              const res = await fetch("https://localhost:5133/api/usuarios/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
@@ -95,7 +95,7 @@ document.querySelectorAll(".nav-btn").forEach(btn => {
             const nuevaClave = document.getElementById("nuevaClave").value;
 
             try {
-              const res = await fetch(`https://localhost:7006/api/usuarios/actualizar-clave/${encodeURIComponent(correo)}`, {
+              const res = await fetch(`https://localhost:5133/api/usuarios/actualizar-clave/${encodeURIComponent(correo)}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
@@ -130,7 +130,7 @@ document.querySelectorAll(".nav-btn").forEach(btn => {
             const correo = document.getElementById("correoUsuarioEliminar").value.trim();
 
             try {
-              const res = await fetch(`https://localhost:7006/api/usuarios/desactivar/${encodeURIComponent(correo)}`, {
+              const res = await fetch(`https://localhost:5133/api/usuarios/desactivar/${encodeURIComponent(correo)}`, {
                 method: "PUT",
                 credentials: "include"
               });
@@ -158,7 +158,7 @@ document.querySelectorAll(".nav-btn").forEach(btn => {
 
         try {
           // 🔹 Llama al backend para borrar la cookie JWT
-          const res = await fetch("https://localhost:7006/api/Auth/logout", {
+          const res = await fetch("https://localhost:5133/api/Auth/logout", {
             method: "POST",
             credentials: "include"
           });

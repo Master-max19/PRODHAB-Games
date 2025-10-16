@@ -1,4 +1,4 @@
-const API_BASE = "https://localhost:7006/api";
+const API_BASE = "http://localhost:5133/api";
 
 async function apiFetch(path, options = {}) {
   const res = await fetch(`${API_BASE}${path}`, {

@@ -1,27 +1,23 @@
 ﻿using APIJuegos.Data;
-using APIJuegos.Data.Modelos;
+using APIJuegos.Modelos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
-using System.Data;
-using System.Text.Json;
+
 
 namespace APIJuegos.Controllers
 {
 
     [ApiController]
     [Route("api/[controller]")]
-
     [EnableCors("FrontWithCookies")]
     [Authorize]
 
     public class AdminController : ControllerBase
     {
-        private readonly PracticaJuegosUcrContext _context;
+        private readonly JuegosProdhabContext _context;
 
-        public AdminController(PracticaJuegosUcrContext context)
+        public AdminController(JuegosProdhabContext context)
         {
             _context = context;
         }

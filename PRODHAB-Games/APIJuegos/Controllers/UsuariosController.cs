@@ -1,35 +1,49 @@
 ﻿using APIJuegos.Data;
-using APIJuegos.Data.Helpers;
-using APIJuegos.Data.Modelos;
+using APIJuegos.Helpers;
+using APIJuegos.Modelos;
 
 //John--------------------------------------------------
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+
 //---------------------------------------------------
 
 namespace APIJuegos.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [EnableCors("FrontWithCookies")]
-    [Authorize(Roles = "admin")]
+    //[EnableCors("FrontWithCookies")]
+    //[Authorize(Roles = "admin")]
     public class UsuariosController : ControllerBase
     {
-        private readonly PracticaJuegosUcrContext _context;
+        private readonly JuegosProdhabContext _context;
 
-        public UsuariosController(PracticaJuegosUcrContext context)
+        public UsuariosController(JuegosProdhabContext context)
         {
             _context = context;
         }
 
         // GET: api/usuarios
         [HttpGet]
-        public IEnumerable<Usuarios> Get()
+        public IActionResult Get()
         {
-            return _context.Usuarios.ToList();
+            var usuarios = _context.Usuarios
+                .Include(u => u.Rol)
+                .Select(u => new
+                {
+                    u.Correo,
+                    Estado = u.Activo,
+                    Rol = u.Rol.Nombre,
+                    u.FechaCreacion
+                })
+                .ToList();
+
+            return Ok(usuarios);
         }
+
 
         // GET: api/Usuarios/5
         [HttpGet("{idUsuarios}")]
@@ -83,18 +97,28 @@ namespace APIJuegos.Controllers
             return Ok(usuario);
         }
 
-        // DELETE: api/Usuario/5
-        [HttpDelete("{idUsuario}")]
-        public ActionResult Delete(int idUsuario)
+
+
+        // DELETE: api/Usuario?correo=ejemplo@correo.com
+
+
+        // DELETE: api/Usuarios/{correo}
+        [HttpDelete("{correo}")] // correo viene en la URL
+        public ActionResult DeleteByEmail(string correo)
         {
-            var usuario = _context.Usuarios.Find(idUsuario);
+            if (string.IsNullOrEmpty(correo))
+                return BadRequest("El correo es obligatorio");
+
+            var usuario = _context.Usuarios.FirstOrDefault(u => u.Correo == correo);
             if (usuario == null)
                 return NotFound();
 
             _context.Usuarios.Remove(usuario);
             _context.SaveChanges();
+
             return NoContent();
         }
+
 
         public record RegisterRequest(string Correo, string Password, int RolId, bool Activo);
 
@@ -116,11 +140,13 @@ namespace APIJuegos.Controllers
                 else
                 {
                     // 🔹 Reactivar usuario existente
+        
                     var salt = PasswordHelper.GenerateSalt();
                     var hash = PasswordHelper.HashPassword(req.Password, salt);
-
-                    existingUser.Salt = salt;
+                    existingUser.Salt = Convert.ToBase64String(salt);
                     existingUser.Clave = hash;
+
+
                     existingUser.RolId = req.RolId;
                     existingUser.Activo = true;  // lo marcamos como activo
 
@@ -136,8 +162,8 @@ namespace APIJuegos.Controllers
             var user = new Usuarios
             {
                 Correo = req.Correo,
-                Clave = nuevoHash,
-                Salt = nuevoSalt,
+                Clave = nuevoHash,                    // byte[]
+                Salt = Convert.ToBase64String(nuevoSalt), // string
                 RolId = req.RolId,
                 FechaCreacion = DateTime.UtcNow,
                 Activo = req.Activo
@@ -150,10 +176,21 @@ namespace APIJuegos.Controllers
         }
 
 
+
         [HttpPut("desactivar/{correo}")]
         public async Task<IActionResult> DesactivarUsuario(string correo)
         {
-            // Buscar el usuario por correo (sin distinguir mayúsculas/minúsculas)
+            // Obtener el correo del usuario logueado desde el JWT
+            var correoLogueado = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+
+            if (correoLogueado == null)
+                return Unauthorized(new { message = "Token inválido" });
+
+            // Evitar que el admin se desactive a sí mismo
+            if (correoLogueado.ToLower() == correo.ToLower())
+                return BadRequest(new { message = "No puedes desactivar tu propia cuenta" });
+
+            // Buscar el usuario a desactivar
             var usuario = await _context.Usuarios
                 .FirstOrDefaultAsync(u => u.Correo.ToLower() == correo.ToLower());
 
@@ -169,12 +206,19 @@ namespace APIJuegos.Controllers
             return Ok(new { message = "Usuario desactivado correctamente" });
         }
 
-        [HttpPut("activar/{id}")]
-        public async Task<IActionResult> ActivarUsuario(int id)
+
+        [HttpPut("activar/{correo}")]
+        public async Task<IActionResult> ActivarUsuario(string correo)
         {
-            var usuario = await _context.Usuarios.FindAsync(id);
+            // Buscar el usuario por correo (sin distinguir mayúsculas/minúsculas)
+            var usuario = await _context.Usuarios
+                .FirstOrDefaultAsync(u => u.Correo.ToLower() == correo.ToLower());
+
             if (usuario == null)
                 return NotFound(new { message = "Usuario no encontrado" });
+
+            if (usuario.Activo)
+                return BadRequest(new { message = "El usuario ya está activo" });
 
             usuario.Activo = true;
             await _context.SaveChangesAsync();
@@ -194,11 +238,14 @@ namespace APIJuegos.Controllers
             if (usuario == null)
                 return NotFound(new { message = "Usuario no encontrado" });
 
+
+
             var nuevoSalt = PasswordHelper.GenerateSalt();
             var nuevoHash = PasswordHelper.HashPassword(request.NuevaClave, nuevoSalt);
 
-            usuario.Salt = nuevoSalt;
+            usuario.Salt = Convert.ToBase64String(nuevoSalt);
             usuario.Clave = nuevoHash;
+
 
             await _context.SaveChangesAsync();
 

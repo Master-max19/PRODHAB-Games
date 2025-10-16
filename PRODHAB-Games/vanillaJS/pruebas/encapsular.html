@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <!-- Script 1 -->
+  <script>
+    (function() {
+      const mensaje = 'Hola desde script 1';
+
+      function saludar() {
+        return mensaje;
+      }
+
+      // Exponer solo lo necesario
+      window.Modulo1 = { saludar };
+    })();
+  </script>
+
+  <!-- Script 2 -->
+  <script>
+    (function() {
+      if (window.Modulo1) {
+        console.log('Script 2 ->', window.Modulo1.saludar());
+      } else {
+        console.log('Script 1 no cargado');
+      }
+    })();
+  </script>
+
+  <!-- Script 3 -->
+  <script>
+    (function() {
+      console.log('Script 3 aislado totalmente');
+    })();
+  </script>
+</body>
+</html>

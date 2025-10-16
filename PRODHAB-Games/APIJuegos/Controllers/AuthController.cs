@@ -1,6 +1,6 @@
 ﻿using APIJuegos.Data;
-using APIJuegos.Data.Helpers;
-using APIJuegos.Data.Modelos;
+using APIJuegos.Helpers;
+using APIJuegos.Modelos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -15,15 +15,15 @@ namespace APIJuegos.Controllers
     [ApiController]
     [Route("api/[controller]")]
 
-    [EnableCors("FrontWithCookies")]
+    //[EnableCors("FrontWithCookies")]
 
 
     public class AuthController : ControllerBase
     {
         private readonly IConfiguration _config;
-        private readonly PracticaJuegosUcrContext _context;
+        private readonly JuegosProdhabContext _context;
 
-        public AuthController(IConfiguration config, PracticaJuegosUcrContext context)
+        public AuthController(IConfiguration config, JuegosProdhabContext context)
         {
             _config = config;
             _context = context;
@@ -46,29 +46,32 @@ namespace APIJuegos.Controllers
             if (!usuario.Activo)
                 return Unauthorized(new { message = "Usuario inactivo, contacte al administrador" });
 
-            var hashedInput = PasswordHelper.HashPassword(request.Password, usuario.Salt);
 
-            if (!hashedInput.SequenceEqual(usuario.Clave))
+            var saltBytes = Convert.FromBase64String(usuario.Salt);
+            bool isValid = PasswordHelper.VerifyPassword(request.Password, saltBytes, usuario.Clave);
+
+            if (!isValid)
                 return Unauthorized(new { message = "Contraseña incorrecta" });
+
 
             var token = GenerateJwtToken(usuario);
 
             // 🔹 Guardar JWT en cookie
-            Response.Cookies.Append("jwt", token, new CookieOptions
+            Response.Cookies.Append("jwt_admin_juegos_prodhab", token, new CookieOptions
             {
                 HttpOnly = true,
                 Secure = true,   // cambiar si se usa http
                 SameSite = SameSiteMode.None
             });
 
-            return Ok(new { message = "Login exitoso" });
+            return Ok(new { message = "Login exitoso"  });
         }
 
 
         [HttpPost("logout")]
         public IActionResult Logout()
         {
-            Response.Cookies.Delete("jwt", new CookieOptions
+            Response.Cookies.Delete("jwt_admin_juegos_prodhab", new CookieOptions
             {
                 Secure = true,
                 SameSite = SameSiteMode.None

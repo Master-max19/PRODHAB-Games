@@ -1,6 +1,5 @@
 using APIJuegos.Data;
 using Microsoft.EntityFrameworkCore;
-
 //John---------------------------------------------------
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -17,35 +16,43 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<PracticaJuegosUcrContext>(options =>
+builder.Services.AddDbContext<JuegosProdhabContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // 🔹 Permitir CORS desde cualquier origen
+
+
+
+
 builder.Services.AddCors(options =>
 {
+    // 1️⃣ Política para permitir todo (Development o test)
     options.AddPolicy("AllowAll", policy =>
     {
         policy
-            .AllowAnyOrigin()
+            .SetIsOriginAllowed(origin => true) // permite cualquier origen
             .AllowAnyHeader()
-            .AllowAnyMethod();
+            .AllowAnyMethod()
+            .AllowCredentials(); // si quieres incluir cookies
     });
 
-    //John-------------------------------------------------
+    // 2️⃣ Política para frontend con cookies (producción)
     options.AddPolicy("FrontWithCookies", policy =>
     {
         policy
-            .WithOrigins("http://localhost:5165")
+            .WithOrigins("http://localhost:8080") // solo tu frontend
             .AllowAnyHeader()
             .AllowAnyMethod()
-            .AllowCredentials();
+            .AllowCredentials(); // importante para enviar cookies de sesión
     });
-    //-----------------------------------------------------
 });
+
+
+
 
 //John-----------------------------------------------
 
-var jwtKey = builder.Configuration["Jwt:Key"];        
+var jwtKey = builder.Configuration["Jwt:Key"];
 var jwtIssuer = builder.Configuration["Jwt:Issuer"];
 
 // 🔹 Configuración de JWT
@@ -69,9 +76,9 @@ builder.Services
         {
             OnMessageReceived = ctx =>
             {
-                if (ctx.Request.Cookies.ContainsKey("jwt"))
+                if (ctx.Request.Cookies.ContainsKey("jwt_admin_juegos_prodhab"))
                 {
-                    ctx.Token = ctx.Request.Cookies["jwt"];
+                    ctx.Token = ctx.Request.Cookies["jwt_admin_juegos_prodhab"];
                 }
                 return Task.CompletedTask;
             }
@@ -97,27 +104,26 @@ if (app.Environment.IsDevelopment())
 
 //app.UseCors("AllowAll");   LOS LLAME ESPESIFICAMENTE EN LAS CLASES QUE LOS VOY A USAR
 //app.UseCors("FrontWithCookies");       LOS LLAME ESPESIFICAMENTE EN LAS CLASES QUE LOS VOY A USAR
+
+
+app.UseHttpsRedirection();
+
+
 app.UseRouting();
 
-app.UseCors();
+// ⚠️ Importante: usar CORS antes de Auth/Authorization
+app.UseCors("AllowAll"); // ⚠️ Muy importante
 
-app.UseHttpsRedirection();
-app.MapControllers();
-   app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Mi API v1");
- });
-
-
-
-app.UseHttpsRedirection();
-
-//John--------------------------------------------
 app.UseAuthentication();
 app.UseAuthorization();
-//-----------------------------------------------
 
-app.MapControllers(); // esto es importante
 
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Mi API v1");
+});
+
+app.MapControllers();
 
 app.Run();

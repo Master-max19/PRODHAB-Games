@@ -37,7 +37,11 @@ class JuegoOrdenaLetras extends HTMLElement {
     // Renderizar el contenido del shadow DOM
     this.shadowRoot.innerHTML = `
     <style>
-      @import url("https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap");
+    *{
+              font-family: "Raleway", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+
+    }
+    
       .card {
         position: absolute;
         inset: 0;
@@ -53,14 +57,14 @@ class JuegoOrdenaLetras extends HTMLElement {
     </style>
 
     <div class="card active" style="--card-color: #4caf50">
-      <inicio-adivina-component video-src="${inicioVideoSrc}"></inicio-adivina-component>
+      <intro-adivina-component video-src="${inicioVideoSrc}"></intro-adivina-component>
     </div>
 
     <div class="card" style="--card-color: #ff5722">
-      <juego-memoria
+      <ordena-letras-component
         style="width: 100%"
         video-final-src="${videoFinalSrc}"
-      ></juego-memoria>
+      ></ordena-letras-component>
     </div>
   `;
 
@@ -70,7 +74,7 @@ class JuegoOrdenaLetras extends HTMLElement {
 
 
   eventoSiguiente() {
-    const comp = this.shadowRoot.querySelector("inicio-adivina-component");
+    const comp = this.shadowRoot.querySelector("intro-adivina-component");
     // escuchamos el evento personalizado que dispara el hijo
     comp.addEventListener("jugar-click", () => {
       this.nextCard();

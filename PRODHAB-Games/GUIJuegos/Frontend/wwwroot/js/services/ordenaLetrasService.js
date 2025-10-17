@@ -29,6 +29,16 @@ const OrdenaLetrasService = {
         texto: "En Costa Rica, la Ley 8968 protege la información personal.",
         palabras: ["Costa", "Rica"],
         tema: "Protección de datos"
+      },
+      {
+        texto: "La independencia de Costa Rica se celebra cada 15 de septiembre.",
+        palabras: ["independencia", "septiembre"],
+        tema: "Historia"
+      },
+      {
+        texto: "El café de Costa Rica es reconocido mundialmente por su calidad.",
+        palabras: ["café", "Costa", "Rica"],
+        tema: "Gastronomía"
       }
     ];
 

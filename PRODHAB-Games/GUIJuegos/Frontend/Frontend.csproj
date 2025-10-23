@@ -1,14 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
-
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
-  <!-- EXCLUIR precomprimidos para evitar la colisión -->
   <ItemGroup>
     <Content Remove="wwwroot\**\*.gz" />
     <Content Remove="wwwroot\**\*.br" />
+    <StaticWebAsset Remove="wwwroot\**\*.gz" />
+    <StaticWebAsset Remove="wwwroot\**\*.br" />
   </ItemGroup>
 </Project>

@@ -1,0 +1,32 @@
+@page "/login-nuevo"
+@using System
+@using System.Collections.Generic
+
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+  }
+  .fondo {
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(135deg, #7c3aed, #4f46e5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+</style>
+
+<div class="fondo">
+  <login-card-component></login-card-component>
+</div>
+
+<!-- ✅ RUTAS CORREGIDAS DESDE Pages -->
+<script src="../js/juegosEnvironments.js"></script>
+<script src="../js/services/fetchService.js"></script>
+<script src="../js/services/authService.js"></script>
+<script src="../js/login/login-card-component.js"></script>
+<script src="../js/login/loginEvents.js"></script>

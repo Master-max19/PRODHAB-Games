@@ -1,13 +1,16 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using APIJuegos.Data;
 using APIJuegos.Modelos;
+using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Net;
 
 namespace APIJuegos.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [EnableCors("AllowAll")]
+
     public class RangoEvaluacionController : ControllerBase
     {
         private readonly JuegosProdhabContext _context;

@@ -21,9 +21,6 @@ public class JuegosProdhabContext : DbContext
     public DbSet<PreguntaJuego> PreguntaJuego { get; set; }
     public DbSet<Usuarios> Usuarios { get; set; }
 
-
-
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
 
@@ -35,9 +32,6 @@ public class JuegosProdhabContext : DbContext
 
         });
 
-
-        // Otra forma
-        // modelBuilder.Entity<Frutas>().ToTable("Frutas");
 
         modelBuilder.Entity<ResultadosJuego>(entity =>
         {

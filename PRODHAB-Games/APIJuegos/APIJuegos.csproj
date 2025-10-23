@@ -16,6 +16,19 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.8" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
+    <Compile Remove="Data\Helpers\**" />
+    <Compile Remove="Data\Modelos\**" />
+    <Content Remove="Data\Helpers\**" />
+    <Content Remove="Data\Modelos\**" />
+    <EmbeddedResource Remove="Data\Helpers\**" />
+    <EmbeddedResource Remove="Data\Modelos\**" />
+    <None Remove="Data\Helpers\**" />
+    <None Remove="Data\Modelos\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\FrutasController.cs" />
+    <Compile Remove="Data\PracticaJuegosUcrContext.cs" />
   </ItemGroup>
 
 </Project>

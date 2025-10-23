@@ -9,7 +9,7 @@ const OrdenaLetrasService = {
    *
    * @async
    * @function obtenerTextoYPalabras
-   * @param {number} [idJuego=1] - Identificador del juego (opcional).
+   * @param {number} [idJuego=2] - Identificador del juego (opcional).
    * @returns {Promise<Object>} Objeto con información del juego.
    * @returns {number} return.idJuego - ID del juego.
    * @returns {string} return.texto - Texto de introducción.
@@ -22,31 +22,31 @@ const OrdenaLetrasService = {
    * console.log(res.palabras); // ["café", "Costa", "Rica"]
    * console.log(res.tema); // "Gastronomía"
    */
-  async obtenerTextoYPalabras(idJuego = 1) {
-    // Lista de ejemplos
-    const ejemplos = [
-      {
+  async obtenerTextoYPalabras(idJuego = 2) {
+    try {
+      const res = await fetch(`https://localhost:7006/api/Preguntas/juegos/${idJuego}`);
+      if (!res.ok) throw new Error('Error al obtener texto');
+      
+      const data = await res.json();
+      
+      const preguntaAleatoria = data.preguntas[Math.floor(Math.random() * data.preguntas.length)];
+      
+      return {
+        idJuego,
+        texto: preguntaAleatoria.enunciado.trim(),
+        palabras: preguntaAleatoria.respuestas.map(r => r.texto),
+        tema: data.nombre 
+      };
+      
+    } catch (error) {
+      console.error('Error fetching texto:', error);
+      return {
+        idJuego,
         texto: "En Costa Rica, la Ley 8968 protege la información personal.",
-        palabras: ["Costa", "Rica"],
+        palabras: ["Costa", "Rica", "8968"],
         tema: "Protección de datos"
-      },
-      {
-        texto: "La independencia de Costa Rica se celebra cada 15 de septiembre.",
-        palabras: ["independencia", "septiembre"],
-        tema: "Historia"
-      },
-      {
-        texto: "El café de Costa Rica es reconocido mundialmente por su calidad.",
-        palabras: ["café", "Costa", "Rica"],
-        tema: "Gastronomía"
-      }
-    ];
-
-    const aleatorio = ejemplos[Math.floor(Math.random() * ejemplos.length)];
-    return {
-      idJuego,
-      ...aleatorio
-    };
+      };
+    }
   }
 };
 

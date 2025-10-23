@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\jberm\\OneDrive\\Desktop\\a\\PRODHAB\\Juego\\PRODHAB-Games\\PRODHAB-Games\\GUIJuegos\\Frontend\\Frontend.csproj",
+      "projectUniqueName": "C:\\Users\\jberm\\OneDrive\\Desktop\\a\\PRODHAB\\Juego\\PRODHAB-Games\\PRODHAB-Games\\guijuegos\\frontend\\Frontend.csproj",
       "projectName": "Frontend",
-      "projectPath": "C:\\Users\\jberm\\OneDrive\\Desktop\\a\\PRODHAB\\Juego\\PRODHAB-Games\\PRODHAB-Games\\GUIJuegos\\Frontend\\Frontend.csproj",
+      "projectPath": "C:\\Users\\jberm\\OneDrive\\Desktop\\a\\PRODHAB\\Juego\\PRODHAB-Games\\PRODHAB-Games\\guijuegos\\frontend\\Frontend.csproj",
       "packagesPath": "C:\\Users\\jberm\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\jberm\\OneDrive\\Desktop\\a\\PRODHAB\\Juego\\PRODHAB-Games\\PRODHAB-Games\\GUIJuegos\\Frontend\\obj\\",
+      "outputPath": "C:\\Users\\jberm\\OneDrive\\Desktop\\a\\PRODHAB\\Juego\\PRODHAB-Games\\PRODHAB-Games\\guijuegos\\frontend\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

@@ -16,6 +16,7 @@ namespace APIJuegos.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [EnableCors("AllowAll")]
 
     public class PreguntasController : ControllerBase
     {

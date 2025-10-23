@@ -1,0 +1,86 @@
+@page "/admin-nuevo"
+@using System
+@using System.Collections.Generic
+
+   <side-nav-component id="menu">
+      <div id="option1" class="option">
+        <admin-header-component
+          title="Administrar usuarios"
+          hide-buttons
+        ></admin-header-component>
+
+        <admin-user-panel></admin-user-panel>
+
+        <simple-table-component
+          id="tabla-usuario-component"
+        ></simple-table-component>
+      </div>
+
+      <div id="option2" class="option"></div>
+
+      <div id="not-found" class="option">
+        <h2>404</h2>
+        <p>Página no encontrada.</p>
+      </div>
+    </side-nav-component>
+
+    <modal-component id="modal-admin-crud"></modal-component>
+
+    <script src="js/services/fetchService.js"></script>
+    <script src="js/juegosEnvironments.js"></script>
+    <script src="js/services/crudTestService.js"></script>
+    <script src="js/services/authService.js"></script>
+    <script src="js/services/usuarioService.js"></script>
+    <script src="js/admin/table-component.js"></script>
+    <script src="js/admin/mainAdminPanel.js"></script>
+    <script src="js/admin/mainTable.js"></script>
+    <script src="js/services/rangoEvaluacionService.js"></script>
+    <script src="js/admin/form-test-component.js"></script>
+    <script src="js/admin/admin-header-component.js"></script>
+    <script src="js/admin/test-viewer-component.js"></script>
+    <script src="js/admin/side-nav-component.js"></script>
+    <script src="js/admin/admin-user-panel-component.js"></script>
+    <script src="js/admin/simple-table-component.js"></script>
+    <script src="js/admin/mainUser.js"></script>
+
+    <script>
+      const option2 = document.getElementById("option2");
+
+      option2.innerHTML = `
+  <admin-header-component title="Test"></admin-header-component>
+  <form-test-component modo="registrar"></form-test-component>
+  <test-viewer-component></test-viewer-component>
+  <table-component id="miTabla" style="margin-bottom: 15px; margin-top: 25px;"></table-component>
+`;
+
+      const sidenav = document.querySelector("#menu");
+
+      sidenav.menuOptions = [
+        { id: "option1", title: "Administrar usuarios", path: "#/html" },
+        { id: "option2", title: "Administrar test", path: "#/admin" },
+        { type: "button", title: "Cerrar sesión", event: "logout" },
+      ];
+
+      sidenav.addEventListener("logout", async () => {
+        // Eliminar la sesión local
+        sessionStorage.removeItem("sesion_admin_juegos_prodhab");
+
+        try {
+          // Usar el servicio en lugar de fetch directo
+          const exito = await AuthService.logout();
+          if (!exito) console.warn("No se pudo cerrar sesión en el servidor");
+        } catch (err) {
+          console.error("Error en logout:", err);
+        }
+
+        // Redirigir al login
+        window.location.href = CONFIG.routes.login;
+      });
+
+      // Inicializar vista
+      sidenav.navigate("#/html");
+
+      // Cada vez que seleccionas una opción del menú:
+    </script>
+    <script src="../modal/modal-component.js"></script>
+    <script src="mainAdminCrud.js"></script>

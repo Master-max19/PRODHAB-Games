@@ -1,0 +1,17 @@
+@page "/test-nuevo"
+@inject Microsoft.Extensions.Configuration.IConfiguration Cfg
+@using System
+@using System.Collections.Generic
+
+<test-component
+  style-url="/css/test.css"
+  correcta_svg="../../images/correcta.svg"
+  incorrecta_svg="../../images/incorrecta.svg"
+  character_png="../../images/superdato_2.png">
+</test-component>
+
+
+<script src="js/test/test.js"></script>
+<script src="js/services/testService.js"></script>
+<script src="js/juegosEnvironments.js"></script>
+<script src="js/test/test-component.js"></script>

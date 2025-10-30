@@ -1,12 +1,54 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\jberm\\OneDrive\\Desktop\\a\\PRODHAB\\Juego\\PRODHAB-Games\\PRODHAB-Games\\APIJuegos\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{53DAF4F1-3FE5-78AB-E77B-A6E5F5068DC0}|APIJuegos.csproj|c:\\users\\jberm\\onedrive\\desktop\\a\\prodhab\\juego\\prodhab-games\\prodhab-games\\apijuegos\\controllers\\resultadosjuegocotroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{53DAF4F1-3FE5-78AB-E77B-A6E5F5068DC0}|APIJuegos.csproj|solutionrelative:controllers\\resultadosjuegocotroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{53DAF4F1-3FE5-78AB-E77B-A6E5F5068DC0}|APIJuegos.csproj|c:\\users\\jberm\\onedrive\\desktop\\a\\prodhab\\juego\\prodhab-games\\prodhab-games\\apijuegos\\controllers\\juegoscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{53DAF4F1-3FE5-78AB-E77B-A6E5F5068DC0}|APIJuegos.csproj|solutionrelative:controllers\\juegoscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 1119,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "JuegosController.cs",
+              "DocumentMoniker": "C:\\Users\\jberm\\OneDrive\\Desktop\\a\\PRODHAB\\Juego\\PRODHAB-Games\\PRODHAB-Games\\APIJuegos\\Controllers\\JuegosController.cs",
+              "RelativeDocumentMoniker": "Controllers\\JuegosController.cs",
+              "ToolTip": "C:\\Users\\jberm\\OneDrive\\Desktop\\a\\PRODHAB\\Juego\\PRODHAB-Games\\PRODHAB-Games\\APIJuegos\\Controllers\\JuegosController.cs",
+              "RelativeToolTip": "Controllers\\JuegosController.cs",
+              "ViewState": "AgIAABEAAAAAAAAAAAAAwBkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-27T19:19:09.439Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ResultadosJuegoCotroller.cs",
+              "DocumentMoniker": "C:\\Users\\jberm\\OneDrive\\Desktop\\a\\PRODHAB\\Juego\\PRODHAB-Games\\PRODHAB-Games\\APIJuegos\\Controllers\\ResultadosJuegoCotroller.cs",
+              "RelativeDocumentMoniker": "Controllers\\ResultadosJuegoCotroller.cs",
+              "ToolTip": "C:\\Users\\jberm\\OneDrive\\Desktop\\a\\PRODHAB\\Juego\\PRODHAB-Games\\PRODHAB-Games\\APIJuegos\\Controllers\\ResultadosJuegoCotroller.cs",
+              "RelativeToolTip": "Controllers\\ResultadosJuegoCotroller.cs",
+              "ViewState": "AgIAADUAAAAAAAAAAAAuwE4AAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-27T19:18:03.194Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 }

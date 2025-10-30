@@ -1,26 +1,115 @@
+﻿using APIJuegos.Data;
+using APIJuegos.DTOs;
+using APIJuegos.Modelos;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using APIJuegos.Data;
-using APIJuegos.Modelos;
-using APIJuegos.DTOs;
+using System.Linq;
 using System.Runtime.InteropServices;
-using Microsoft.AspNetCore.Cors;
-
 
 namespace APIJuegos.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [EnableCors("AllowAll")]
+    [EnableCors("FrontWithCookies")]
+    [Authorize]
 
-    public class JuegosController : ControllerBase
+    public class ResultadosJuegoCotroller : ControllerBase
     {
         private readonly JuegosProdhabContext _context;
 
-        public JuegosController(JuegosProdhabContext context)
+        public ResultadosJuegoCotroller(JuegosProdhabContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
+
+        [HttpPost("registrar/{idJuego:int}")]
+        public async Task<IActionResult> RegistrarResultado(int idJuego)
+        {
+            bool existeJuego = await _context.Juegos
+                .AsNoTracking()
+                .AnyAsync(j => j.IdJuegos == idJuego);
+            if (!existeJuego) return NotFound("El juego no existe.");
+
+            const int CANTIDAD_ITEMS_ESTATICO = 10;
+            const int ACIERTOS_ESTATICO = 7;
+            const decimal NOTA_ESTATICA = 70.00m;
+
+            var nuevo = new ResultadosJuego
+            {
+                IdJuegos = idJuego,
+                CantidadItems = CANTIDAD_ITEMS_ESTATICO,
+                Aciertos = ACIERTOS_ESTATICO,
+                Nota = Math.Round(NOTA_ESTATICA, 2),
+                FechaRegistro = DateTime.Now
+            };
+
+            _context.ResultadosJuego.Add(nuevo);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { Mensaje = "OK", nuevo.IdResultadoJuego });
+        }
+
+
+        [HttpGet("estadisticas/{idJuego:int}")]
+        public async Task<IActionResult> Getultimos30Dias(int idJuego)
+        {
+            // Traer existencia + nombre del tipo de evaluación en la MISMA consulta
+            var infoJuego = await _context.Juegos
+                .AsNoTracking()
+                .Where(j => j.IdJuegos == idJuego)
+                .Select(j => new
+                {
+                    j.IdJuegos,
+                    TipoEvaluacion = j.Nombre
+
+                })
+                .FirstOrDefaultAsync();
+
+            if (infoJuego is null)
+                return NotFound("El juego no existe.");
+
+            var desde = DateTime.Now.AddDays(-30); // últimos 30 días
+
+            var q = _context.ResultadosJuego
+                .AsNoTracking()
+                .Where(r => r.IdJuegos == idJuego && r.FechaRegistro >= desde);
+
+            if (idJuego == 1)
+            {
+                var agregado = await q
+                    .GroupBy(_ => 1)
+                    .Select(g => new
+                    {
+                        Cantidad = g.Count(),
+                        Promedio = g.Average(x => (decimal?)x.Nota)
+                    })
+                    .FirstOrDefaultAsync();
+
+                var cantidad = agregado?.Cantidad ?? 0;
+                var promedio = Math.Round(agregado?.Promedio ?? 0m, 2);
+
+                return Ok(new
+                {
+                    IdJuegos = idJuego,
+                    TipoEvaluacion = infoJuego.TipoEvaluacion, 
+                    CantidadRegistrosUlt30Dias = cantidad,
+                    PromedioNotaUlt30Dias = promedio
+                });
+            }
+            else
+            {
+                var cantidad = await q.CountAsync();
+                return Ok(new
+                {
+                    IdJuegos = idJuego,
+                    TipoEvaluacion = infoJuego.TipoEvaluacion, 
+                    CantidadRegistrosUlt30Dias = cantidad
+                });
+            }
+        }
+
 
 
         /// <summary>
@@ -188,67 +277,6 @@ namespace APIJuegos.Controllers
             };
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Juegos>>> Get()
-        {
-            return await _context.Juegos.ToListAsync();
-        }
 
-        [HttpGet("{idJuegos}")]
-        public async Task<ActionResult<Juegos>> GetById(int idJuegos)
-        {
-            var juego = await _context.Juegos.FindAsync(idJuegos);
-            if (juego == null)
-                return NotFound();
-            return juego;
-        }
-
-
-        [HttpPost]
-        public async Task<ActionResult<Juegos>> Create(Juegos nuevoJuego)
-        {
-            if (nuevoJuego == null || string.IsNullOrWhiteSpace(nuevoJuego.Nombre))
-                return BadRequest("El juego debe tener un nombre.");
-
-            nuevoJuego.Descripcion ??= string.Empty;
-            nuevoJuego.Detalle ??= string.Empty;
-
-            _context.Juegos.Add(nuevoJuego);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(
-                nameof(GetById), new { idJuegos = nuevoJuego.IdJuegos }, nuevoJuego);
-        }
-
-
-        [HttpPut("{idJuegos}")]
-        public async Task<ActionResult<Juegos>> Update(int idJuegos,
-                                                       Juegos juegoActualizado)
-        {
-            var juego = await _context.Juegos.FindAsync(idJuegos);
-            if (juego == null)
-                return NotFound();
-
-            juego.Nombre = juegoActualizado.Nombre ?? juego.Nombre;
-            juego.Descripcion = juegoActualizado.Descripcion ?? juego.Descripcion;
-            juego.Detalle = juegoActualizado.Detalle ?? juego.Detalle;
-
-            await _context.SaveChangesAsync();
-
-            return Ok(juego);
-        }
-
-        [HttpDelete("{idJuegos}")]
-        public async Task<ActionResult> Delete(int idJuegos)
-        {
-            var juego = await _context.Juegos.FindAsync(idJuegos);
-            if (juego == null)
-                return NotFound();
-
-            _context.Juegos.Remove(juego);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
     }
 }

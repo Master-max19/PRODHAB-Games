@@ -71,8 +71,8 @@ public class JuegosProdhabContext : DbContext
 
         modelBuilder.Entity<Usuarios>(entity =>
         {
-            entity.HasKey(e => e.Id);
-            entity.Property(e => e.Correo).HasMaxLength(255);
+            entity.HasKey(u => u.Id);
+            entity.Property(u => u.Correo).HasMaxLength(255);
         });
 
     }

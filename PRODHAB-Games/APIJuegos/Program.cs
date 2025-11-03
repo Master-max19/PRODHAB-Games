@@ -1,11 +1,12 @@
+using System.Text;
 using APIJuegos.Data;
-using Microsoft.EntityFrameworkCore;
+using APIJuegos.Modelos; // <- Ajusta según tu carpeta donde está TipoJuego
 //John---------------------------------------------------
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
-//-----------------------------------------------
 
+//-----------------------------------------------
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,38 +18,39 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<JuegosProdhabContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+);
 
 // 🔹 Permitir CORS desde cualquier origen
-
-
-
 
 builder.Services.AddCors(options =>
 {
     // 1️⃣ Política para permitir todo (Development o test)
-    options.AddPolicy("AllowAll", policy =>
-    {
-        policy
-            .SetIsOriginAllowed(origin => true) // permite cualquier origen
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials(); // si quieres incluir cookies
-    });
+    options.AddPolicy(
+        "AllowAll",
+        policy =>
+        {
+            policy
+                .SetIsOriginAllowed(origin => true) // permite cualquier origen
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials(); // si quieres incluir cookies
+        }
+    );
 
     // 2️⃣ Política para frontend con cookies (producción)
-    options.AddPolicy("FrontWithCookies", policy =>
-    {
-        policy
-            .WithOrigins("http://localhost:8080") // solo tu frontend
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials(); // importante para enviar cookies de sesión
-    });
+    options.AddPolicy(
+        "FrontWithCookies",
+        policy =>
+        {
+            policy
+                .WithOrigins("http://localhost:8080") // solo tu frontend
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials(); // importante para enviar cookies de sesión
+        }
+    );
 });
-
-
-
 
 //John-----------------------------------------------
 
@@ -56,8 +58,8 @@ var jwtKey = builder.Configuration["Jwt:Key"];
 var jwtIssuer = builder.Configuration["Jwt:Issuer"];
 
 // 🔹 Configuración de JWT
-builder.Services
-    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+builder
+    .Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         options.SaveToken = true;
@@ -68,7 +70,7 @@ builder.Services
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
             ValidIssuer = jwtIssuer,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey!))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey!)),
         };
 
         // Leer el token desde la cookie HttpOnly "jwt"
@@ -81,14 +83,39 @@ builder.Services
                     ctx.Token = ctx.Request.Cookies["jwt_admin_juegos_prodhab"];
                 }
                 return Task.CompletedTask;
-            }
+            },
         };
     });
 
 //-----------------------------------------------------
 
-
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<JuegosProdhabContext>();
+
+    using var transaction = db.Database.BeginTransaction(); // Inicia la transacción
+
+    var tiposIniciales = new List<TipoJuego>
+    {
+        new TipoJuego { IdTipoJuego = 1, Nombre = "Test" },
+        new TipoJuego { IdTipoJuego = 2, Nombre = "Ordenar palabras" },
+        new TipoJuego { IdTipoJuego = 3, Nombre = "Completar texto" },
+        new TipoJuego { IdTipoJuego = 4, Nombre = "Sopa de letras" },
+    };
+
+    foreach (var tipo in tiposIniciales)
+    {
+        if (!db.TipoJuegos.Any(t => t.IdTipoJuego == tipo.IdTipoJuego))
+        {
+            db.TipoJuegos.Add(tipo);
+        }
+    }
+
+    db.SaveChanges();
+    transaction.Commit(); // Confirma los cambios
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -105,9 +132,7 @@ if (app.Environment.IsDevelopment())
 //app.UseCors("AllowAll");   LOS LLAME ESPESIFICAMENTE EN LAS CLASES QUE LOS VOY A USAR
 //app.UseCors("FrontWithCookies");       LOS LLAME ESPESIFICAMENTE EN LAS CLASES QUE LOS VOY A USAR
 
-
 app.UseHttpsRedirection();
-
 
 app.UseRouting();
 
@@ -116,7 +141,6 @@ app.UseCors("AllowAll"); // ⚠️ Muy importante
 
 app.UseAuthentication();
 app.UseAuthorization();
-
 
 app.UseSwagger();
 app.UseSwaggerUI(c =>

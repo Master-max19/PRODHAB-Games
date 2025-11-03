@@ -1,3 +1,0 @@
-// Para crear la plantilla
-dotnet new webapp -n Frontend
-

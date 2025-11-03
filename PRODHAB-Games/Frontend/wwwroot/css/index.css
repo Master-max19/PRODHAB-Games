@@ -1,0 +1,343 @@
+
+      :root {
+        --primary: #1e40af;
+        --primary-hover: #1d4ed8;
+        --secondary: #64748b;
+        --success: #10b981;
+        --danger: #ef4444;
+        --bg: #f9fafb;
+        --card: #ffffff;
+        --border: #e5e7eb;
+        --text: #111827;
+        --text-light: #6b7280;
+        --radius: 12px;
+        --shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.1);
+        --transition: all 0.25s ease;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.6;
+        min-height: 100vh;
+      }
+
+      .container {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+      }
+
+      /* Header */
+      header {
+        text-align: center;
+        margin-bottom: 3rem;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 0.5rem;
+      }
+
+      .subtitle {
+        color: var(--text-light);
+        font-size: 1.1rem;
+        max-width: 700px;
+        margin: 0 auto;
+      }
+
+      /* Filtros */
+      .filtros {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-bottom: 2.5rem;
+      }
+
+      .filtro-btn {
+        padding: 0.6rem 1.25rem;
+        background: var(--card);
+        color: var(--text);
+        border: 1.5px solid var(--border);
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        box-shadow: var(--shadow);
+      }
+
+      .filtro-btn i {
+        font-size: 1rem;
+        color: var(--secondary);
+      }
+
+      .filtro-btn:hover {
+        border-color: var(--primary);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+      }
+
+      .filtro-btn.active {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+        box-shadow: 0 6px 20px rgba(30, 64, 175, 0.2);
+      }
+
+      .filtro-btn.active i {
+        color: white;
+      }
+
+      /* Grid */
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.75rem;
+        margin-bottom: 3rem;
+      }
+
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        transition: var(--transition);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .card:hover {
+        transform: translateY(-6px);
+        box-shadow: var(--shadow-lg);
+        border-color: var(--primary);
+      }
+
+      .card-header {
+        padding: 1.25rem 1.25rem 0;
+      }
+
+      .card h3 {
+        font-size: 1.35rem;
+        font-weight: 600;
+        color: var(--text);
+        margin-bottom: 0.5rem;
+      }
+
+      .card-body {
+        padding: 0 1.25rem;
+        flex-grow: 1;
+      }
+
+      .card p {
+        color: var(--text-light);
+        font-size: 0.95rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.35rem 0.75rem;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin: 0.75rem 0;
+      }
+
+      .badge i {
+        font-size: 0.9rem;
+      }
+
+      .badge-1 {
+        background: #fef3c7;
+        color: #d97706;
+      }
+      .badge-2 {
+        background: #dbeafe;
+        color: #1e40af;
+      }
+      .badge-3 {
+        background: #d1fae5;
+        color: #059669;
+      }
+      .badge-4 {
+        background: #fef3c7;
+        color: #b45309;
+      }
+
+      .btn-jugar {
+        margin: 1rem 1.25rem;
+        padding: 0.75rem;
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        font-size: 1rem;
+      }
+
+      .btn-jugar:hover {
+        background: var(--primary-hover);
+        box-shadow: 0 6px 16px rgba(30, 64, 175, 0.25);
+      }
+
+      /* Paginación */
+      .paginacion {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.75rem;
+        margin: 2rem 0;
+      }
+
+      .paginacion-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        border: 1.5px solid var(--border);
+        background: white;
+        color: var(--text);
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+      }
+
+      .paginacion-btn:hover:not(:disabled) {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+      }
+
+      .paginacion-btn.active {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+        font-weight: 700;
+      }
+
+      .paginacion-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+
+      /* Juego Activo */
+      .juego-activo {
+        background: var(--card);
+        padding: 2rem;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        margin-bottom: 2rem;
+        border: 1px solid var(--border);
+      }
+
+      .volver-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.25rem;
+        background: var(--secondary);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        margin-bottom: 1.5rem;
+        font-size: 0.95rem;
+      }
+
+      .volver-btn:hover {
+        background: #475569;
+      }
+
+      /* Fullscreen Game */
+      .juego-fullwidth {
+        max-width: 100% !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 1.5rem !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        background: var(--bg) !important;
+        border: none !important;
+      }
+
+      #juegoContainer {
+        width: 100%;
+        max-width: 100%;
+        overflow: hidden;
+      }
+
+      body.juego-abierto {
+        padding: 0 !important;
+        background: var(--bg);
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .container {
+          padding: 1.5rem 1rem;
+        }
+        h1 {
+          font-size: 2.1rem;
+        }
+        .grid {
+          grid-template-columns: 1fr;
+          gap: 1.5rem;
+        }
+        .filtros {
+          flex-direction: column;
+          align-items: center;
+        }
+        .filtro-btn {
+          width: 100%;
+          max-width: 300px;
+          justify-content: center;
+        }
+        .juego-activo {
+          padding: 1.5rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .container {
+          padding: 1rem;
+        }
+        h1 {
+          font-size: 1.8rem;
+        }
+        .card-header,
+        .card-body {
+          padding-left: 1rem;
+          padding-right: 1rem;
+        }
+        .btn-jugar {
+          margin: 1rem;
+        }
+      }

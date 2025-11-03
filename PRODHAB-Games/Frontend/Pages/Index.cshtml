@@ -1,0 +1,58 @@
+﻿@page
+@model IndexModel
+
+
+    <div class="container">
+      <header>
+        <h1>Pruebas - Catálogo de Juegos</h1>
+        <p class="subtitle">
+          Desafíos educativos interactivos para el aprendizaje
+        </p>
+      </header>
+
+      <div class="filtros">
+        <button class="filtro-btn active" data-filtro="todos">Todos</button>
+        <button class="filtro-btn" data-filtro="1">Test</button>
+        <button class="filtro-btn" data-filtro="2">Ordenar Palabra</button>
+        <button class="filtro-btn" data-filtro="3">Completar Texto</button>
+        <button class="filtro-btn" data-filtro="4">Sopa de Letras</button>
+      </div>
+
+      <div class="grid" id="juegosGrid"></div>
+      <div class="paginacion" id="paginacion"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="src/components/test/test.js"></script>
+    <script src="src/services/testService.js"></script>
+    <script src="src/services/juegosService.js"></script>
+
+    <script src="src/juegosEnvironments.js"></script>
+    <script src="src/components/test/test-component.js"></script>
+    <script src="src/services/resultadoJuegoService.js"></script>
+    <script src="src/services/sopaLetrasService.js"></script>
+    <script src="src/components/sopa-letras-component/sopa-letras-component.js"></script>
+    <script src="src/components/sopa-letras-component/modal-sopa.js"></script>
+    <script src="src/services/ordenaLetrasService.js"></script>
+    <script src="src/components/ordena-palabra-component/juego-ordena-letras-component.js"></script>
+    <script src="src/components/ordena-palabra-component/intro-adivina-component.js"></script>
+    <script src="src/components/ordena-palabra-component/ordena-letras-component.js"></script>
+    <script src="src/services/completarTextoService.js"></script>
+    <script src="src/components/completar/completar-texto-component.js"></script>
+
+    <script src="js/index.js"> </script>
+
+
+
+<link href="css/index.css" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+
+   
+

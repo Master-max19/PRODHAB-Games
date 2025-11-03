@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sopa de Letras - Personalizable</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        font-family: "Raleway", sans-serif;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 900px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <sopa-letras-component
+        size="14"
+        id-sopa=""
+        modal1-video="public/video/superdato_anotando.webm"
+        modal2-video="public/video/superdato_idea.webm"
+        superdato-img="public/images/superdato_señalando.png"
+      >
+      </sopa-letras-component>
+    </div>
+    <script src="src/juegosEnvironments.js"></script>
+    <script src="src/services/resultadoJuegoService.js"></script>
+    <script src="src/services/sopaLetrasService.js"></script>
+    <script src="src/components/sopa-letras-component/sopa-letras-component.js"></script>
+    <script src="src/components/sopa-letras-component/modal-sopa.js"></script>
+  </body>
+</html>

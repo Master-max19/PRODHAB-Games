@@ -4,15 +4,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
-
 namespace APIJuegos.Controllers
 {
-
     [ApiController]
     [Route("api/[controller]")]
     [EnableCors("FrontWithCookies")]
     [Authorize]
-
     public class AdminController : ControllerBase
     {
         private readonly JuegosProdhabContext _context;
@@ -23,7 +20,7 @@ namespace APIJuegos.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Preguntas> Get()
+        public IEnumerable<Pregunta> Get()
         {
             return _context.Preguntas.ToList();
         }

@@ -1,0 +1,20 @@
+@page "/sopa-letras"
+@using System
+@using System.Collections.Generic
+    
+    
+    <div class="container">
+      <sopa-letras-component
+        size="14"
+        id-sopa=""
+        modal1-video="public/video/superdato_anotando.webm"
+        modal2-video="public/video/superdato_idea.webm"
+        superdato-img="public/images/superdato_señalando.png"
+      >
+      </sopa-letras-component>
+    </div>
+    <script src="src/juegosEnvironments.js"></script>
+    <script src="src/services/resultadoJuegoService.js"></script>
+    <script src="src/services/sopaLetrasService.js"></script>
+    <script src="src/components/sopa-letras-component/sopa-letras-component.js"></script>
+    <script src="src/components/sopa-letras-component/modal-sopa.js"></script>

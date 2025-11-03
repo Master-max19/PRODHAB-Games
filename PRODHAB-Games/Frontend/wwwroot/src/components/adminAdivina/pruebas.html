@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Items Manager</title>
+  </head>
+  <body>
+    <admin-palabra-component
+      id="miGestor"
+      title="Gestor de Preguntas"
+      add-button-text="Agregar"
+      edit-button-text="Modificar"
+      delete-button-text="Quitar"
+      add-sub-button-text="Añadir opción"
+      prev-button-text="Atrás"
+      next-button-text="Adelante"
+      confirm-delete-text="¿Eliminar este ítem?"
+      items-per-page-label-text="Elementos por página:"
+      sub-placeholder-text="Añadir opción..."
+      save-button-text="Guardar Cambios"
+      cancel-button-text="Cancelar"
+    ></admin-palabra-component>
+
+    <script src="admin-palabra-component.js"></script>
+    <script src="../../juegosEnvironments.js"></script>
+    <script src="../../services/completarTextoService.js"></script>
+
+    <script >
+    
+      document.addEventListener("DOMContentLoaded", () => {
+        const gestor = document.querySelector("#miGestor");
+
+        // ===== EVENTO: Guardar Subitems =====
+        gestor.addEventListener("subitems-save-requested", async (e) => {
+          const { itemId, subItems } = e.detail;
+
+          try {
+            const respuestas = subItems.map((s) => s.texto);
+            console.log("4. Respuestas a enviar:", respuestas);
+
+            const resp = await completarTextoService.guardarSubitems(
+              itemId,
+              respuestas
+            );
+
+            console.log("5. Respuesta del backend:", resp);
+
+            // 1. ENCONTRAR EL ITEM EN MEMORIA
+            const item = gestor._items.find(
+              (i) => String(i.id) === String(itemId)
+            );
+            console.log("6. Item encontrado:", item);
+
+            if (item) {
+              console.log("7. Subitems antes:", item.subItems);
+
+              // El backend devuelve { exito, mensaje, ids }
+              // ids es un array de números
+              if (
+                resp &&
+                resp.ids &&
+                Array.isArray(resp.ids) &&
+                resp.ids.length > 0
+              ) {
+                // Construir subitems con los IDs devueltos y los textos enviados
+                const nuevoSubitems = resp.ids.map((id, idx) => ({
+                  id: id,
+                  texto: respuestas[idx], // Usar el texto que enviamos
+                }));
+
+                console.log("8. Nuevos subitems a agregar:", nuevoSubitems);
+                item.subItems.push(...nuevoSubitems);
+                console.log("9. Subitems después:", item.subItems);
+              } else {
+                console.log("8. Respuesta sin ids o ids vacío");
+              }
+            } else {
+              console.log("ERROR: Item no encontrado");
+            }
+
+            // 3. LIMPIAR PENDIENTES
+            const state = gestor._itemStates.get(itemId);
+            console.log("10. State:", state);
+            if (state) {
+              state.pendingSubItems = [];
+              console.log("11. Pendientes limpiados");
+            }
+
+            // 4. RENDERIZAR
+            console.log("12. Llamando a _render()");
+            gestor._render();
+            console.log("13. Render completado");
+
+            alert(`✓ ${respuestas.length} subitems guardados`);
+          } catch (err) {
+            console.error("ERROR:", err);
+            alert(`✗ Error: ${err.message || err}`);
+          }
+        });
+
+        // ===== EVENTO: Eliminar Item =====
+        gestor.addEventListener("item-delete-requested", async (e) => {
+          const { itemId, absIdx } = e.detail;
+
+          try {
+            await completarTextoService.eliminarRonda(Number(itemId));
+            gestor.removeItem(absIdx);
+            alert("✓ Item eliminado");
+          } catch (err) {
+            alert(`✗ Error al eliminar: ${err.message}`);
+          }
+        });
+
+        // ===== EVENTO: Guardar Item Nuevo =====
+        gestor.addEventListener("item-saved", async (e) => {
+          const { titulo, isNew, id } = e.detail;
+          if (!isNew) return;
+
+          try {
+            const resp = await completarTextoService.crearRonda(5, titulo);
+            const idPregunta = resp.pregunta.idPregunta;
+            const items = gestor.getItems();
+            const item = items.find((i) => i.id === id);
+            if (item) item.id = idPregunta;
+            gestor.loadItems(items);
+            alert(`✓ "${titulo}" guardado (ID: ${idPregunta})`);
+          } catch (err) {
+            alert(`✗ Error: ${err.message || JSON.stringify(err)}`);
+          }
+        });
+
+        // ===== EVENTO: Modificar Item Existente =====
+        gestor.addEventListener("item-saved", async (e) => {
+          const { titulo, isNew, id } = e.detail;
+          if (isNew) return; // solo entra cuando se edita
+
+          try {
+            // Llamada al servicio de actualización
+            const resp = await completarTextoService.actualizarRonda(
+              id,
+              titulo
+            );
+            alert(`✓ Ronda "${titulo}" actualizada correctamente`);
+          } catch (err) {
+            alert(`✗ Error al actualizar: ${err.message || err}`);
+          }
+        });
+
+        gestor.shadowRoot.addEventListener("click", async (e) => {
+          if (!e.target.matches(".sublist .chip button")) return;
+
+          const chipEl = e.target.closest(".chip");
+          const subId = chipEl.dataset.id;
+
+          // Confirm externo
+          if (!confirm("¿Deseas eliminar este subitem?")) return;
+
+          try {
+            // Llamada a la API
+            const resp = await completarTextoService.eliminarSubitem(subId);
+            console.log("API respondió:", resp);
+
+            // Solo eliminar localmente si la API devuelve éxito
+            gestor.eliminarSubitemLocal(subId);
+            alert("Subitem eliminado correctamente");
+          } catch (err) {
+            console.error(err);
+            alert(`Error al eliminar subitem: ${err.message}`);
+          }
+        });
+
+        // ===== CARGAR DATOS INICIALES =====
+        async function cargarDatos() {
+          try {
+            const items = await completarTextoService.obtenerRondasMapeadas(2);
+            gestor.loadItems(items.rondas);
+          } catch (err) {
+            console.error("Error al cargar:", err);
+          }
+        }
+        cargarDatos();
+      });
+    </script>
+  </body>
+</html>

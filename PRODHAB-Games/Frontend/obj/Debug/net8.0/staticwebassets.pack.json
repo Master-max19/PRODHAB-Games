@@ -1,0 +1,629 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\Frontend.bundle.scp.css",
+      "PackagePath": "staticwebassets\\Frontend.bundle.scp.css"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\css\\Login.css",
+      "PackagePath": "staticwebassets\\css\\Login.css"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\css\\admin.css",
+      "PackagePath": "staticwebassets\\css\\admin.css"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\css\\site.css",
+      "PackagePath": "staticwebassets\\css\\site.css"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\css\\test.css",
+      "PackagePath": "staticwebassets\\css\\test.css"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\favicon.ico",
+      "PackagePath": "staticwebassets\\favicon.ico"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\images\\correcta.svg",
+      "PackagePath": "staticwebassets\\images\\correcta.svg"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\images\\incorrecta.svg",
+      "PackagePath": "staticwebassets\\images\\incorrecta.svg"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\images\\super.webm",
+      "PackagePath": "staticwebassets\\images\\super.webm"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\images\\superdato_1.png",
+      "PackagePath": "staticwebassets\\images\\superdato_1.png"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\images\\superdato_2.png",
+      "PackagePath": "staticwebassets\\images\\superdato_2.png"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\js\\admin.js",
+      "PackagePath": "staticwebassets\\js\\admin.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\js\\auth-service.js",
+      "PackagePath": "staticwebassets\\js\\auth-service.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\js\\login.js",
+      "PackagePath": "staticwebassets\\js\\login.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\js\\ordenar\\blanco.webm",
+      "PackagePath": "staticwebassets\\js\\ordenar\\blanco.webm"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\js\\ordenar\\intro-adivina-component.js",
+      "PackagePath": "staticwebassets\\js\\ordenar\\intro-adivina-component.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\js\\ordenar\\juego-ordena-letras-component.js",
+      "PackagePath": "staticwebassets\\js\\ordenar\\juego-ordena-letras-component.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\js\\ordenar\\ordena-letras-component.js",
+      "PackagePath": "staticwebassets\\js\\ordenar\\ordena-letras-component.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\js\\ordenar\\ordena_letras.html",
+      "PackagePath": "staticwebassets\\js\\ordenar\\ordena_letras.html"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\js\\ordenar\\super.webm",
+      "PackagePath": "staticwebassets\\js\\ordenar\\super.webm"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\js\\services\\authService.js",
+      "PackagePath": "staticwebassets\\js\\services\\authService.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\js\\services\\crudTestService.js",
+      "PackagePath": "staticwebassets\\js\\services\\crudTestService.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\js\\services\\fetchService.js",
+      "PackagePath": "staticwebassets\\js\\services\\fetchService.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\js\\services\\ordenaLetrasService.js",
+      "PackagePath": "staticwebassets\\js\\services\\ordenaLetrasService.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\js\\services\\rangoEvaluacionService.js",
+      "PackagePath": "staticwebassets\\js\\services\\rangoEvaluacionService.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\js\\services\\testService.js",
+      "PackagePath": "staticwebassets\\js\\services\\testService.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\js\\services\\usuarioService.js",
+      "PackagePath": "staticwebassets\\js\\services\\usuarioService.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\js\\site.js",
+      "PackagePath": "staticwebassets\\js\\site.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\js\\test-service.js",
+      "PackagePath": "staticwebassets\\js\\test-service.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\js\\test.js",
+      "PackagePath": "staticwebassets\\js\\test.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\LICENSE",
+      "PackagePath": "staticwebassets\\lib\\bootstrap"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.css"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.css.map"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.min.css"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.js.map"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.min.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\jquery-validation\\LICENSE.md",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\LICENSE.md"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\additional-methods.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\additional-methods.min.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\jquery.validate.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\jquery.validate.min.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\jquery\\LICENSE.txt",
+      "PackagePath": "staticwebassets\\lib\\jquery\\LICENSE.txt"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\jquery\\dist\\jquery.js",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\jquery\\dist\\jquery.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\lib\\jquery\\dist\\jquery.min.map",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\public\\images\\correcta.svg",
+      "PackagePath": "staticwebassets\\public\\images\\correcta.svg"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\public\\images\\icon-agregar.svg",
+      "PackagePath": "staticwebassets\\public\\images\\icon-agregar.svg"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\public\\images\\incorrecta.svg",
+      "PackagePath": "staticwebassets\\public\\images\\incorrecta.svg"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\public\\images\\superdato_1.png",
+      "PackagePath": "staticwebassets\\public\\images\\superdato_1.png"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\public\\images\\superdato_2.png",
+      "PackagePath": "staticwebassets\\public\\images\\superdato_2.png"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\public\\images\\superdato_manos_cintura.png",
+      "PackagePath": "staticwebassets\\public\\images\\superdato_manos_cintura.png"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\public\\images\\superdato_señalando.png",
+      "PackagePath": "staticwebassets\\public\\images\\superdato_señalando.png"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\public\\images\\superdato_volando.png",
+      "PackagePath": "staticwebassets\\public\\images\\superdato_volando.png"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\public\\video\\super_dato_saluda.webm",
+      "PackagePath": "staticwebassets\\public\\video\\super_dato_saluda.webm"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\public\\video\\super_dato_sonrie.webm",
+      "PackagePath": "staticwebassets\\public\\video\\super_dato_sonrie.webm"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\public\\video\\superdato_anotando.webm",
+      "PackagePath": "staticwebassets\\public\\video\\superdato_anotando.webm"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\public\\video\\superdato_escribe.webm",
+      "PackagePath": "staticwebassets\\public\\video\\superdato_escribe.webm"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\public\\video\\superdato_idea.webm",
+      "PackagePath": "staticwebassets\\public\\video\\superdato_idea.webm"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\admin.html",
+      "PackagePath": "staticwebassets\\src\\admin.html"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\components\\actividad-component\\ResumenActividadComponent.js",
+      "PackagePath": "staticwebassets\\src\\components\\actividad-component\\ResumenActividadComponent.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\components\\admin-header-component\\AdminHeaderComponent.js",
+      "PackagePath": "staticwebassets\\src\\components\\admin-header-component\\AdminHeaderComponent.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\components\\admin-palabras-component\\AdminPalabrasComponent.js",
+      "PackagePath": "staticwebassets\\src\\components\\admin-palabras-component\\AdminPalabrasComponent.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\components\\admin-user-panel-component\\AdminUserPanelComponent.js",
+      "PackagePath": "staticwebassets\\src\\components\\admin-user-panel-component\\AdminUserPanelComponent.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\components\\adminAdivina\\admin-palabra-component.js",
+      "PackagePath": "staticwebassets\\src\\components\\adminAdivina\\admin-palabra-component.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\components\\adminAdivina\\pruebas.html",
+      "PackagePath": "staticwebassets\\src\\components\\adminAdivina\\pruebas.html"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\components\\adminAdivina\\sopaLetrasAdmin.html",
+      "PackagePath": "staticwebassets\\src\\components\\adminAdivina\\sopaLetrasAdmin.html"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\components\\admin\\prueba\\index.html",
+      "PackagePath": "staticwebassets\\src\\components\\admin\\prueba\\index.html"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\components\\admin\\prueba\\mainJuegos.js",
+      "PackagePath": "staticwebassets\\src\\components\\admin\\prueba\\mainJuegos.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\components\\completar\\completar-texto-component.js",
+      "PackagePath": "staticwebassets\\src\\components\\completar\\completar-texto-component.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\components\\form-test-component\\FormTestComponent.js",
+      "PackagePath": "staticwebassets\\src\\components\\form-test-component\\FormTestComponent.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\components\\login\\login-card-component.js",
+      "PackagePath": "staticwebassets\\src\\components\\login\\login-card-component.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\components\\modal\\modal-component.js",
+      "PackagePath": "staticwebassets\\src\\components\\modal\\modal-component.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\components\\ordena-palabra-component\\intro-adivina-component.js",
+      "PackagePath": "staticwebassets\\src\\components\\ordena-palabra-component\\intro-adivina-component.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\components\\ordena-palabra-component\\juego-ordena-letras-component.js",
+      "PackagePath": "staticwebassets\\src\\components\\ordena-palabra-component\\juego-ordena-letras-component.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\components\\ordena-palabra-component\\ordena-letras-component.js",
+      "PackagePath": "staticwebassets\\src\\components\\ordena-palabra-component\\ordena-letras-component.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\components\\side-nav-component\\SideNavComponent.js",
+      "PackagePath": "staticwebassets\\src\\components\\side-nav-component\\SideNavComponent.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\components\\simple-table-component\\SimpleTableComponent.js",
+      "PackagePath": "staticwebassets\\src\\components\\simple-table-component\\SimpleTableComponent.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\components\\sopa-letras-component\\modal-sopa.js",
+      "PackagePath": "staticwebassets\\src\\components\\sopa-letras-component\\modal-sopa.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\components\\sopa-letras-component\\sopa-letras-component.js",
+      "PackagePath": "staticwebassets\\src\\components\\sopa-letras-component\\sopa-letras-component.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\components\\table-component\\TableComponent.js",
+      "PackagePath": "staticwebassets\\src\\components\\table-component\\TableComponent.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\components\\test-viewer-component\\TestViewerComponent.js",
+      "PackagePath": "staticwebassets\\src\\components\\test-viewer-component\\TestViewerComponent.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\components\\test\\test-component.js",
+      "PackagePath": "staticwebassets\\src\\components\\test\\test-component.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\components\\test\\test-functions.js",
+      "PackagePath": "staticwebassets\\src\\components\\test\\test-functions.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\components\\test\\test-main.js",
+      "PackagePath": "staticwebassets\\src\\components\\test\\test-main.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\components\\test\\test.css",
+      "PackagePath": "staticwebassets\\src\\components\\test\\test.css"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\components\\test\\test.js",
+      "PackagePath": "staticwebassets\\src\\components\\test\\test.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\controllers\\AdminCompletarTextoController.js",
+      "PackagePath": "staticwebassets\\src\\controllers\\AdminCompletarTextoController.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\controllers\\AdminJuegosController.js",
+      "PackagePath": "staticwebassets\\src\\controllers\\AdminJuegosController.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\controllers\\AdminOrdenarPalabrasController.js",
+      "PackagePath": "staticwebassets\\src\\controllers\\AdminOrdenarPalabrasController.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\controllers\\AdminRangoEvaluacionController.js",
+      "PackagePath": "staticwebassets\\src\\controllers\\AdminRangoEvaluacionController.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\controllers\\AdminSideNavController.js",
+      "PackagePath": "staticwebassets\\src\\controllers\\AdminSideNavController.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\controllers\\AdminSopaLetrasController.js",
+      "PackagePath": "staticwebassets\\src\\controllers\\AdminSopaLetrasController.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\controllers\\AdminUserController.js",
+      "PackagePath": "staticwebassets\\src\\controllers\\AdminUserController.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\controllers\\AdminUserPanelController.js",
+      "PackagePath": "staticwebassets\\src\\controllers\\AdminUserPanelController.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\controllers\\LoginController.js",
+      "PackagePath": "staticwebassets\\src\\controllers\\LoginController.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\juegosEnvironments.js",
+      "PackagePath": "staticwebassets\\src\\juegosEnvironments.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\services\\authService.js",
+      "PackagePath": "staticwebassets\\src\\services\\authService.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\services\\completarTextoService.js",
+      "PackagePath": "staticwebassets\\src\\services\\completarTextoService.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\services\\crudTestService.js",
+      "PackagePath": "staticwebassets\\src\\services\\crudTestService.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\services\\fetchService.js",
+      "PackagePath": "staticwebassets\\src\\services\\fetchService.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\services\\helpers.js",
+      "PackagePath": "staticwebassets\\src\\services\\helpers.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\services\\juegoPalabrasService.js",
+      "PackagePath": "staticwebassets\\src\\services\\juegoPalabrasService.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\services\\juegosService.js",
+      "PackagePath": "staticwebassets\\src\\services\\juegosService.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\services\\ordenaLetrasService.js",
+      "PackagePath": "staticwebassets\\src\\services\\ordenaLetrasService.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\services\\rangoEvaluacionService.js",
+      "PackagePath": "staticwebassets\\src\\services\\rangoEvaluacionService.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\services\\resultadoJuegoService.js",
+      "PackagePath": "staticwebassets\\src\\services\\resultadoJuegoService.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\services\\sopaLetrasService.js",
+      "PackagePath": "staticwebassets\\src\\services\\sopaLetrasService.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\services\\testService.js",
+      "PackagePath": "staticwebassets\\src\\services\\testService.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\services\\usuarioService.js",
+      "PackagePath": "staticwebassets\\src\\services\\usuarioService.js"
+    },
+    {
+      "Id": "C:\\Users\\50683\\Documents\\prodhabnueva\\PRODHAB-Games\\PRODHAB-Games\\Frontend\\wwwroot\\src\\util\\modalJuegoUtility.js",
+      "PackagePath": "staticwebassets\\src\\util\\modalJuegoUtility.js"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.Frontend.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.Frontend.props",
+      "PackagePath": "build\\Frontend.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.Frontend.props",
+      "PackagePath": "buildMultiTargeting\\Frontend.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.Frontend.props",
+      "PackagePath": "buildTransitive\\Frontend.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

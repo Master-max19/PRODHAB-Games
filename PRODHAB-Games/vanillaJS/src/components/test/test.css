@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap");
-
 * {
   box-sizing: border-box;
   margin: 0;
@@ -7,7 +5,6 @@
   font-family: "Raleway", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   scroll-behavior: smooth;
 }
-
 
 .container {
   max-width: auto;
@@ -41,7 +38,7 @@ h1 {
 
 .card {
   width: 100%;
-  max-width: 880px;
+  max-width: 900px;
   background: #fff;
   border: 1px solid #e5e7eb;
   border-radius: 16px;
@@ -109,6 +106,10 @@ h1 {
   animation: girar 1s linear infinite;
   margin: 0 auto;
   margin-top: 12vh;
+}
+
+#titulo-test {
+  font-size: 20px;
 }
 
 @keyframes girar {
@@ -290,6 +291,7 @@ button.primary:hover {
 
 button.ghost:hover {
   background: #f8fafc;
+  color: black;
 }
 
 button:disabled {
@@ -338,7 +340,8 @@ button:disabled {
 
 .summary {
   font-weight: 600;
-  color: #64748b;
+  color: rgb(25, 41, 82);
+  margin-left: 5px;
 }
 
 .instructions {
@@ -347,16 +350,16 @@ button:disabled {
   padding: 20px;
   margin-top: 30px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  border-left: 4px solid #2563eb;
+  border-left: 4px solid  rgb(0, 53, 160);;
 }
 
 .instructions h3 {
-  color: #2563eb;
+  color: rgb(0, 53, 160);
   margin-bottom: 10px;
 }
 
 .finish {
-  background: #2563eb;
+  background:  rgb(0, 53, 160);;
   color: #fff;
 }
 
@@ -479,7 +482,7 @@ button:disabled {
   }
 
   .finish {
-    background: #2563eb;
+    background: rgb(0, 53, 160);;
     color: #fff;
     border-color: transparent;
   }

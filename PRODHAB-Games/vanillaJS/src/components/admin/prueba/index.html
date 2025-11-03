@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Catálogo de Juegos</title>
+</head>
+<body>
+    <h1>Catálogo de Juegos</h1>
+    <catalogo-juegos></catalogo-juegos>
+
+    <script>
+      // src/components/catalogo-juegos.js
+class CatalogoJuegos extends HTMLElement {
+    constructor() {
+        super();
+        this.attachShadow({ mode: 'open' });
+        this.currentPage = 1;
+        this.cardsPerPage = 4;
+        this.games = [];
+    }
+
+    async connectedCallback() {
+        this.renderSkeleton();
+        await this.loadGames();
+        this.renderCards();
+    }
+
+    renderSkeleton() {
+        this.shadowRoot.innerHTML = `
+            <style>
+                :host { display:block; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+                .grid { display:grid; grid-template-columns: repeat(2,1fr); gap:25px; margin-bottom:30px; }
+                .card { background:#1e3a5c; border-radius:8px; overflow:hidden; cursor:pointer; transition: transform 0.3s; display:flex; flex-direction:column; border:1px solid #2a4d7a; }
+                .card:hover { transform:translateY(-5px); border-color:#0066cc; }
+                .card-image { height:150px; display:flex; align-items:center; justify-content:center; color:white; font-weight:bold; background:linear-gradient(135deg,#1a6bc4,#0d8a3d); }
+                .card-content { padding:15px; display:flex; flex-direction:column; flex-grow:1; }
+                .card-title { font-weight:600; font-size:1.2em; margin-bottom:5px; }
+                .card-description { font-size:0.9em; color:#b3d9ff; flex-grow:1; }
+                .card-footer { display:flex; justify-content:space-between; align-items:center; margin-top:10px; }
+                .card-badge { padding:5px 12px; border-radius:4px; font-size:0.8em; font-weight:600; }
+                .badge-1 { background:#b23c17; color:white; }
+                .badge-2 { background:#1a6bc4; color:white; }
+                .badge-3 { background:#0d8a3d; color:white; }
+                .badge-4 { background:#d4af37; color:#0a1929; }
+                .pagination { display:flex; justify-content:center; gap:10px; margin-top:20px; }
+                button { padding:8px 16px; border:none; border-radius:5px; background:#0066cc; color:white; cursor:pointer; }
+                button:disabled { background:#2a4d7a; cursor:not-allowed; }
+            </style>
+            <div class="grid" id="grid"></div>
+            <div class="pagination">
+                <button id="prevBtn">Anterior</button>
+                <span id="pageInfo"></span>
+                <button id="nextBtn">Siguiente</button>
+            </div>
+        `;
+        this.grid = this.shadowRoot.getElementById('grid');
+        this.prevBtn = this.shadowRoot.getElementById('prevBtn');
+        this.nextBtn = this.shadowRoot.getElementById('nextBtn');
+        this.pageInfo = this.shadowRoot.getElementById('pageInfo');
+
+        this.prevBtn.addEventListener('click',()=>{ if(this.currentPage>1){ this.currentPage--; this.renderCards(); }});
+        this.nextBtn.addEventListener('click',()=>{ const totalPages=Math.ceil(this.games.length/this.cardsPerPage); if(this.currentPage<totalPages){ this.currentPage++; this.renderCards(); }});
+    }
+
+    async loadGames() {
+        try {
+            const response = await fetch('http://localhost:5133/api/Juego'); // Tu endpoint real
+            if(!response.ok) throw new Error('Error cargando juegos');
+            this.games = await response.json();
+        } catch(e){
+            console.error(e);
+            this.grid.innerHTML='<p style="color:red;">Error cargando juegos</p>';
+        }
+    }
+
+    renderCards() {
+        this.grid.innerHTML='';
+        const start = (this.currentPage-1)*this.cardsPerPage;
+        const pageGames = this.games.slice(start,start+this.cardsPerPage);
+
+        pageGames.forEach(g=>{
+            const card = document.createElement('div');
+            card.className='card';
+            const badgeClass = `badge-${g.idTipoJuego}`;
+            const tipoJuegoText = ['','Acción','Aventura','Estrategia','Deportes'][g.idTipoJuego]||'Otros';
+            card.innerHTML = `
+                <div class="card-image">${tipoJuegoText}</div>
+                <div class="card-content">
+                    <div class="card-title">${g.nombre}</div>
+                    <div class="card-description">${g.descripcion||'Sin descripción'}</div>
+                    <div class="card-footer">
+                        <div class="card-badge ${badgeClass}">${tipoJuegoText}</div>
+                        <div style="font-size:0.8em;color:#66bb6a;font-weight:500;">${g.activo?'✓ Activo':'✗ Inactivo'}</div>
+                    </div>
+                    <a href="${g.urlJuego}" target="_blank" style="margin-top:10px;padding:8px 12px;background:white;color:#0066cc;border-radius:4px;display:inline-block;text-decoration:none;font-weight:bold;">Jugar Ahora</a>
+                </div>
+            `;
+            this.grid.appendChild(card);
+        });
+
+        const totalPages = Math.ceil(this.games.length/this.cardsPerPage);
+        this.pageInfo.textContent=`Página ${this.currentPage} de ${totalPages}`;
+        this.prevBtn.disabled=this.currentPage===1;
+        this.nextBtn.disabled=this.currentPage===totalPages;
+    }
+}
+
+customElements.define('catalogo-juegos',CatalogoJuegos);
+
+    </script>
+    <script type="module" src="src/components/catalogo-juegos.js"></script>
+</body>
+</html>

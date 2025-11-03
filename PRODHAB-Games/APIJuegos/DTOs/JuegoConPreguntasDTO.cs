@@ -1,12 +1,11 @@
 namespace APIJuegos.DTOs
 {
-    public class JuegoConPreguntasDTO
+    public class JuegoConPreguntasDto
     {
-        public int IdJuegos { get; set; }
+        public int IdJuego { get; set; }
         public string Nombre { get; set; } = string.Empty;
         public string Descripcion { get; set; } = string.Empty;
         public string Detalle { get; set; } = string.Empty;
-        public List<PreguntaConRespuestasDTO> Preguntas { get; set; } = new();
+        public List<PreguntaConRespuestasDto> Preguntas { get; set; } = new();
     }
-
 }

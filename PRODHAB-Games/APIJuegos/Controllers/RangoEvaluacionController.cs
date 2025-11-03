@@ -1,8 +1,48 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+/**
+ * Documentación: Validación de Rangos de Evaluación (Semiabiertos)
+ *
+ * Contexto:
+ * Cada juego puede tener varios rangos de puntuación (RangoEvaluacion) con límite mínimo y máximo.
+ * Estos rangos determinan la calificación o mensaje asociado a un resultado numérico.
+ *
+ * Definición de Rango Semiabierto:
+ * Cada rango se interpreta como [RangoMinimo, RangoMaximo)
+ * - RangoMinimo: incluyente (valor pertenece al rango)
+ * - RangoMaximo: excluyente (valor no pertenece al rango)
+ *
+ * Ejemplo:
+ * ID | RangoMinimo | RangoMaximo | Intervalo | Valores que incluye
+ * 1  | 0           | 50          | [0,50)    | 0 → 49.999...
+ * 2  | 50          | 100         | [50,100)  | 50 → 99.999...
+ *
+ * Interpretación:
+ * - Valor 49 → rango 1
+ * - Valor 50 → rango 2
+ * - Valor 100 → fuera de cualquier rango
+ *
+ * Justificación:
+ * - Evita solapamientos: valores exactos de límite no quedan en dos rangos.
+ * - Evita huecos: todos los valores continuos dentro del límite quedan cubiertos.
+ *
+ * Implementación:
+ * private async Task<bool> ExisteRangoSolapado(RangoEvaluacion rango, int? idIgnorar = null)
+ * - Detecta si un rango se superpone con alguno existente.
+ * - r.RangoMaximo <= rango.RangoMinimo → no hay solapamiento
+ * - r.RangoMinimo >= rango.RangoMaximo → no hay solapamiento
+ * - Negación !() → detecta solapamiento
+ * - idIgnorar → permite omitir un rango específico (útil al editar)
+ *
+ * Resultado:
+ * - Evita rangos duplicados o solapados
+ * - Garantiza cobertura continua de valores
+ * - Cada valor numérico pertenece a un único rango
+ */
+
+using System.Net;
 using APIJuegos.Data;
 using APIJuegos.Modelos;
-using System.Net;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace APIJuegos.Controllers
 {
@@ -17,13 +57,12 @@ namespace APIJuegos.Controllers
             _context = context;
         }
 
-        // 1. Obtener todos los rangos de un juego
         [HttpGet("juego/{idJuego}")]
         public async Task<ActionResult<IEnumerable<RangoEvaluacion>>> GetPorJuego(int idJuego)
         {
-            var rangos = await _context.RangoEvaluacion
-                .Where(r => r.IdJuegos == idJuego)
-                .OrderBy(r => r.RangoMinimo)  // <-- orden ascendente por RangoMinimo
+            var rangos = await _context
+                .RangoEvaluaciones.Where(r => r.IdJuego == idJuego)
+                .OrderBy(r => r.RangoMinimo) // <-- orden ascendente por RangoMinimo
                 .ToListAsync();
 
             if (!rangos.Any())
@@ -32,50 +71,71 @@ namespace APIJuegos.Controllers
             return Ok(rangos);
         }
 
-        // 2. Agregar nuevo rango con validación
         [HttpPost]
         public async Task<ActionResult<RangoEvaluacion>> Crear(RangoEvaluacion rango)
         {
-            rango.Mensaje = WebUtility.HtmlEncode(rango.Mensaje);
+            var juegoExistente = await _context.Juegos.FindAsync(rango.IdJuego);
+            if (juegoExistente == null)
+            {
+                return BadRequest(new { message = "El juego especificado no existe." });
+            }
 
             // Validaciones de rango
             if (rango.RangoMinimo < 0 || rango.RangoMaximo < 0)
-                return BadRequest(new { message = "Los valores del rango no pueden ser negativos." });
+                return BadRequest(
+                    new { message = "Los valores del rango no pueden ser negativos." }
+                );
 
             if (rango.RangoMinimo > rango.RangoMaximo)
-                return BadRequest(new { message = "El rango mínimo no puede ser mayor que el rango máximo." });
+                return BadRequest(
+                    new { message = "El rango mínimo no puede ser mayor que el rango máximo." }
+                );
 
             if (await ExisteRangoSolapado(rango))
-                return BadRequest(new { message = "El rango especificado se solapa con otro existente para este juego." });
+                return BadRequest(
+                    new
+                    {
+                        message = "El rango especificado se solapa con otro existente para este juego.",
+                    }
+                );
 
-            _context.RangoEvaluacion.Add(rango);
+            _context.RangoEvaluaciones.Add(rango);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetPorJuego), new { idJuego = rango.IdJuegos }, rango);
+            return CreatedAtAction(nameof(GetPorJuego), new { idJuego = rango.IdJuego }, rango);
         }
 
-        // 3. Editar rango
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Editar(int id, RangoEvaluacion rango)
+        [HttpPut("{IdRangoEvaluacion}")]
+        public async Task<IActionResult> Editar(int idRangoEvaluacion, RangoEvaluacion rango)
         {
-            var existente = await _context.RangoEvaluacion
-                .FirstOrDefaultAsync(r => r.Id == id);
+            var existente = await _context.RangoEvaluaciones.FirstOrDefaultAsync(r =>
+                r.IdRangoEvaluacion == idRangoEvaluacion
+            );
 
             if (existente == null)
                 return NotFound(new { message = "No se encontró el rango." });
 
             rango.Mensaje = WebUtility.HtmlEncode(rango.Mensaje);
-            rango.IdJuegos = existente.IdJuegos; // no se cambia el juego
+            rango.IdJuego = existente.IdJuego; // no se cambia el juego
 
             // Validaciones de rango
             if (rango.RangoMinimo < 0 || rango.RangoMaximo < 0)
-                return BadRequest(new { message = "Los valores del rango no pueden ser negativos." });
+                return BadRequest(
+                    new { message = "Los valores del rango no pueden ser negativos." }
+                );
 
             if (rango.RangoMinimo > rango.RangoMaximo)
-                return BadRequest(new { message = "El rango mínimo no puede ser mayor que el rango máximo." });
+                return BadRequest(
+                    new { message = "El rango mínimo no puede ser mayor que el rango máximo." }
+                );
 
-            if (await ExisteRangoSolapado(rango, id))
-                return BadRequest(new { message = "El rango especificado se solapa con otro existente para este juego." });
+            if (await ExisteRangoSolapado(rango, idRangoEvaluacion))
+                return BadRequest(
+                    new
+                    {
+                        message = "El rango especificado se solapa con otro existente para este juego.",
+                    }
+                );
 
             existente.RangoMinimo = rango.RangoMinimo;
             existente.RangoMaximo = rango.RangoMaximo;
@@ -85,30 +145,27 @@ namespace APIJuegos.Controllers
             return Ok(existente);
         }
 
-        // 4. Eliminar rango
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Eliminar(int id)
+        [HttpDelete("{idRangoEvaluacion}")]
+        public async Task<IActionResult> Eliminar(int idRangoEvaluacion)
         {
-            var rango = await _context.RangoEvaluacion.FindAsync(id);
+            var rango = await _context.RangoEvaluaciones.FindAsync(idRangoEvaluacion);
             if (rango == null)
                 return NotFound(new { message = "No se encontró el rango." });
 
-            _context.RangoEvaluacion.Remove(rango);
+            _context.RangoEvaluaciones.Remove(rango);
             await _context.SaveChangesAsync();
             return NoContent();
         }
 
-        // Verificar si el nuevo rango se solapa con alguno existente
+        // No hay solapamiento si
+        // nuevo.Max <= existente.Min  o nuevo.Min >= existente.Max
+        // Entonces se solapa si no se cumple eso:
         private async Task<bool> ExisteRangoSolapado(RangoEvaluacion rango, int? idIgnorar = null)
         {
-            return await _context.RangoEvaluacion.AnyAsync(r =>
-                r.IdJuegos == rango.IdJuegos &&
-                (idIgnorar == null || r.Id != idIgnorar) &&
-                (
-                    (rango.RangoMinimo >= r.RangoMinimo && rango.RangoMinimo <= r.RangoMaximo) ||
-                    (rango.RangoMaximo >= r.RangoMinimo && rango.RangoMaximo <= r.RangoMaximo) ||
-                    (rango.RangoMinimo <= r.RangoMinimo && rango.RangoMaximo >= r.RangoMaximo)
-                )
+            return await _context.RangoEvaluaciones.AnyAsync(r =>
+                r.IdJuego == rango.IdJuego
+                && (idIgnorar == null || r.IdRangoEvaluacion != idIgnorar)
+                && (r.RangoMinimo < rango.RangoMaximo && rango.RangoMinimo < r.RangoMaximo) // solapamiento real
             );
         }
     }

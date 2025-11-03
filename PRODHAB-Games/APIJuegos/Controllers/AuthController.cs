@@ -1,4 +1,7 @@
-﻿using APIJuegos.Data;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using APIJuegos.Data;
 using APIJuegos.Helpers;
 using APIJuegos.Modelos;
 using Microsoft.AspNetCore.Authorization;
@@ -6,17 +9,12 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace APIJuegos.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-
     //[EnableCors("FrontWithCookies")]
-
 
     public class AuthController : ControllerBase
     {
@@ -27,59 +25,63 @@ namespace APIJuegos.Controllers
         {
             _config = config;
             _context = context;
-
         }
 
-        public record LoginRequest(string Username, string Password);
-
+        public record LoginRequestDto(string Username, string Password);
 
         [HttpPost("login")]
-        public IActionResult Login([FromBody] LoginRequest request)
+        public IActionResult Login([FromBody] LoginRequestDto request)
         {
-            var usuario = _context.Usuarios
-                .Include(u => u.Rol)
+            var usuario = _context
+                .Usuarios.Include(u => u.Rol)
                 .FirstOrDefault(u => u.Correo == request.Username);
 
             if (usuario == null)
                 return Unauthorized(new { message = "Correo no encontrado" });
 
             if (!usuario.Activo)
-                return Unauthorized(new { message = "Usuario inactivo, contacte al administrador" });
-
+                return Unauthorized(
+                    new { message = "Usuario inactivo, contacte al administrador" }
+                );
 
             var saltBytes = Convert.FromBase64String(usuario.Salt);
-            bool isValid = PasswordHelper.VerifyPassword(request.Password, saltBytes, usuario.Clave);
+            bool isValid = PasswordHelper.VerifyPassword(
+                request.Password,
+                saltBytes,
+                usuario.Clave
+            );
 
             if (!isValid)
                 return Unauthorized(new { message = "Contraseña incorrecta" });
 
-
             var token = GenerateJwtToken(usuario);
 
             // 🔹 Guardar JWT en cookie
-            Response.Cookies.Append("jwt_admin_juegos_prodhab", token, new CookieOptions
-            {
-                HttpOnly = true,
-                Secure = true,   // cambiar si se usa http
-                SameSite = SameSiteMode.None
-            });
+            Response.Cookies.Append(
+                "jwt_admin_juegos_prodhab",
+                token,
+                new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true, // cambiar si se usa http
+                    SameSite = SameSiteMode.None,
+                }
+            );
 
-            return Ok(new { message = "Login exitoso"  });
+            return Ok(new { message = "Login exitoso", rol = usuario.Rol.Nombre });
         }
-
 
         [HttpPost("logout")]
         public IActionResult Logout()
         {
-            Response.Cookies.Delete("jwt_admin_juegos_prodhab", new CookieOptions
-            {
-                Secure = true,
-                SameSite = SameSiteMode.None
-            });
+            Response.Cookies.Delete(
+                "jwt_admin_juegos_prodhab",
+                new CookieOptions { Secure = true, SameSite = SameSiteMode.None }
+            );
             return Ok(new { message = "Logout ok" });
         }
 
-        private string GenerateJwtToken(Usuarios usuario)
+        private string GenerateJwtToken(Usuario usuario)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -87,7 +89,7 @@ namespace APIJuegos.Controllers
             var claims = new[]
             {
                 new Claim(ClaimTypes.Name, usuario.Correo),
-                new Claim(ClaimTypes.Role, usuario.Rol.Nombre) // si tienes roles
+                new Claim(ClaimTypes.Role, usuario.Rol.Nombre), // si tienes roles
             };
 
             var token = new JwtSecurityToken(
@@ -100,6 +102,5 @@ namespace APIJuegos.Controllers
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
-
     }
 }

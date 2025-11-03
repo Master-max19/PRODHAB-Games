@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pruebas - Catálogo de Juegos Educativos</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary: #1e40af;
+        --primary-hover: #1d4ed8;
+        --secondary: #64748b;
+        --success: #10b981;
+        --danger: #ef4444;
+        --bg: #f9fafb;
+        --card: #ffffff;
+        --border: #e5e7eb;
+        --text: #111827;
+        --text-light: #6b7280;
+        --radius: 12px;
+        --shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.1);
+        --transition: all 0.25s ease;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.6;
+        min-height: 100vh;
+      }
+
+      .container {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+      }
+
+      /* Header */
+      header {
+        text-align: center;
+        margin-bottom: 3rem;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 0.5rem;
+      }
+
+      .subtitle {
+        color: var(--text-light);
+        font-size: 1.1rem;
+        max-width: 700px;
+        margin: 0 auto;
+      }
+
+      /* Filtros */
+      .filtros {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-bottom: 2.5rem;
+      }
+
+      .filtro-btn {
+        padding: 0.6rem 1.25rem;
+        background: var(--card);
+        color: var(--text);
+        border: 1.5px solid var(--border);
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        box-shadow: var(--shadow);
+      }
+
+      .filtro-btn i {
+        font-size: 1rem;
+        color: var(--secondary);
+      }
+
+      .filtro-btn:hover {
+        border-color: var(--primary);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+      }
+
+      .filtro-btn.active {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+        box-shadow: 0 6px 20px rgba(30, 64, 175, 0.2);
+      }
+
+      .filtro-btn.active i {
+        color: white;
+      }
+
+      /* Grid */
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.75rem;
+        margin-bottom: 3rem;
+      }
+
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        transition: var(--transition);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .card:hover {
+        transform: translateY(-6px);
+        box-shadow: var(--shadow-lg);
+        border-color: var(--primary);
+      }
+
+      .card-header {
+        padding: 1.25rem 1.25rem 0;
+      }
+
+      .card h3 {
+        font-size: 1.35rem;
+        font-weight: 600;
+        color: var(--text);
+        margin-bottom: 0.5rem;
+      }
+
+      .card-body {
+        padding: 0 1.25rem;
+        flex-grow: 1;
+      }
+
+      .card p {
+        color: var(--text-light);
+        font-size: 0.95rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.35rem 0.75rem;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin: 0.75rem 0;
+      }
+
+      .badge i {
+        font-size: 0.9rem;
+      }
+
+      .badge-1 {
+        background: #fef3c7;
+        color: #d97706;
+      }
+      .badge-2 {
+        background: #dbeafe;
+        color: #1e40af;
+      }
+      .badge-3 {
+        background: #d1fae5;
+        color: #059669;
+      }
+      .badge-4 {
+        background: #fef3c7;
+        color: #b45309;
+      }
+
+      .btn-jugar {
+        margin: 1rem 1.25rem;
+        padding: 0.75rem;
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        font-size: 1rem;
+      }
+
+      .btn-jugar:hover {
+        background: var(--primary-hover);
+        box-shadow: 0 6px 16px rgba(30, 64, 175, 0.25);
+      }
+
+      /* Paginación */
+      .paginacion {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.75rem;
+        margin: 2rem 0;
+      }
+
+      .paginacion-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        border: 1.5px solid var(--border);
+        background: white;
+        color: var(--text);
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+      }
+
+      .paginacion-btn:hover:not(:disabled) {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+      }
+
+      .paginacion-btn.active {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+        font-weight: 700;
+      }
+
+      .paginacion-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+
+      /* Juego Activo */
+      .juego-activo {
+        background: var(--card);
+        padding: 2rem;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        margin-bottom: 2rem;
+        border: 1px solid var(--border);
+      }
+
+      .volver-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.25rem;
+        background: var(--secondary);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        margin-bottom: 1.5rem;
+        font-size: 0.95rem;
+      }
+
+      .volver-btn:hover {
+        background: #475569;
+      }
+
+      /* Fullscreen Game */
+      .juego-fullwidth {
+        max-width: 100% !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 1.5rem !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        background: var(--bg) !important;
+        border: none !important;
+      }
+
+      #juegoContainer {
+        width: 100%;
+        max-width: 100%;
+        overflow: hidden;
+      }
+
+      body.juego-abierto {
+        padding: 0 !important;
+        background: var(--bg);
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .container {
+          padding: 1.5rem 1rem;
+        }
+        h1 {
+          font-size: 2.1rem;
+        }
+        .grid {
+          grid-template-columns: 1fr;
+          gap: 1.5rem;
+        }
+        .filtros {
+          flex-direction: column;
+          align-items: center;
+        }
+        .filtro-btn {
+          width: 100%;
+          max-width: 300px;
+          justify-content: center;
+        }
+        .juego-activo {
+          padding: 1.5rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .container {
+          padding: 1rem;
+        }
+        h1 {
+          font-size: 1.8rem;
+        }
+        .card-header,
+        .card-body {
+          padding-left: 1rem;
+          padding-right: 1rem;
+        }
+        .btn-jugar {
+          margin: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Pruebas - Catálogo de Juegos</h1>
+        <p class="subtitle">
+          Desafíos educativos interactivos para el aprendizaje
+        </p>
+      </header>
+
+      <div class="filtros">
+        <button class="filtro-btn active" data-filtro="todos">Todos</button>
+        <button class="filtro-btn" data-filtro="1">Test</button>
+        <button class="filtro-btn" data-filtro="2">Ordenar Palabra</button>
+        <button class="filtro-btn" data-filtro="3">Completar Texto</button>
+        <button class="filtro-btn" data-filtro="4">Sopa de Letras</button>
+      </div>
+
+      <div class="grid" id="juegosGrid"></div>
+      <div class="paginacion" id="paginacion"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="src/components/test/test.js"></script>
+    <script src="src/services/testService.js"></script>
+    <script src="src/services/juegosService.js"></script>
+
+    <script src="src/juegosEnvironments.js"></script>
+    <script src="src/components/test/test-component.js"></script>
+    <script src="src/services/resultadoJuegoService.js"></script>
+    <script src="src/services/sopaLetrasService.js"></script>
+    <script src="src/components/sopa-letras-component/sopa-letras-component.js"></script>
+    <script src="src/components/sopa-letras-component/modal-sopa.js"></script>
+    <script src="src/services/ordenaLetrasService.js"></script>
+    <script src="src/components/ordena-palabra-component/juego-ordena-letras-component.js"></script>
+    <script src="src/components/ordena-palabra-component/intro-adivina-component.js"></script>
+    <script src="src/components/ordena-palabra-component/ordena-letras-component.js"></script>
+    <script src="src/services/completarTextoService.js"></script>
+    <script src="src/components/completar/completar-texto-component.js"></script>
+
+    <script>
+      let todosLosJuegos = [];
+      let juegosFiltrados = [];
+      let paginaActual = 1;
+      const juegosPorPagina = 6; // Cambia a 4 si quieres
+      let filtroActual = "todos";
+
+      async function obtenerJuegos() {
+        try {
+          const juegos = await juegoService.obtenerJuegos();
+          return juegos.filter((j) => j.activo);
+        } catch (error) {
+          console.error("Error:", error);
+          return [];
+        }
+      }
+
+      function filtrarJuegos(tipo) {
+        filtroActual = tipo;
+        juegosFiltrados =
+          tipo === "todos"
+            ? [...todosLosJuegos]
+            : todosLosJuegos.filter((j) => j.idTipoJuego.toString() === tipo);
+        paginaActual = 1;
+        mostrarJuegos();
+      }
+
+      function mostrarJuegos() {
+        const grid = document.getElementById("juegosGrid");
+        grid.innerHTML = "";
+
+        const inicio = (paginaActual - 1) * juegosPorPagina;
+        const fin = inicio + juegosPorPagina;
+        const juegosPagina = juegosFiltrados.slice(inicio, fin);
+
+        if (juegosPagina.length === 0) {
+          grid.innerHTML =
+            "<p style='text-align:center; color:var(--text-light); grid-column:1/-1; padding:2rem;'>No se encontraron juegos activos.</p>";
+          document.getElementById("paginacion").innerHTML = "";
+          return;
+        }
+
+        juegosPagina.forEach((juego) => {
+          const tipoText =
+            [
+              "",
+              "Test",
+              "Ordenar Palabra",
+              "Completar Texto",
+              "Sopa de Letras",
+            ][juego.idTipoJuego] || "Otro";
+          const badgeClass = `badge-${juego.idTipoJuego}`;
+          const icon = ["", "", "", "", ""][juego.idTipoJuego];
+
+          const card = document.createElement("div");
+          card.className = "card";
+          card.innerHTML = `
+          <div class="card-header">
+            <h3>${juego.nombre}</h3>
+          </div>
+          <div class="card-body">
+            <p><strong>Descripción:</strong> ${
+              juego.descripcion || "Sin descripción"
+            }</p>
+            <p><strong>Detalle:</strong> ${juego.detalle || "N/A"}</p>
+            <div class="badge ${badgeClass}">
+              ${icon} ${tipoText}
+            </div>
+            <button class="btn-jugar">
+              Jugar Ahora
+            </button>
+          </div>
+        `;
+
+          card
+            .querySelector(".btn-jugar")
+            .addEventListener("click", () => mostrarJuego(juego));
+          grid.appendChild(card);
+        });
+
+        actualizarPaginacion();
+      }
+
+      function mostrarJuego(juego) {
+        const container = document.querySelector(".container");
+        container.innerHTML = `
+        <div class="juego-activo juego-fullwidth">
+          <button class="volver-btn" id="volverBtn">
+            Volver al Catálogo
+          </button>
+          <div id="juegoContainer"></div>
+        </div>
+      `;
+
+        document.body.classList.add("juego-abierto");
+        document.getElementById("volverBtn").addEventListener("click", () => {
+          document.body.classList.remove("juego-abierto");
+          location.reload();
+        });
+
+        tipoJuegoTexto(juego.idTipoJuego, juego.idJuego);
+      }
+
+      function actualizarPaginacion() {
+        const total = Math.ceil(juegosFiltrados.length / juegosPorPagina);
+        const pag = document.getElementById("paginacion");
+        if (total <= 1) {
+          pag.innerHTML = "";
+          return;
+        }
+
+        let html = `<button class="paginacion-btn" id="prevBtn" ${
+          paginaActual === 1 ? "disabled" : ""
+        }>Anterior</button>`;
+        for (let i = 1; i <= total; i++) {
+          html += `<button class="paginacion-btn ${
+            i === paginaActual ? "active" : ""
+          }" data-pagina="${i}">${i}</button>`;
+        }
+        html += `<button class="paginacion-btn" id="nextBtn" ${
+          paginaActual === total ? "disabled" : ""
+        }>Siguiente</button>`;
+        pag.innerHTML = html;
+
+        document.getElementById("prevBtn").onclick = () => {
+          if (paginaActual > 1) {
+            paginaActual--;
+            mostrarJuegos();
+          }
+        };
+        document.getElementById("nextBtn").onclick = () => {
+          if (paginaActual < total) {
+            paginaActual++;
+            mostrarJuegos();
+          }
+        };
+        document.querySelectorAll("[data-pagina]").forEach(
+          (b) =>
+            (b.onclick = () => {
+              paginaActual = +b.dataset.pagina;
+              mostrarJuegos();
+            })
+        );
+      }
+
+      async function inicializar() {
+        todosLosJuegos = await obtenerJuegos();
+        juegosFiltrados = [...todosLosJuegos];
+        mostrarJuegos();
+
+        document.querySelectorAll(".filtro-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            document
+              .querySelectorAll(".filtro-btn")
+              .forEach((b) => b.classList.remove("active"));
+            btn.classList.add("active");
+            filtrarJuegos(btn.dataset.filtro);
+          });
+        });
+      }
+
+      function completar(id) {
+        document.getElementById(
+          "juegoContainer"
+        ).innerHTML = `<div style="width:100%;"><completar-texto-component img-intro="public/images/superdato_1.png" webm-final="public/video/superdato_escribe.webm" img-rondas="public/images/superdato_manos_cintura.png" id-completar="${id}"></completar-texto-component></div>`;
+      }
+      function sopa(id) {
+        document.getElementById(
+          "juegoContainer"
+        ).innerHTML = `<div style="width:100%;"><sopa-letras-component size="14" id-sopa="${id}" modal1-video="public/video/superdato_anotando.webm" modal2-video="public/video/superdato_idea.webm" superdato-img="public/images/superdato_señalando.png"></sopa-letras-component></div>`;
+      }
+      function test(id) {
+        document.getElementById(
+          "juegoContainer"
+        ).innerHTML = `<test-component style-url="src/components/test/test.css" correcta_svg="public/images/correcta.svg" incorrecta_svg="public/images/incorrecta.svg" character_png="public/images/superdato_2.png" id-test="${id}"></test-component>`;
+      }
+      function ordenar(id) {
+        document.getElementById(
+          "juegoContainer"
+        ).innerHTML = `<juego-ordena-letras-component id-ordenar="${id}" video-final-src="public/video/super_dato_sonrie.webm" inicio-video-src="public/video/super_dato_saluda.webm" style="width:100%;"></juego-ordena-letras-component>`;
+      }
+      function tipoJuegoTexto(t, id) {
+        const map = { 1: test, 2: ordenar, 3: completar, 4: sopa };
+        (map[t] || sopa)(id);
+      }
+
+      document.addEventListener("DOMContentLoaded", inicializar);
+    </script>
+  </body>
+</html>

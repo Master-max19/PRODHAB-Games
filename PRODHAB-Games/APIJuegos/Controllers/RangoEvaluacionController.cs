@@ -38,16 +38,20 @@
  * - Cada valor numérico pertenece a un único rango
  */
 
-using System.Net;
 using APIJuegos.Data;
 using APIJuegos.Modelos;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace APIJuegos.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
+    [EnableCors("FrontWithCookies")]
     public class RangoEvaluacionController : ControllerBase
     {
         private readonly JuegosProdhabContext _context;

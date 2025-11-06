@@ -1,6 +1,8 @@
 using APIJuegos.Data;
 using APIJuegos.DTOs;
 using APIJuegos.Modelos;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,6 +10,8 @@ namespace APIJuegos.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
+    [EnableCors("FrontWithCookies")]
     public class PalabraJuegoController : ControllerBase
     {
         private readonly JuegosProdhabContext _context;
@@ -19,6 +23,8 @@ namespace APIJuegos.Controllers
 
         // GET: api/PalabraJuego
         [HttpGet]
+        [AllowAnonymous]
+        [EnableCors("AllowAll")]
         public async Task<ActionResult<IEnumerable<PalabraJuego>>> GetPalabras()
         {
             return await _context.PalabraJuegos.ToListAsync();
@@ -62,6 +68,8 @@ namespace APIJuegos.Controllers
         }
 
         [HttpGet("solo-palabras/{idJuego}")] // Nuevo endpoint para claridad
+        [AllowAnonymous]
+        [EnableCors("AllowAll")]
         public async Task<IActionResult> GetSoloPalabrasPorJuego(int idJuego)
         {
             var resultado = await _context
@@ -111,7 +119,7 @@ namespace APIJuegos.Controllers
                     500,
                     new
                     {
-                        mensaje = "Ocurri� un error al guardar la palabra. Intente nuevamente m�s tarde.",
+                        mensaje = "Ocurrio un error al guardar la palabra. Intente nuevamente mas tarde.",
                     }
                 );
             }

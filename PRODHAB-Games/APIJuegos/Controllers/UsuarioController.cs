@@ -14,8 +14,8 @@ namespace APIJuegos.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    //[EnableCors("FrontWithCookies")]
-    //[Authorize(Roles = "admin")]
+    [EnableCors("FrontWithCookies")]
+    [Authorize(Roles = "Administrador")]
     public class UsuarioController : ControllerBase
     {
         private readonly JuegosProdhabContext _context;

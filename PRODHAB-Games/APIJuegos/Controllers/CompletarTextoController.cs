@@ -14,6 +14,8 @@ namespace APIJuegos.Controllers
 {
     [ApiController]
     [Route("api/completar-texto")]
+    [Authorize]                      
+    [EnableCors("FrontWithCookies")]
     public class CompletarTextoController : ControllerBase
     {
         private readonly JuegosProdhabContext _context;
@@ -28,6 +30,8 @@ namespace APIJuegos.Controllers
         Las respuesta son las palabras a completar como opción (palabras = respuestas.Texto)
         */
         [HttpGet("{idJuego}")]
+        [AllowAnonymous]
+        [EnableCors("AllowAll")]
         public async Task<IActionResult> GetCompletarTexto(int idJuego)
         {
             try
@@ -222,6 +226,7 @@ namespace APIJuegos.Controllers
         }
 
         [HttpPost("crear-ronda/{idJuego}")]
+
         public async Task<ActionResult> CrearRonda(int idJuego, [FromBody] CrearRondaDto dto)
         {
             if (dto == null || string.IsNullOrWhiteSpace(dto.Enunciado))

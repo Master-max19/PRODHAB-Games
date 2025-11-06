@@ -2,6 +2,7 @@ using APIJuegos.Data;
 using APIJuegos.DTOs;
 using APIJuegos.Modelos;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +10,8 @@ namespace APIJuegos.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [EnableCors("FrontWithCookies")]
+    [Authorize]
     public class TestController : ControllerBase
     {
         private readonly JuegosProdhabContext _context;
@@ -19,7 +22,8 @@ namespace APIJuegos.Controllers
         }
 
         [HttpGet("admin/{idTest}/con-respuestas")]
-        //   [Authorize]
+        [AllowAnonymous]
+        [EnableCors("AllowAll")]
         public ActionResult GetPreguntasConRespuestasPorJuego(int idTest)
         {
             // Primero obtenemos los idPregunta asociados al juego
@@ -44,6 +48,8 @@ namespace APIJuegos.Controllers
         }
 
         [HttpGet("preguntas/{idTest}")]
+        [AllowAnonymous]
+        [EnableCors("AllowAll")]
         public async Task<IActionResult> GetPreguntasAleatorias(int idTest)
         {
             try
@@ -136,6 +142,8 @@ namespace APIJuegos.Controllers
         **/
 
         [HttpPost("evaluar/{idTest:int}")]
+        [AllowAnonymous]
+        [EnableCors("AllowAll")]
         public async Task<IActionResult> GuardarRespuestas(
             int idTest,
             [FromBody] List<PreguntaRespondidaDto> respuestas

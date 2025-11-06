@@ -14,7 +14,7 @@ namespace APIJuegos.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    //[EnableCors("FrontWithCookies")]
+    [EnableCors("FrontWithCookies")]
 
     public class AuthController : ControllerBase
     {

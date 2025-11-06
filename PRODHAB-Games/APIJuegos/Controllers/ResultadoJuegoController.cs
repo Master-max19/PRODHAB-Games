@@ -12,8 +12,8 @@ namespace APIJuegos.Controllers
 {
     [ApiController]
     // [Route("api/[controller]")]
-    //  [EnableCors("FrontWithCookies")]
-    //[Authorize]
+    [Authorize]
+    [EnableCors("FrontWithCookies")]
     public class ResultadoJuegoController : ControllerBase
     {
         private readonly JuegosProdhabContext _context;

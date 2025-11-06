@@ -1,16 +1,18 @@
-using System.Runtime.InteropServices;
 using APIJuegos.Data;
 using APIJuegos.DTOs;
 using APIJuegos.Modelos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.InteropServices;
 
 namespace APIJuegos.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [EnableCors("AllowAll")]
+    [Authorize]
+    [EnableCors("FrontWithCookies")]
     public class JuegoController : ControllerBase
     {
         private readonly JuegosProdhabContext _context;

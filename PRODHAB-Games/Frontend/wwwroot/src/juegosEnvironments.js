@@ -1,4 +1,4 @@
-const SERVER = 'http://localhost:5133';
+const SERVER = 'https://localhost:7006';
 const PUBLIC_PATH = '../../../public/image';
 
 const ENVIRONMENTS = {

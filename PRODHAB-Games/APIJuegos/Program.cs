@@ -44,7 +44,7 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy
-                .WithOrigins("http://localhost:8080") // solo tu frontend
+                .WithOrigins("http://localhost:5165") // solo tu frontend
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials(); // importante para enviar cookies de sesión
@@ -137,7 +137,7 @@ app.UseHttpsRedirection();
 app.UseRouting();
 
 // ⚠️ Importante: usar CORS antes de Auth/Authorization
-app.UseCors("AllowAll"); // ⚠️ Muy importante
+app.UseCors(); // ⚠️ Muy importante
 
 app.UseAuthentication();
 app.UseAuthorization();

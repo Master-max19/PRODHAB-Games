@@ -14,6 +14,8 @@ namespace APIJuegos.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
+    [EnableCors("FrontWithCookies")]
     public class PreguntaController : ControllerBase
     {
         private readonly JuegosProdhabContext _context;
@@ -25,12 +27,16 @@ namespace APIJuegos.Controllers
 
         // GET: api/Preguntas
         [HttpGet]
+        [AllowAnonymous]
+        [EnableCors("AllowAll")]
         public IEnumerable<Pregunta> Get()
         {
             return _context.Preguntas.ToList();
         }
 
         [HttpGet("{idPregunta}")]
+        [AllowAnonymous]
+        [EnableCors("AllowAll")]
         public ActionResult<Pregunta> GetById(long idPregunta)
         {
             var pregunta = _context.Preguntas.Find(idPregunta);
@@ -213,6 +219,8 @@ namespace APIJuegos.Controllers
         }
 
         [HttpGet("pregunta/{idPregunta}/con-respuestas")]
+        [AllowAnonymous]
+        [EnableCors("AllowAll")]
         public ActionResult GetPreguntaConRespuestas(int idPregunta)
         {
             // Obtener la pregunta y sus respuestas directamente

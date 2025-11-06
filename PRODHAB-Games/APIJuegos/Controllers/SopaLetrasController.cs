@@ -1,14 +1,18 @@
-using System.Net;
 using APIJuegos.Data;
 using APIJuegos.DTOs; // Aseg�rate de incluir el namespace correcto para RecibirItemSopaDTO
 using APIJuegos.Modelos;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace APIJuegos.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
+    [EnableCors("FrontWithCookies")]
     public class SopaLetrasController : ControllerBase
     {
         private readonly JuegosProdhabContext _context;

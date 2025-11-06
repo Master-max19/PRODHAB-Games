@@ -1,6 +1,7 @@
 using APIJuegos.Data;
 using APIJuegos.DTOs;
 using APIJuegos.Modelos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,7 +9,8 @@ namespace APIJuegos.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [EnableCors("AllowAll")]
+    [Authorize]
+    [EnableCors("FrontWithCookies")]
     public class RespuestaController : ControllerBase
     {
         private readonly JuegosProdhabContext _context;
@@ -20,6 +22,8 @@ namespace APIJuegos.Controllers
 
         // GET: api/Respuestas
         [HttpGet]
+        [AllowAnonymous]
+        [EnableCors("AllowAll")]
         public IEnumerable<Respuesta> Get()
         {
             return _context.Respuestas.ToList();
@@ -27,6 +31,8 @@ namespace APIJuegos.Controllers
 
         // GET: api/Respuestas/5
         [HttpGet("{idRespuesta}")]
+        [AllowAnonymous]
+        [EnableCors("AllowAll")]
         public ActionResult<Respuesta> GetById(long idRespuesta)
         {
             var respuesta = _context.Respuestas.Find(idRespuesta);

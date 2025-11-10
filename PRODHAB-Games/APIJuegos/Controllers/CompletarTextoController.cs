@@ -14,6 +14,8 @@ namespace APIJuegos.Controllers
 {
     [ApiController]
     [Route("api/completar-texto")]
+    [Authorize]
+    [EnableCors("FrontWithCookies")]
     public class CompletarTextoController : ControllerBase
     {
         private readonly JuegosProdhabContext _context;
@@ -27,7 +29,10 @@ namespace APIJuegos.Controllers
         Las preguntas contiene el texto (texto = pregunta.Enunciado)
         Las respuesta son las palabras a completar como opción (palabras = respuestas.Texto)
         */
+
         [HttpGet("{idJuego}")]
+        [AllowAnonymous]
+        [EnableCors("AllowAll")]
         public async Task<IActionResult> GetCompletarTexto(int idJuego)
         {
             try
@@ -113,16 +118,11 @@ namespace APIJuegos.Controllers
                 if (juego == null)
                     return NotFound(new { exito = false, mensaje = "Juego no encontrado" });
 
-                // Obtener preguntas activas para completar
                 var preguntasBase = await (
                     from pj in _context.PreguntaJuegos
                     join p in _context.Preguntas on pj.IdPregunta equals p.IdPregunta
                     where pj.IdJuego == idJuego && p.Activa
-                    select new
-                    {
-                        p.IdPregunta,
-                        Enunciado = p.Enunciado ?? "", // evita null
-                    }
+                    select new { p.IdPregunta, Enunciado = p.Enunciado ?? "" }
                 ).ToListAsync();
 
                 if (!preguntasBase.Any())
@@ -209,7 +209,7 @@ namespace APIJuegos.Controllers
             return NoContent();
         }
 
-        [HttpDelete("opcion-completar{idRespuesta}")]
+        [HttpDelete("opcion-completar/{idRespuesta}")]
         public async Task<IActionResult> BorrarOpcionCompletar(long idRespuesta)
         {
             var respuesta = await _context.Respuestas.FindAsync(idRespuesta);
@@ -222,17 +222,24 @@ namespace APIJuegos.Controllers
         }
 
         [HttpPost("crear-ronda/{idJuego}")]
-        public async Task<ActionResult> CrearRonda(int idJuego, [FromBody] CrearRondaDto dto)
+        public async Task<ActionResult> CrearRonda(
+            int idJuego,
+            [FromBody] EnviarEnunciadoRondaDto dto
+        )
         {
             if (dto == null || string.IsNullOrWhiteSpace(dto.Enunciado))
                 return BadRequest(new { exito = false, mensaje = "El enunciado es obligatorio." });
 
-            if (dto.Enunciado.Length > 500)
+            var juego = await _context.Juegos.FindAsync(idJuego);
+            if (juego == null)
+                return NotFound(new { exito = false, mensaje = "Juego no encontrado" });
+
+            if (dto.Enunciado.Length > 600)
                 return BadRequest(
                     new
                     {
                         exito = false,
-                        mensaje = "El enunciado no debe superar los 500 caracteres.",
+                        mensaje = "El enunciado no debe superar los 600 caracteres.",
                     }
                 );
 
@@ -248,11 +255,9 @@ namespace APIJuegos.Controllers
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                // Guardar la pregunta y generar IdPregunta
                 await _context.Preguntas.AddAsync(pregunta);
                 await _context.SaveChangesAsync();
 
-                // Asociar con el juego
                 var preguntaJuego = new PreguntaJuego
                 {
                     IdPregunta = pregunta.IdPregunta,
@@ -263,7 +268,6 @@ namespace APIJuegos.Controllers
 
                 await transaction.CommitAsync();
 
-                // Devolver el Id generado junto con los demás campos
                 return Ok(
                     new
                     {
@@ -370,30 +374,31 @@ namespace APIJuegos.Controllers
             }
         }
 
-        [HttpPut("{idRonda}")]
-        public ActionResult ActualizarDetalleRonda(
+        [HttpPatch("{idRonda}")]
+        public ActionResult ActualizarEnunciadoRonda(
             long idRonda,
-            [FromBody] Pregunta rondaActualizada
+            [FromBody] EnviarEnunciadoRondaDto rondaActualizada
         )
         {
             var ronda = _context.Preguntas.Find(idRonda);
             if (ronda == null)
-                return NotFound("La ronda no existe.");
+                return NotFound(new { exito = false, mensaje = "La ronda no existe." });
 
             if (rondaActualizada.Enunciado != null)
             {
-                string limpio = rondaActualizada.Enunciado;
+                string enunciado = rondaActualizada.Enunciado;
 
-                if (limpio.Length > 500)
-                    return BadRequest("El enunciado no puede tener más de 500 caracteres.");
+                if (enunciado.Length > 600)
+                    return BadRequest(
+                        new
+                        {
+                            exito = false,
+                            mensaje = "El enunciado no debe superar los 600 caracteres.",
+                        }
+                    );
 
-                ronda.Enunciado = limpio;
+                ronda.Enunciado = enunciado;
             }
-
-            if (!string.IsNullOrWhiteSpace(rondaActualizada.Tipo))
-                ronda.Tipo = rondaActualizada.Tipo;
-
-            ronda.Activa = true;
 
             _context.SaveChanges();
             return Ok(ronda);

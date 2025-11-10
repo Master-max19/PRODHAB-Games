@@ -11,9 +11,9 @@ class FormTestComponent extends HTMLElement {
     return this._testViewer;
   }
 
-   get serviceId() {
-    const id  = this.getAttribute("service-id") || 1;
-    return Number(id) ;
+  get serviceId() {
+    const id = this.getAttribute("service-id") || 1;
+    return Number(id);
   }
 
   constructor() {
@@ -56,7 +56,7 @@ class FormTestComponent extends HTMLElement {
             padding: 12px;
             font-size: 0.9rem;
             border-radius: 4px;
-            border: 1px solid #ccc;
+            border: 1px solid #000000ff;
             background: none;
           }
 
@@ -68,7 +68,7 @@ class FormTestComponent extends HTMLElement {
             transform: translateY(-50%);
             background: #fff;
             padding: 0 4px;
-            color: #888;
+            color: #000000ff;
             font-size: 0.9rem;
             transition: 0.2s ease all;
             pointer-events: none;
@@ -405,15 +405,16 @@ class FormTestComponent extends HTMLElement {
       });
 
       // Validaciones
-      const tieneCorrecta = respuestas.some(r => r.esCorrecta);
-      if (!enunciado || !tipo || respuestas.length === 0 || !tieneCorrecta) {
-        utilModalJuegos.mostrarMensajeModal(
-          "Aviso",
-          "Por favor, completa todos los campos y marca al menos una respuesta correcta."
-        );
+      const errores = this.validarPregunta({ enunciado, tipo, respuestas });
 
+      if (errores.length > 0) {
+        utilModalJuegos.mostrarMensajeModal(
+          "Error",
+          errores.map(e => "• " + e).join("<br>")
+        );
         return;
       }
+
 
       const preguntaData = { enunciado, tipo, activa: true };
 
@@ -422,11 +423,12 @@ class FormTestComponent extends HTMLElement {
 
         if (this.getAttribute("modo")?.toLowerCase() === "registrar") {
           result = await CRUDTestService.crearPregunta({ ...preguntaData, respuestas }, this.serviceId);
-
-          utilModalJuegos.mostrarMensajeModal(
-            "Éxito",
-            "La pregunta ha sido creada correctamente."
-          );
+          if (result) {
+            utilModalJuegos.mostrarMensajeModal(
+              "Éxito",
+              "La pregunta ha sido creada correctamente."
+            );
+          }
 
           if (this._testViewer) {
             const preguntaConID = {
@@ -450,20 +452,31 @@ class FormTestComponent extends HTMLElement {
           }
 
           const id = this.currentEditId;
-          result = await CRUDTestService.actualizarPregunta({ ...preguntaData, idPregunta: id, respuestas }, Number(this.currentEditId));
 
-          if (this._testViewer) {
-            const preguntaConID = {
-              pregunta: { ...preguntaData, idPregunta: id },
-              respuestas
-            };
-            this._testViewer.actualizarPregunta(preguntaConID);
-          }
-
-         utilModalJuegos. mostrarMensajeModal(
-            "Éxito",
-            "La pregunta ha sido actualizada correctamente."
+          const result = await CRUDTestService.actualizarPregunta(
+            { ...preguntaData, idPregunta: id, respuestas },
+            Number(this.currentEditId)
           );
+
+          if (result.error) {
+            utilModalJuegos.mostrarMensajeModal(
+              "Error",
+              `No se pudo actualizar la pregunta: ${JSON.stringify(result.detalle)}`
+            );
+          } else {
+            if (this._testViewer) {
+              const preguntaConID = {
+                pregunta: { ...preguntaData, idPregunta: id },
+                respuestas
+              };
+              this._testViewer.actualizarPregunta(preguntaConID);
+            }
+
+            utilModalJuegos.mostrarMensajeModal(
+              "Éxito",
+              "La pregunta ha sido actualizada correctamente."
+            );
+          }
 
 
           this.setAttribute("modo", "registrar");
@@ -506,6 +519,50 @@ class FormTestComponent extends HTMLElement {
     this.shadowRoot.querySelector("#tipo").classList.remove("has-value");
     this.shadowRoot.querySelector("#lista-opciones").innerHTML = "";
   }
+
+validarPregunta({ enunciado, tipo, respuestas }) {
+
+  // Enunciado
+  if (!enunciado || enunciado.trim() === "") {
+    return ["El enunciado no puede estar vacío."]; 
+  }
+  if (enunciado.length > 500) {
+    return ["El enunciado no puede superar los 500 caracteres."]; 
+  }
+
+  // Tipo
+  if (!tipo) {
+    return ["Debes seleccionar un tipo de pregunta."];
+  }
+
+  // Respuestas
+  if (!Array.isArray(respuestas) || respuestas.length === 0) {
+    return ["Debes agregar por lo menos una respuesta."];
+  }
+
+  for (let i = 0; i < respuestas.length; i++) {
+    const r = respuestas[i];
+
+    if (!r.texto || r.texto.trim() === "") {
+      return [`La respuesta ${i + 1} no puede estar vacía.`];
+    }
+    if (r.texto.length > 300) {
+      return [`La respuesta ${i + 1} supera los 300 caracteres.`];
+    }
+    if (r.retroalimentacion && r.retroalimentacion.length > 300) {
+      return [`La retroalimentación de la respuesta ${i + 1} supera los 300 caracteres.`];
+    }
+  }
+
+  const tieneCorrecta = respuestas.some(r => r.esCorrecta);
+  if (!tieneCorrecta) {
+    return ["Debes marcar al menos una respuesta correcta."];
+  }
+
+  return []; // OK
+}
+
+
 }
 
 customElements.define("form-test-component", FormTestComponent);

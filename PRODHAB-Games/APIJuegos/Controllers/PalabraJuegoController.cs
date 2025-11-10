@@ -1,6 +1,8 @@
 using APIJuegos.Data;
 using APIJuegos.DTOs;
 using APIJuegos.Modelos;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,6 +10,8 @@ namespace APIJuegos.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
+    [EnableCors("FrontWithCookies")]
     public class PalabraJuegoController : ControllerBase
     {
         private readonly JuegosProdhabContext _context;
@@ -17,30 +21,30 @@ namespace APIJuegos.Controllers
             _context = context;
         }
 
-        // GET: api/PalabraJuego
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<PalabraJuego>>> GetPalabras()
-        {
-            return await _context.PalabraJuegos.ToListAsync();
-        }
-
+        /*        [HttpGet]
+                public async Task<ActionResult<IEnumerable<PalabraJuego>>> GetPalabras()
+                {
+                    return await _context.PalabraJuegos.ToListAsync();
+                }
+        */
         // GET: api/PalabraJuego/porJuego/5
 
+        /**
+        Busca las palabras de un juego por medio de su identificador y las devuelve asociadas
+        con loss detalles del mismo juego, ya sea descripción, nombre y etc.
+        */
         [HttpGet("porJuego/{idJuego}")]
         public async Task<IActionResult> GetPalabrasPorJuego(int idJuego)
         {
-            // 1. Ejecuta una única consulta para obtener el juego Y sus palabras
             var resultado = await _context
                 .Juegos.Where(j => j.IdJuego == idJuego)
-                .Select(j => new // Proyecta la información del juego y las palabras asociadas
+                .Select(j => new
                 {
-                    // Detalles del juego (la parte principal del objeto)
                     IdJuego = j.IdJuego,
                     j.Nombre,
                     j.Descripcion,
                     j.Detalle,
 
-                    // Proyecta la lista de palabras relacionadas
                     Palabras = j
                         .PalabrasJuego.Select(pj => new
                         {
@@ -50,18 +54,22 @@ namespace APIJuegos.Controllers
                         })
                         .ToList(),
                 })
-                .FirstOrDefaultAsync(); // Obtiene solo un resultado (el juego con ese ID)
+                .FirstOrDefaultAsync();
 
             if (resultado == null)
             {
                 return NotFound(new { mensaje = $"Juego con ID {idJuego} no encontrado." });
             }
 
-            // 2. Devolver la respuesta (el objeto ya está en el formato deseado)
             return Ok(resultado);
         }
 
-        [HttpGet("solo-palabras/{idJuego}")] // Nuevo endpoint para claridad
+        /**
+        Solo trae las palabras del juego asociado pero no sus detalles.
+        */
+        [HttpGet("solo-palabras/{idJuego}")]
+        [AllowAnonymous]
+        [EnableCors("AllowAll")]
         public async Task<IActionResult> GetSoloPalabrasPorJuego(int idJuego)
         {
             var resultado = await _context
@@ -84,51 +92,18 @@ namespace APIJuegos.Controllers
             return Ok(resultado);
         }
 
-        [HttpPost]
-        public async Task<ActionResult<PalabraJuego>> PostPalabra(PalabraJuego palabraJuego)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var juegoExiste = await _context.Juegos.AnyAsync(j =>
-                j.IdJuego == palabraJuego.IdJuego
-            );
-            if (!juegoExiste)
-                return BadRequest(
-                    new { mensaje = $"El IdJuego {palabraJuego.IdJuego} no existe." }
-                );
-
-            _context.PalabraJuegos.Add(palabraJuego);
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                // Mensaje gen�rico, no exponemos detalles de la DB
-                return StatusCode(
-                    500,
-                    new
-                    {
-                        mensaje = "Ocurri� un error al guardar la palabra. Intente nuevamente m�s tarde.",
-                    }
-                );
-            }
-
-            return CreatedAtAction(
-                nameof(GetPalabrasPorJuego),
-                new { idJuego = palabraJuego.IdJuego },
-                palabraJuego
-            );
-        }
-
+        /*Permite registrar en la base de datos una lista de palabras o varias a la vez*/
         [HttpPost("{idJuego}/multiples")]
         public async Task<ActionResult<PalabrasResponseDto>> PostMultiplesPalabras(
             int idJuego,
             [FromBody] PalabrasRequestDto request
         )
         {
+            if (request.Palabras.Any(p => p.Length > 50))
+                return BadRequest(
+                    new { mensaje = "Cada palabra no puede superar los 50 caracteres." }
+                );
+
             if (request == null || request.Palabras == null || !request.Palabras.Any())
                 return BadRequest(
                     new PalabrasResponseDto
@@ -138,10 +113,9 @@ namespace APIJuegos.Controllers
                     }
                 );
 
-            // Validar que el juego exista
             var juegoExiste = await _context.Juegos.AnyAsync(j => j.IdJuego == idJuego);
             if (!juegoExiste)
-                return BadRequest(
+                return NotFound(
                     new PalabrasResponseDto
                     {
                         Mensaje = $"El IdJuego {idJuego} no existe.",
@@ -181,7 +155,6 @@ namespace APIJuegos.Controllers
             );
         }
 
-        // DELETE: api/PalabraJuego/5
         [HttpDelete("{idPalabraJuego}")]
         public async Task<IActionResult> DeletePalabra(int idPalabraJuego)
         {
@@ -195,7 +168,7 @@ namespace APIJuegos.Controllers
             return NoContent();
         }
 
-        // DELETE: api/PalabraJuego/porJuego/5
+        /*Elimina toda palabta que se relacione con el idJuego*/
         [HttpDelete("porJuego/{idJuego}")]
         public async Task<ActionResult<PalabrasResponseDto>> DeletePalabrasPorJuego(int idJuego)
         {
@@ -224,29 +197,6 @@ namespace APIJuegos.Controllers
             );
         }
 
-        // PUT: api/PalabraJuego/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutPalabra(int id, PalabraJuego palabraJuego)
-        {
-            if (id != palabraJuego.IdPalabraJuego)
-                return BadRequest();
-
-            _context.Entry(palabraJuego).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ExistePalabra(id))
-                    return NotFound();
-                else
-                    throw;
-            }
-
-            return NoContent();
-        }
 
         private bool ExistePalabra(int idPalabraJuego)
         {

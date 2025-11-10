@@ -8,7 +8,6 @@ class AdminUserPanelComponent extends HTMLElement {
     this.render();
   }
 
-  // --- Métodos públicos ---
 
   resetearContenido() {
     const contentArea = this.shadowRoot.getElementById("content-area");
@@ -78,9 +77,9 @@ class AdminUserPanelComponent extends HTMLElement {
       contentArea.innerHTML = `
 <h3>Crear Usuario</h3>
 <form id="crearUsuarioForm">
-  <input type="email" id="correo" placeholder="Correo electrónico" required>
+  <input maxlength="100" type="email" id="correo" placeholder="Correo electrónico" required>
   <div class="input-group">
-    <input type="password" id="password" placeholder="Contraseña" required>
+    <input maxlength="100" type="password" id="password" placeholder="Contraseña" required>
     <button type="button" class="toggle-password" data-target="password">Mostrar</button>
   </div>
   <select id="idRol" required>
@@ -102,9 +101,9 @@ class AdminUserPanelComponent extends HTMLElement {
       contentArea.innerHTML = `
 <h3>Cambiar Contraseña</h3>
 <form id="cambiarClaveForm">
-  <input type="email" id="correoUsuarioClave" placeholder="Correo del usuario" required>
+  <input maxlength="100" type="email" id="correoUsuarioClave" placeholder="Correo del usuario" required>
   <div class="input-group">
-    <input type="password" id="nuevaClave" placeholder="Nueva contraseña" required>
+    <input  maxlength="100" type="password" id="nuevaClave" placeholder="Nueva contraseña" required>
     <button type="button" class="toggle-password" data-target="nuevaClave">Mostrar</button>
   </div>
   <button type="submit">Actualizar</button>
@@ -120,7 +119,7 @@ class AdminUserPanelComponent extends HTMLElement {
       contentArea.innerHTML = `
 <h3>Desactivar Usuario</h3>
 <form id="eliminarUsuarioForm">
-  <input type="email" id="correoUsuarioEliminar" placeholder="Correo del usuario" required>
+  <input maxlength="100" type="email" id="correoUsuarioEliminar" placeholder="Correo del usuario" required>
   <button type="submit">Desactivar</button>
   <div id="eliminarUsuarioMsg" class="user-message"></div>
 </form>`;

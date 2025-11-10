@@ -15,17 +15,18 @@ const AuthService = {
     }
   },
 
-  async logout() {
-    try {
-      await apiFetch(`${CONFIG.apiUrl}/api/Auth/logout`, {
-        method: "POST"
-      });
-      return true;
-    } catch (error) {
-      console.error("Error cerrando sesión:", error);
-      return false;
-    }
-  },
+ async logout() {
+  try {
+    await apiFetch(`${CONFIG.apiUrl}/api/Auth/logout`, {
+      method: "POST",
+      credentials: "include" 
+    });
+    return true;
+  } catch (error) {
+    console.error("Error cerrando sesión:", error);
+    return false;
+  }
+},
 
 
 };

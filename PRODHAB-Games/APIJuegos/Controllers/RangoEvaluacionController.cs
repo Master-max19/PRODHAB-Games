@@ -40,14 +40,20 @@
 
 using System.Net;
 using APIJuegos.Data;
+using APIJuegos.DTOs;
 using APIJuegos.Modelos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Cors;
+
 
 namespace APIJuegos.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
+    [EnableCors("FrontWithCookies")]
     public class RangoEvaluacionController : ControllerBase
     {
         private readonly JuegosProdhabContext _context;
@@ -71,31 +77,41 @@ namespace APIJuegos.Controllers
             return Ok(rangos);
         }
 
-        [HttpPost]
-        public async Task<ActionResult<RangoEvaluacion>> Crear(RangoEvaluacion rango)
+        [HttpPost("{idJuego}")]
+        public async Task<ActionResult<RangoEvaluacion>> Crear(
+            int idJuego,
+            [FromBody] PostRangoEvaluacionDto dto
+        )
         {
-            var juegoExistente = await _context.Juegos.FindAsync(rango.IdJuego);
+            var juegoExistente = await _context.Juegos.FindAsync(idJuego);
             if (juegoExistente == null)
-            {
-                return BadRequest(new { message = "El juego especificado no existe." });
-            }
+                return BadRequest(new { mensaje = "El juego especificado no existe." });
 
             // Validaciones de rango
-            if (rango.RangoMinimo < 0 || rango.RangoMaximo < 0)
+            if (dto.RangoMinimo < 0 || dto.RangoMaximo < 0)
                 return BadRequest(
-                    new { message = "Los valores del rango no pueden ser negativos." }
+                    new { mensaje = "Los valores del rango no pueden ser negativos." }
                 );
 
-            if (rango.RangoMinimo > rango.RangoMaximo)
+            if (dto.RangoMinimo > dto.RangoMaximo)
                 return BadRequest(
-                    new { message = "El rango mínimo no puede ser mayor que el rango máximo." }
+                    new { mensaje = "El rango mínimo no puede ser mayor que el rango máximo." }
                 );
+
+            // Mapear DTO a entidad usando los mismos nombres
+            var rango = new RangoEvaluacion
+            {
+                IdJuego = idJuego,
+                RangoMinimo = dto.RangoMinimo,
+                RangoMaximo = dto.RangoMaximo,
+                Mensaje = dto.Mensaje,
+            };
 
             if (await ExisteRangoSolapado(rango))
                 return BadRequest(
                     new
                     {
-                        message = "El rango especificado se solapa con otro existente para este juego.",
+                        mensaje = "El rango especificado se solapa con otro existente para este juego.",
                     }
                 );
 
@@ -105,8 +121,11 @@ namespace APIJuegos.Controllers
             return CreatedAtAction(nameof(GetPorJuego), new { idJuego = rango.IdJuego }, rango);
         }
 
-        [HttpPut("{IdRangoEvaluacion}")]
-        public async Task<IActionResult> Editar(int idRangoEvaluacion, RangoEvaluacion rango)
+        [HttpPut("{idRangoEvaluacion}")]
+        public async Task<IActionResult> Editar(
+            int idRangoEvaluacion,
+            [FromBody] PostRangoEvaluacionDto dto
+        )
         {
             var existente = await _context.RangoEvaluaciones.FirstOrDefaultAsync(r =>
                 r.IdRangoEvaluacion == idRangoEvaluacion
@@ -115,21 +134,26 @@ namespace APIJuegos.Controllers
             if (existente == null)
                 return NotFound(new { message = "No se encontró el rango." });
 
-            rango.Mensaje = WebUtility.HtmlEncode(rango.Mensaje);
-            rango.IdJuego = existente.IdJuego; // no se cambia el juego
-
             // Validaciones de rango
-            if (rango.RangoMinimo < 0 || rango.RangoMaximo < 0)
+            if (dto.RangoMinimo < 0 || dto.RangoMaximo < 0)
                 return BadRequest(
                     new { message = "Los valores del rango no pueden ser negativos." }
                 );
 
-            if (rango.RangoMinimo > rango.RangoMaximo)
+            if (dto.RangoMinimo > dto.RangoMaximo)
                 return BadRequest(
                     new { message = "El rango mínimo no puede ser mayor que el rango máximo." }
                 );
 
-            if (await ExisteRangoSolapado(rango, idRangoEvaluacion))
+            // Crear un objeto temporal para la validación de solapamiento
+            var rangoTemp = new RangoEvaluacion
+            {
+                IdJuego = existente.IdJuego, // el juego no cambia
+                RangoMinimo = dto.RangoMinimo,
+                RangoMaximo = dto.RangoMaximo,
+            };
+
+            if (await ExisteRangoSolapado(rangoTemp, idRangoEvaluacion))
                 return BadRequest(
                     new
                     {
@@ -137,11 +161,13 @@ namespace APIJuegos.Controllers
                     }
                 );
 
-            existente.RangoMinimo = rango.RangoMinimo;
-            existente.RangoMaximo = rango.RangoMaximo;
-            existente.Mensaje = rango.Mensaje;
+            // Mapear los valores del DTO a la entidad existente
+            existente.RangoMinimo = dto.RangoMinimo;
+            existente.RangoMaximo = dto.RangoMaximo;
+            existente.Mensaje = dto.Mensaje;
 
             await _context.SaveChangesAsync();
+
             return Ok(existente);
         }
 

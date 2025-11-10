@@ -46,9 +46,14 @@
 
     if (panel) {
         panel.addEventListener("crear-usuario-request", async (e) => {
+            console.log(e.detail.correo)
+
+
             try {
-                await usuarioService.crearUsuario(e.detail);
-                utilModalJuegos.mostrarMensajeModal("Mensaje", "Usuario creado exitósamente.", false)
+                const result = await usuarioService.crearUsuario(e.detail);
+                if (result) {
+                    utilModalJuegos.mostrarMensajeModal("Mensaje", "Usuario creado exitósamente.", false);
+                }
             } catch (err) {
                 utilModalJuegos.mostrarMensajeModal("Mensaje", err.message, false)
             }
@@ -57,9 +62,11 @@
         panel.addEventListener("cambiar-clave-request", async (e) => {
             try {
                 const { correo, nuevaClave } = e.detail;
-                await usuarioService.cambiarClave(correo, nuevaClave);
-                utilModalJuegos.mostrarMensajeModal("Mensaje", "Contraseña actualizada exitósamente.", false)
-                panel.resetearContenido();
+                const result = await usuarioService.cambiarClave(correo, nuevaClave);
+                if (result) {
+                    utilModalJuegos.mostrarMensajeModal("Mensaje", "Contraseña actualizada exitósamente.", false)
+                    panel.resetearContenido();
+                }
             } catch (err) {
                 utilModalJuegos.mostrarMensajeModal("Mensaje", err.message, false)
             }
@@ -68,10 +75,11 @@
         panel.addEventListener("desactivar-usuario-request", async (e) => {
             try {
                 const { correo } = e.detail;
-                await usuarioService.desactivarUsuario(correo);
-                utilModalJuegos.mostrarMensajeModal("Mensaje", "Cuenta ha sido desactivada.", false)
-                panel.resetearContenido();
-
+                const result = await usuarioService.desactivarUsuario(correo);
+                if (result) {
+                    utilModalJuegos.mostrarMensajeModal("Mensaje", "Cuenta ha sido desactivada.", false)
+                    panel.resetearContenido();
+                }
             } catch (err) {
                 utilModalJuegos.mostrarMensajeModal("Mensaje", err.message, false)
             }

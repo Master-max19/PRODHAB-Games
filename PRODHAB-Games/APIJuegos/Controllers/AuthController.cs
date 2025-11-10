@@ -14,8 +14,7 @@ namespace APIJuegos.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    //[EnableCors("FrontWithCookies")]
-
+    [EnableCors("FrontWithCookies")]
     public class AuthController : ControllerBase
     {
         private readonly IConfiguration _config;
@@ -32,43 +31,62 @@ namespace APIJuegos.Controllers
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginRequestDto request)
         {
-            var usuario = _context
-                .Usuarios.Include(u => u.Rol)
-                .FirstOrDefault(u => u.Correo == request.Username);
+            try
+            {
+                if (request == null)
+                    return BadRequest(new { message = "Solicitud inválida" });
 
-            if (usuario == null)
-                return Unauthorized(new { message = "Correo no encontrado" });
+                if (string.IsNullOrWhiteSpace(request.Username))
+                    return BadRequest(new { message = "El usuario es obligatorio" });
 
-            if (!usuario.Activo)
-                return Unauthorized(
-                    new { message = "Usuario inactivo, contacte al administrador" }
+                if (string.IsNullOrEmpty(request.Password))
+                    return BadRequest(new { message = "La contraseña es obligatoria" });
+
+                string username = request.Username;
+
+                var usuario = _context
+                    .Usuarios.Include(u => u.Rol)
+                    .FirstOrDefault(u => u.Correo == username);
+
+                bool credentialsAreValid = false;
+
+                if (usuario != null)
+                {
+                    var saltBytes = Convert.FromBase64String(usuario.Salt);
+                    credentialsAreValid = PasswordHelper.VerifyPassword(
+                        request.Password,
+                        saltBytes,
+                        usuario.Clave
+                    );
+                }
+
+                if (!credentialsAreValid)
+                    return Unauthorized(new { message = "Usuario o contraseña inválidos" });
+
+                if (!usuario.Activo)
+                    return Unauthorized(
+                        new { message = "Usuario inactivo, contacte al administrador" }
+                    );
+
+                var token = GenerateJwtToken(usuario);
+
+                Response.Cookies.Append(
+                    "jwt_admin_juegos_prodhab",
+                    token,
+                    new CookieOptions
+                    {
+                        HttpOnly = true,
+                        Secure = true,
+                        SameSite = SameSiteMode.None,
+                    }
                 );
 
-            var saltBytes = Convert.FromBase64String(usuario.Salt);
-            bool isValid = PasswordHelper.VerifyPassword(
-                request.Password,
-                saltBytes,
-                usuario.Clave
-            );
-
-            if (!isValid)
-                return Unauthorized(new { message = "Contraseña incorrecta" });
-
-            var token = GenerateJwtToken(usuario);
-
-            // 🔹 Guardar JWT en cookie
-            Response.Cookies.Append(
-                "jwt_admin_juegos_prodhab",
-                token,
-                new CookieOptions
-                {
-                    HttpOnly = true,
-                    Secure = true, // cambiar si se usa http
-                    SameSite = SameSiteMode.None,
-                }
-            );
-
-            return Ok(new { message = "Login exitoso", rol = usuario.Rol.Nombre });
+                return Ok(new { message = "Login exitoso", rol = usuario.Rol.Nombre });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error interno en el servidor" });
+            }
         }
 
         [HttpPost("logout")]
@@ -76,8 +94,14 @@ namespace APIJuegos.Controllers
         {
             Response.Cookies.Delete(
                 "jwt_admin_juegos_prodhab",
-                new CookieOptions { Secure = true, SameSite = SameSiteMode.None }
+                new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.None,
+                }
             );
+
             return Ok(new { message = "Logout ok" });
         }
 
@@ -89,7 +113,7 @@ namespace APIJuegos.Controllers
             var claims = new[]
             {
                 new Claim(ClaimTypes.Name, usuario.Correo),
-                new Claim(ClaimTypes.Role, usuario.Rol.Nombre), // si tienes roles
+                new Claim(ClaimTypes.Role, usuario.Rol.Nombre), 
             };
 
             var token = new JwtSecurityToken(

@@ -241,7 +241,9 @@ button {
     const end = start + this.pageSize;
     const preguntasPagina = this.filteredPreguntas.slice(start, end);
 
-    preguntasPagina.forEach(item => {
+
+    preguntasPagina.forEach((item, index) => {
+      const numero = start + index + 1; // ← enumeración global
       const p = item.pregunta;
       const respuestas = item.respuestas;
       const div = document.createElement("div");
@@ -249,7 +251,7 @@ button {
 
       div.innerHTML = `
         <h3 style="display:flex;justify-content:space-between;align-items:center;gap:.5rem;">
-          <span>${this.decodificarHtml(p.enunciado)}</span>
+        <span>${numero}) ${this.decodificarHtml(p.enunciado)}</span>
           <span class="estado ${p.activa ? "activa" : "inactiva"}">
             ${p.activa ? "Activa" : "Inactiva"}
           </span>
@@ -308,7 +310,6 @@ button {
           return;
         }
 
-        // Actualiza en memoria y re-renderiza
         const syncEstado = (arr) => {
           const idx = arr.findIndex(x => x.pregunta.idPregunta === p.idPregunta);
           if (idx !== -1) arr[idx].pregunta.activa = nuevoEstado;

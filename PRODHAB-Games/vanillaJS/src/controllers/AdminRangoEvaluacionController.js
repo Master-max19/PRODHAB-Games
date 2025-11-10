@@ -62,11 +62,6 @@
 
     tabla.hiddenColumns = ["id", "idJuego"];
 
-    const decodeHtml = (html) => {
-      const txt = document.createElement("textarea");
-      txt.innerHTML = html;
-      return txt.value;
-    };
 
     const cargarDatos = async () => {
       try {
@@ -76,7 +71,7 @@
           idJuego: u.idJuego,
           rangoMinimo: u.rangoMinimo,
           rangoMaximo: u.rangoMaximo,
-          mensaje: decodeHtml(u.mensaje),
+          mensaje: u.mensaje,
         }));
       } catch (err) {
         console.error("Error cargando datos:", err);
@@ -110,11 +105,10 @@
       try {
         if (isNew) {
           const creado = await RangoEvaluacionService.crear({
-            idJuego,
             rangoMinimo: Number(row.rangoMinimo),
             rangoMaximo: Number(row.rangoMaximo),
             mensaje: row.mensaje,
-          });
+          }, idJuego);
           const fila = tabla.data.find(r => r._id === id);
           Object.assign(fila, { ...row, id: creado.idRangoEvaluacion });
           delete fila._isNew;
@@ -154,14 +148,11 @@
           try {
             await RangoEvaluacionService.eliminar(idReal);
 
-            // Actualizar la data local
             tabla.data = tabla.data.filter(r => r._id !== idInterno);
 
-            // Ajustar la página si quedó fuera de rango
             const totalPages = Math.max(1, Math.ceil(tabla.data.length / tabla.pageSize));
             if (tabla.page > totalPages) tabla.page = totalPages;
 
-            // Refrescar la tabla
             tabla._render();
 
             utilModalJuegos.mostrarMensajeModal("Aviso", "Fila eliminada correctamente.");

@@ -1,18 +1,29 @@
 const usuarioService = {
   async obtenerUsuarios() {
     try {
+      const sesionStr = sessionStorage.getItem("sesion_admin_juegos_prodhab");
+      if (!sesionStr) return [];
+
+      const sesionObj = JSON.parse(sesionStr);
+      const rol = (sesionObj.rol || "").toLowerCase(); // convertimos a minúsculas
+
+      if (rol !== "administrador") return []; // comparamos en minúsculas
+
       const data = await apiFetch(`${CONFIG.apiUrl}/api/usuario`);
+      if (!data) return [];
+
       return data.map(item => ({
         correo: item.correo,
         estado: item.estado ? "Activo" : "Inactivo",
-        rol: item.rol,
+        rol: (item.rol || "").toLowerCase(), // opcional: también normalizamos los roles de los usuarios
         fechaCreacion: new Date(item.fechaCreacion).toLocaleDateString(),
       }));
     } catch (error) {
       console.error("Error fetching usuarios:", error);
       return [];
     }
-  },
+  }
+  ,
 
   async eliminarUsuario(correo) {
     try {
@@ -50,7 +61,7 @@ const usuarioService = {
     }
   },
 
-    async cambiarClave(correo, nuevaClave) {
+  async cambiarClave(correo, nuevaClave) {
     try {
       return await apiFetch(
         `${CONFIG.apiUrl}/api/usuario/actualizar-clave/${encodeURIComponent(correo)}`,

@@ -11,9 +11,8 @@ using Microsoft.EntityFrameworkCore;
 namespace APIJuegos.Controllers
 {
     [ApiController]
-    // [Route("api/[controller]")]
-    //  [EnableCors("FrontWithCookies")]
-    //[Authorize]
+    [Authorize]
+    [EnableCors("FrontWithCookies")]
     public class ResultadoJuegoController : ControllerBase
     {
         private readonly JuegosProdhabContext _context;
@@ -23,48 +22,9 @@ namespace APIJuegos.Controllers
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        /*
-        [HttpPost("registrar/{idJuego:int}")]
-        public async Task<IActionResult> RegistrarResultado(int idJuego, [FromBody] ResultadoJuego dto)
-        {
-            // Verificar que el juego exista
-            bool existeJuego = await _context.Juegos
-                .AsNoTracking()
-                .AnyAsync(j => j.IdJuego == idJuego);
-        
-            if (!existeJuego)
-                return NotFound("El juego no existe.");
-        
-            // Validaciones básicas
-            if (dto.CantidadItems < 0 || dto.CantidadItems > 999)
-                return BadRequest("La cantidad de items debe ser entre 0 y 999.");
-        
-            if (dto.CantidadAciertos < 0 || dto.CantidadAciertos > 999)
-                return BadRequest("La cantidad de aciertos debe ser entre 0 y 999.");
-        
-            if (dto.Nota < 0 || dto.Nota > 100)
-                return BadRequest("La nota debe estar entre 0 y 100.");
-        
-            // Validación lógica
-            if (dto.CantidadAciertos > dto.CantidadItems)
-                return BadRequest("La cantidad de aciertos no puede ser mayor que la cantidad de items.");
-        
-            // Crear resultado
-            var nuevo = new ResultadoJuego
-            {
-                IdJuego = idJuego,
-                CantidadItems = dto.CantidadItems,
-                CantidadAciertos = dto.CantidadAciertos,
-                Nota = Math.Round(dto.Nota, 2),
-                FechaRegistro = DateTime.Now
-            };
-        
-            _context.ResultadoJuegos.Add(nuevo);
-            await _context.SaveChangesAsync();
-        
-            return Ok(new { Mensaje = "OK", nuevo.IdResultadoJuego });
-        }
-        */
+  
+        [AllowAnonymous]
+        [EnableCors("AllowAll")]
         [HttpPost("registrar/{idJuego:int}")]
         public async Task<IActionResult> RegistrarResultado(int idJuego)
         {
@@ -109,7 +69,7 @@ namespace APIJuegos.Controllers
                 .FirstOrDefaultAsync();
 
             if (infoJuego is null)
-                return NotFound("El juego no existe.");
+                return NotFound(new { message = "El juego no existe." });
 
             // Fechas base
             var desde30Dias = DateTime.Now.AddDays(-30);

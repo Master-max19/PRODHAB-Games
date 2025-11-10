@@ -25,7 +25,6 @@ builder.Services.AddDbContext<JuegosProdhabContext>(options =>
 
 builder.Services.AddCors(options =>
 {
-    // 1️⃣ Política para permitir todo (Development o test)
     options.AddPolicy(
         "AllowAll",
         policy =>
@@ -136,8 +135,7 @@ app.UseHttpsRedirection();
 
 app.UseRouting();
 
-// ⚠️ Importante: usar CORS antes de Auth/Authorization
-app.UseCors("AllowAll"); // ⚠️ Muy importante
+app.UseCors();
 
 app.UseAuthentication();
 app.UseAuthorization();

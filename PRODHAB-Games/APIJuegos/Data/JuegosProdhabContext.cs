@@ -20,6 +20,7 @@ public class JuegosProdhabContext : DbContext
     public DbSet<Usuario> Usuarios { get; set; }
     public DbSet<PalabraJuego> PalabraJuegos { get; set; }
     public DbSet<TipoJuego> TipoJuegos { get; set; }
+    public DbSet<Rol> Roles { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -82,7 +83,14 @@ public class JuegosProdhabContext : DbContext
         {
             entity.HasKey(tp => tp.IdTipoJuego);
             entity.ToTable("TipoJuego");
-            entity.Property(tp => tp.IdTipoJuego).ValueGeneratedNever(); 
+            entity.Property(tp => tp.IdTipoJuego).ValueGeneratedNever();
+        });
+
+        modelBuilder.Entity<Rol>(entity =>
+        {
+            entity.HasKey(r => r.IdRol);
+            entity.ToTable("Rol");
+            entity.Property(r => r.IdRol);
         });
     }
 }

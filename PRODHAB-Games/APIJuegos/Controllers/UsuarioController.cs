@@ -14,8 +14,8 @@ namespace APIJuegos.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    //[EnableCors("FrontWithCookies")]
-    //[Authorize(Roles = "admin")]
+    [EnableCors("FrontWithCookies")]
+    [Authorize(Roles = "Administrador")]
     public class UsuarioController : ControllerBase
     {
         private readonly JuegosProdhabContext _context;
@@ -105,6 +105,15 @@ namespace APIJuegos.Controllers
         [HttpDelete("{correo}")] // correo viene en la URL
         public ActionResult DeleteByEmail(string correo)
         {
+            var correoLogueado = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+
+            if (correoLogueado == null)
+                return Unauthorized(new { message = "Token inválido" });
+
+            // Evitar que el admin se desactive a sí mismo
+            if (correoLogueado.ToLower() == correo.ToLower())
+                return BadRequest(new { message = "No puedes eliminar tu propia cuenta" });
+
             if (string.IsNullOrEmpty(correo))
                 return BadRequest("El correo es obligatorio");
 
@@ -129,6 +138,9 @@ namespace APIJuegos.Controllers
             var existingUser = await _context.Usuarios.FirstOrDefaultAsync(u =>
                 u.Correo == req.Correo
             );
+            var rol = await _context.Roles.FindAsync(req.IdRol);
+            if (rol == null)
+                return BadRequest(new { message = "El rol especificado no existe" });
 
             if (existingUser != null)
             {
@@ -140,8 +152,6 @@ namespace APIJuegos.Controllers
                 }
                 else
                 {
-                    // 🔹 Reactivar usuario existente
-
                     var salt = PasswordHelper.GenerateSalt();
                     var hash = PasswordHelper.HashPassword(req.Password, salt);
                     existingUser.Salt = Convert.ToBase64String(salt);
@@ -233,15 +243,57 @@ namespace APIJuegos.Controllers
             [FromBody] CambiarClaveRequest request
         )
         {
-            var usuario = await _context.Usuarios.FirstOrDefaultAsync(u =>
-                u.Correo.ToLower() == correo.ToLower()
-            );
+            var correoLogueado = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+            if (correoLogueado == null)
+                return Unauthorized(new { message = "Token inválido" });
 
+            var usuario = await _context
+                .Usuarios.Include(u => u.Rol)
+                .FirstOrDefaultAsync(u => u.Correo.ToLower() == correo.ToLower());
             if (usuario == null)
                 return NotFound(new { message = "Usuario no encontrado" });
 
+            var usuarioLogueado = await _context
+                .Usuarios.Include(u => u.Rol)
+                .FirstOrDefaultAsync(u => u.Correo.ToLower() == correoLogueado.ToLower());
+
+            if (usuarioLogueado.IdRol == 2)
+            {
+                return StatusCode(
+                    403,
+                    new { message = "No tienes permisos para cambiar contraseñas" }
+                );
+            }
+
+            // Administrador (IdRol == 1)
+            if (usuario.IdRol == 1)
+            {
+                // Solo él mismo puede cambiar su contraseña
+                if (usuario.Correo?.ToLower() != correoLogueado?.ToLower())
+                    return StatusCode(
+                        403,
+                        new { message = "No puedes cambiar la contraseña de otro administrador" }
+                    );
+            }
+            else
+            {
+                // Si no es administrador, solo un admin puede cambiar la contraseña de otro usuario
+                if (
+                    usuarioLogueado.IdRol != 1
+                    && usuario.Correo?.ToLower() != correoLogueado?.ToLower()
+                )
+                {
+                    return BadRequest(
+                        new
+                        {
+                            message = "Solo un administrador puede cambiar la contraseña de otro usuario",
+                        }
+                    );
+                }
+            }
+
             var nuevoSalt = PasswordHelper.GenerateSalt();
-            var nuevoHash = PasswordHelper.HashPassword(request.NuevaClave, nuevoSalt);
+            var nuevoHash = PasswordHelper.HashPassword(request.NuevaClave ?? "", nuevoSalt);
 
             usuario.Salt = Convert.ToBase64String(nuevoSalt);
             usuario.Clave = nuevoHash;

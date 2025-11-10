@@ -12,7 +12,7 @@ const ENVIRONMENTS = {
         }
     },
     production: {
-        apiUrl: SERVER,
+        apiUrl: 'https://api.allorigins.win/get?url=http://www.prodhabpracticantes.somee.com',
         publicPath: PUBLIC_PATH,
         debug: false,
         routes: {
@@ -22,5 +22,5 @@ const ENVIRONMENTS = {
     }
 };
 
-const CONFIG = ENVIRONMENTS.development;
+const CONFIG = ENVIRONMENTS.production;
 

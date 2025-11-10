@@ -50,6 +50,7 @@
             fondoLogin.style.display = "block";
             sideNav.style.display = "none";
         }
+        sidenav.navigate("#/inicio");
     });
 
     sidenav.navigate("#/inicio");

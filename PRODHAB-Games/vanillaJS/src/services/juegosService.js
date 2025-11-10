@@ -19,16 +19,16 @@ const juegoService = {
  */
     async obtenerJuegosPorTipo(idTipoJuego) {
         try {
-            const resp = await fetch(`${CONFIG.apiUrl}/api/Juego/buscar?idTipoJuego=${encodeURIComponent(idTipoJuego)}`);
-            if (!resp.ok) {
-                throw new Error(`Error al obtener los juegos: ${resp.status} ${resp.statusText}`);
-            }
-            return await resp.json();
+            const resp = await apiFetch(
+                `${CONFIG.apiUrl}/api/Juego/buscar?idTipoJuego=${encodeURIComponent(idTipoJuego)}`
+            );
+            return resp; // apiFetch ya maneja JSON y errores
         } catch (err) {
-            console.error("Error en obtenerJuegos:", err);
+            console.error("Error en obtenerJuegosPorTipo:", err);
             throw err;
         }
     },
+
     /**
      * Actualiza un juego existente por su ID.
      * @param {number} id - ID del juego a actualizar.
@@ -37,71 +37,50 @@ const juegoService = {
      */
     async actualizarJuego(id, datos) {
         try {
-            const resp = await fetch(`${CONFIG.apiUrl}/api/Juego/${id}`, {
+            const resp = await apiFetch(`${CONFIG.apiUrl}/api/Juego/${id}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(datos),
             });
-
-            if (!resp.ok) {
-                const errText = await resp.text();
-                throw new Error(`Error ${resp.status}: ${errText}`);
-            }
-
-            return await resp.json();
+            return resp;
         } catch (err) {
             console.error("Error en actualizarJuego:", err);
             throw err;
         }
-    }
-    ,
+    },
+
 
     /**
      * Crea un nuevo juego (POST)
      */
     async crearJuego(datos) {
         try {
-            const resp = await fetch(`${CONFIG.apiUrl}/api/Juego`, {
+            const resp = await apiFetch(`${CONFIG.apiUrl}/api/Juego`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(datos),
             });
-
-            if (!resp.ok) {
-                const errorData = await resp.json().catch(() => ({}));
-                throw new Error(
-                    `Error al crear el juego: ${errorData.message || resp.statusText}`
-                );
-            }
-
-            return await resp.json();
+            return resp; // apiFetch ya maneja JSON y errores
         } catch (err) {
             console.error("Error en crearJuego:", err);
             throw err;
         }
     },
+
     /**
  * Elimina un juego por su ID (DELETE)
  */
     async eliminarJuego(id) {
         try {
-            const resp = await fetch(`${CONFIG.apiUrl}/api/Juego/${id}`, {
+            await apiFetch(`${CONFIG.apiUrl}/api/Juego/${id}`, {
                 method: "DELETE",
             });
-
-            if (!resp.ok) {
-                const errorData = await resp.json().catch(() => ({}));
-                throw new Error(
-                    `Error al eliminar el juego: ${errorData.message || resp.statusText}`
-                );
-            }
-
-            return true;
+            return true; // si apiFetch no lanza error, la eliminación fue exitosa
         } catch (err) {
             console.error("Error en eliminarJuego:", err);
             throw err;
         }
-    },
+    }
 };

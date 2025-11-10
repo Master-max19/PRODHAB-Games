@@ -16,7 +16,6 @@ class TestComponent extends HTMLElement {
         this.styleURL = this.getAttribute("style-url") || TestComponent.componente.styleURL;
         this.serverURL = this.getAttribute("server-url") || TestComponent.componente.serverURL;
         this.publicURL = this.getAttribute("public") || TestComponent.componente.public;
-
         this.correctaSVG = this.getAttribute("correcta_svg") || `${TestComponent.componente.public}/correcta.svg`;
         this.incorrectaSVG = this.getAttribute("incorrecta_svg") || `${TestComponent.componente.public}/incorrecta.svg`;
         this.characterPNG = this.getAttribute("character_png") || `${TestComponent.componente.public}/character.png`;
@@ -176,7 +175,7 @@ class TestComponent extends HTMLElement {
             return `
             <div id="option-${opcionId}-${preguntaId}" class="option">
                 <span class="bullet"><span class="dot-small"></span></span>
-                <span class="option-text">${this.escaparHtml(opcion.texto)}</span>
+                <span class="option-text">${utilHtmlJuegos.escapeHtml(opcion.texto)}</span>
             </div>`;
         }).join('');
     };
@@ -298,14 +297,14 @@ class TestComponent extends HTMLElement {
                             throw new Error('Por favor, responde todas las preguntas antes de finalizar.');
                         }
                         const serverResponse = await enviarRespuestasTest(respuestas, this.getAttribute('id-test') || null);
-
+                        console.log(respuestas)
                         this.mostrarResultados(serverResponse.detalle);
                         this.actualizarResumen(
                             serverResponse.totalFallos,
                             serverResponse.totalAciertos,
                             Number(serverResponse.calificacion).toFixed(2),
                             false, // reiniciar
-                            this.escaparHtml(serverResponse.mensaje),
+                            utilHtmlJuegos.escapeHtml(serverResponse.mensaje),
                             this.test.obtenerCantidadPreguntasCorrecta(serverResponse.detalle)
 
                         );
@@ -457,7 +456,7 @@ class TestComponent extends HTMLElement {
               <span class="pill">Pregunta ${index + 1}/${this.listaPreguntas.length}</span>
               <span class="muted">${this.mostrarTipoPregunta(pregunta.categoria)}</span>
             </div>
-            <h2 class="q-title">${this.escaparHtml(pregunta.titulo)}</h2>
+            <h2 class="q-title">${utilHtmlJuegos.escapeHtml(pregunta.titulo)}</h2>
             <div class="options">${this.obtenerOpcionesHTML(pregunta)}</div>
             <div class="q-footer">
               <div class="left"><div class="result"></div></div>
@@ -512,7 +511,7 @@ class TestComponent extends HTMLElement {
         return `
       <div class="${classes.join(' ')}" data-id="${op.id}">
         <span class="bullet"><span class="dot-small"></span></span>
-        <span class="option-text">${this.escaparHtml(op.texto)}<strong>${iconoExtra}</strong></span>
+        <span class="option-text">${utilHtmlJuegos.escapeHtml(op.texto)}<strong>${iconoExtra}</strong></span>
       </div>`;
     }
 
@@ -525,17 +524,14 @@ class TestComponent extends HTMLElement {
      */
     renderRetro(pregunta, respuestaSeleccionada) {
         if (!respuestaSeleccionada) return '';
-        const opcionesMarcadas = respuestaSeleccionada.opciones
-            .filter(o => o.seleccionada)
-            .map(o => o.idOpcion);
-        return opcionesMarcadas.map(idOp => {
-            const opcion = pregunta.opciones.find(o => Number(String(o.id).replace(/^o/, '')) === idOp);
-            return opcion && opcion.retroalimentacion
-                ? `<div class="retroalimentacion">${this.escaparHtml(opcion.retroalimentacion)}</div>`
-                : '';
-        }).join('');
-    }
 
+        return respuestaSeleccionada.opciones
+            .filter(o => o.seleccionada && o.retroalimentacion && o.retroalimentacion.trim())
+            .map(o => {
+                return `<div class="retroalimentacion">${utilHtmlJuegos.escapeHtml(o.retroalimentacion)}</div>`;
+            })
+            .join('');
+    }
     /**
  * Renderiza el bloque completo de una pregunta con sus opciones y retroalimentación.
  * 
@@ -560,7 +556,7 @@ class TestComponent extends HTMLElement {
           <span class="pill">Pregunta ${index + 1}/${this.listaPreguntas.length}</span>
           <span class="muted">${this.mostrarTipoPregunta(pregunta.categoria)}</span>
         </div>
-        <h2 class="q-title">${this.escaparHtml(pregunta.titulo)}</h2>
+        <h2 class="q-title">${utilHtmlJuegos.escapeHtml(pregunta.titulo)}</h2>
         <div class="options">${opcionesHTML}</div>
         ${retroHTML}
         <div class="q-footer">
@@ -653,11 +649,6 @@ class TestComponent extends HTMLElement {
 
 
 
-    escaparHtml = (html) => {
-        const txt = document.createElement("textarea");
-        txt.textContent = html;
-        return txt.innerHTML;
-    };
 
 
     actualizarResumen(fallos, correctas, calificacion, reiniciar = false, mensaje, totalPreguntasCorrectas) {
@@ -772,7 +763,7 @@ class TestComponent extends HTMLElement {
             }
             this.mostrarPregunta(0);
             this.actualizarBarraProgreso(this.posicionPregunta);
-            this.actualizarResumen(0, 0, 0, true, this.escaparHtml(juegoConPreguntas.detalle), 0);
+            this.actualizarResumen(0, 0, 0, true, utilHtmlJuegos.escapeHtml(juegoConPreguntas.detalle), 0);
         } else {
             const divStack = this.shadowRoot.getElementById('div-stack');
             divStack.innerHTML = '<p>Error al cargar el test</p>';

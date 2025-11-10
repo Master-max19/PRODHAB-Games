@@ -8,54 +8,50 @@ const juegoPalabrasService = {
     async cargarPalabras(idJuego) {
         if (!idJuego) return [];
 
-        const response = await fetch(`${CONFIG.apiUrl}/api/PalabraJuego/porJuego/${idJuego}`);
-        if (!response.ok) return [];
+        try {
+            const data = await apiFetch(`${CONFIG.apiUrl}/api/PalabraJuego/porJuego/${idJuego}`, {
+                method: 'GET',
+                headers: { 'Accept': '*/*' },
+            });
 
-        const data = await response.json();
-        if (!data || !Array.isArray(data.palabras)) return [];
+            if (!data || !Array.isArray(data.palabras)) return [];
 
-        // Mapear al formato que espera loadItems
-        return [
-            {
-                id: String(data.idJuego),              // id del juego
-                titulo: data.descripcion || "",        // descripcion como titulo
-                nombre: data.nombre || "",        // descripcion como titulo
-
-                subItems: data.palabras.map((p) => ({
-                    id: String(p.idPalabraJuego),     // id de la palabra
-                    texto: p.palabra || ""            // texto de la palabra
-                }))
-            }
-        ];
+            return [
+                {
+                    id: String(data.idJuego),
+                    titulo: data.descripcion || "",
+                    nombre: data.nombre || "",
+                    subItems: data.palabras.map(p => ({
+                        id: String(p.idPalabraJuego),
+                        texto: p.palabra || ""
+                    }))
+                }
+            ];
+        } catch (err) {
+            console.error('Error al cargar palabras:', err);
+            return [];
+        }
     }
-    ,
-    async eliminarPalabra(idPalabra) {
+    , async eliminarPalabra(idPalabra) {
         if (!idPalabra) throw new Error("Debes proporcionar el ID de la palabra");
 
-        const palabraId = parseInt(idPalabra, 10); // asegurarse que sea entero
+        const palabraId = parseInt(idPalabra, 10);
         if (isNaN(palabraId)) throw new Error("ID de palabra inválido");
 
-        const url = `${CONFIG.apiUrl}/api/PalabraJuego/${palabraId}`;
-
-        const response = await fetch(url, {
-            method: "DELETE",
-            headers: { "accept": "*/*" },
-        });
-
-        if (!response.ok) {
-            const text = await response.text();
-            throw new Error(text || `Error al eliminar la palabra (status ${response.status})`);
-        }
-
         try {
-            const data = await response.json();
-            return data;
-        } catch {
-            return { exito: true };
+            const data = await apiFetch(`${CONFIG.apiUrl}/api/PalabraJuego/${palabraId}`, {
+                method: "DELETE",
+                headers: { "accept": "*/*" },
+            });
+
+            // Si apiFetch devuelve null (por 401) o no hay data, asumimos éxito
+            return data ?? { exito: true };
+        } catch (err) {
+            console.error("Error al eliminar palabra:", err);
+            throw err;
         }
-    },
-
-
+    }
+    ,
     async crearPalabras(idJuego, palabras) {
         if (!idJuego) throw new Error("Debes proporcionar el ID del juego");
         if (!Array.isArray(palabras) || palabras.length === 0)
@@ -63,20 +59,22 @@ const juegoPalabrasService = {
 
         const url = `${CONFIG.apiUrl}/api/PalabraJuego/${idJuego}/multiples`;
 
-        const res = await fetch(url, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Accept: "*/*",
-            },
-            body: JSON.stringify({ palabras })
-        });
+        try {
+            const data = await apiFetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "*/*",
+                },
+                body: JSON.stringify({ palabras }),
+            });
 
-        if (!res.ok) {
-            const errorText = await res.text();
-            throw new Error(errorText || "Error al crear palabras");
+            // Si apiFetch devuelve null (por 401), podemos devolver objeto vacío o manejarlo
+            return data ?? { exito: true };
+        } catch (err) {
+            console.error("Error al crear palabras:", err);
+            throw err;
         }
-
-        return res.json();
     }
+
 };

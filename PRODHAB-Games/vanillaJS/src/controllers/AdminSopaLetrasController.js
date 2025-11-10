@@ -80,6 +80,8 @@
     gestor.addEventListener("subitems-save-requested", async (e) => {
       const { itemId, subItems } = e.detail;
 
+      const valido = utilValidacionesJuegos.validarSubItems(gestor, itemId, subItems, 50);
+      if (!valido) return;
       try {
         const palabras = subItems.map((s) => s.texto);
         if (!palabras.length) return;
@@ -118,8 +120,6 @@
             `✓ Se agregaron ${resp.palabras.length} palabras correctamente`
           );
         }
-
-        // 4. Limpiar pendientes
         const state = gestor._itemStates.get(itemId);
         if (state) {
           state.pendingSubItems = [];
@@ -156,7 +156,6 @@
       }
       if (!isNaN(Number(palabraId))) {
 
-        // Palabra existente
         utilModalJuegos.mostrarMensajeModal(
           "Confirmar eliminación",
           "¿Deseas eliminar esta palabra?",

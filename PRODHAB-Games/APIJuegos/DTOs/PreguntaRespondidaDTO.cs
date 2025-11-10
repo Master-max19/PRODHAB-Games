@@ -15,7 +15,6 @@ namespace APIJuegos.DTOs
     {
         // Identificador único de la opción
         public long IdOpcion { get; set; }
-
         // Indica si el usuario seleccionó esta opción
         public bool Seleccionada { get; set; }
     }
@@ -28,7 +27,6 @@ namespace APIJuegos.DTOs
     {
         // Identificador único de la pregunta
         public long IdPregunta { get; set; }
-
         // Lista de opciones disponibles para la pregunta y su estado de selección
         public List<OpcionDto> Opciones { get; set; } = new List<OpcionDto>();
     }

@@ -58,6 +58,8 @@
 
         gestor.addEventListener("item-saved", async (e) => {
             const { titulo, isNew } = e.detail;
+         
+
             if (isNew) return;
             try {
                 await juegoService.actualizarJuego(Number(window.prodhab_juegos.juegoSeleccionado), { Descripcion: titulo });
@@ -74,6 +76,9 @@
         gestor.addEventListener("subitems-save-requested", async (e) => {
             const { itemId, subItems } = e.detail;
 
+               
+            const valido = utilValidacionesJuegos.validarSubItems(gestor, itemId, subItems, 50);
+            if (!valido) return;
             try {
                 const palabras = subItems.map((s) => s.texto);
                 if (!palabras.length) return;

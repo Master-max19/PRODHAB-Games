@@ -14,6 +14,8 @@ namespace APIJuegos.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
+    [EnableCors("FrontWithCookies")]
     public class PreguntaController : ControllerBase
     {
         private readonly JuegosProdhabContext _context;
@@ -24,11 +26,12 @@ namespace APIJuegos.Controllers
         }
 
         // GET: api/Preguntas
-        [HttpGet]
-        public IEnumerable<Pregunta> Get()
-        {
-            return _context.Preguntas.ToList();
-        }
+
+        /*  [HttpGet]
+          public IEnumerable<Pregunta> Get()
+          {
+              return _context.Preguntas.ToList();
+          }*/
 
         [HttpGet("{idPregunta}")]
         public ActionResult<Pregunta> GetById(long idPregunta)
@@ -132,24 +135,13 @@ namespace APIJuegos.Controllers
         {
             try
             {
-                // Validaciones básicas
-                if (dto == null || string.IsNullOrWhiteSpace(dto.Enunciado))
-                    return BadRequest(new { mensaje = "La pregunta debe tener un enunciado." });
+                var juego = await _context.Juegos.FindAsync(idJuego);
+                if (juego == null)
+                    return NotFound(new { exito = false, mensaje = "Test no encontrado" });
 
-                if (dto.Respuestas == null || !dto.Respuestas.Any())
-                    return BadRequest(new { mensaje = "Debe agregar al menos una respuesta." });
-
-                if (dto.Enunciado.Length < 1 || dto.Enunciado.Length > 500)
-                    return BadRequest(
-                        new { mensaje = "El enunciado debe tener entre 1 y 500 caracteres." }
-                    );
-
-                if (dto.Tipo != "unica" && dto.Tipo != "multiple")
-                {
-                    return BadRequest(
-                        new { mensaje = "El tipo de pregunta debe ser 'unica' o 'multiple'." }
-                    );
-                }
+                var validacion = ValidarPreguntaConRespuestas(dto);
+                if (validacion != null)
+                    return validacion;
 
                 var enunciadoSeguro = dto.Enunciado;
 
@@ -213,6 +205,8 @@ namespace APIJuegos.Controllers
         }
 
         [HttpGet("pregunta/{idPregunta}/con-respuestas")]
+        [AllowAnonymous]
+        [EnableCors("AllowAll")]
         public ActionResult GetPreguntaConRespuestas(int idPregunta)
         {
             // Obtener la pregunta y sus respuestas directamente
@@ -239,16 +233,9 @@ namespace APIJuegos.Controllers
             [FromBody] RecibirPreguntaConRespuestasDto dto
         )
         {
-            if (dto == null || string.IsNullOrWhiteSpace(dto.Enunciado))
-                return BadRequest(new { mensaje = "La pregunta debe tener un enunciado." });
-
-            if (dto.Respuestas == null || !dto.Respuestas.Any())
-                return BadRequest(new { mensaje = "Debe incluir al menos una respuesta." });
-
-            if (dto.Tipo != "unica" && dto.Tipo != "multiple")
-                return BadRequest(
-                    new { mensaje = "El tipo de pregunta debe ser 'unica' o 'multiple'." }
-                );
+            var validacion = ValidarPreguntaConRespuestas(dto);
+            if (validacion != null)
+                return validacion;
 
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
@@ -257,7 +244,6 @@ namespace APIJuegos.Controllers
                 if (pregunta == null)
                     return NotFound(new { mensaje = "Pregunta no encontrada." });
 
-                // Actualizar datos de la pregunta
                 pregunta.Enunciado = dto.Enunciado;
                 pregunta.Tipo = dto.Tipo;
                 pregunta.Activa = dto.Activa;
@@ -352,6 +338,45 @@ namespace APIJuegos.Controllers
                     new { mensaje = "Ocurrió un error al actualizar el estado." }
                 );
             }
+        }
+
+        private ActionResult ValidarPreguntaConRespuestas(RecibirPreguntaConRespuestasDto dto)
+        {
+            if (dto == null || string.IsNullOrWhiteSpace(dto.Enunciado))
+                return BadRequest(new { mensaje = "La pregunta debe tener un enunciado." });
+
+            if (dto.Respuestas == null || !dto.Respuestas.Any())
+                return BadRequest(new { mensaje = "Debe agregar al menos una respuesta." });
+
+            if (dto.Enunciado.Length < 1 || dto.Enunciado.Length > 500)
+                return BadRequest(
+                    new { mensaje = "El enunciado debe tener entre 1 y 500 caracteres." }
+                );
+
+            if (dto.Tipo != "unica" && dto.Tipo != "multiple")
+                return BadRequest(
+                    new { mensaje = "El tipo de pregunta debe ser 'unica' o 'multiple'." }
+                );
+
+            int totalCorrectas = dto.Respuestas.Count(r => r.EsCorrecta);
+
+            if (dto.Tipo == "unica" && totalCorrectas != 1)
+                return BadRequest(
+                    new
+                    {
+                        mensaje = "Las preguntas de tipo 'unica' deben tener exactamente una respuesta correcta.",
+                    }
+                );
+
+            if (dto.Tipo == "multiple" && totalCorrectas < 1)
+                return BadRequest(
+                    new
+                    {
+                        mensaje = "Las preguntas de tipo 'multiple' deben tener al menos una respuesta correcta.",
+                    }
+                );
+
+            return null; // Todo ok
         }
     }
 }

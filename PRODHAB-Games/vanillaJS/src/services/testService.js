@@ -64,10 +64,9 @@ const mapearPreguntaAPITest = (preguntaAPI) => {
         .map(r => ({
             id: 'o' + r.idRespuesta,
             texto: r.texto,
-            correcta: r.esCorrecta,
-            retroalimentacion: r.retroalimentacion
+            correcta: r.esCorrecta
         }))
-        .filter(r => r.texto && r.texto.trim() !== ""); // eliminar respuestas vacías
+        .filter(r => r.texto && r.texto.trim() !== "");
     if (opciones.length === 0) return null;
 
     return {

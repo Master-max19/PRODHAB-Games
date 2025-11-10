@@ -63,11 +63,13 @@
 
 (() => {
 
-
     document.addEventListener("admin-completar-texto", (e) => {
         const gestor = document.querySelector("#admin-completar-texto");
         gestor.addEventListener("subitems-save-requested", async (e) => {
             const { itemId, subItems } = e.detail;
+
+            const valido = utilValidacionesJuegos.validarSubItems(gestor, itemId, subItems, 50);
+            if (!valido) return;
 
             try {
                 const respuestas = subItems.map((s) => s.texto);
@@ -151,17 +153,30 @@
         });
 
 
+
+
+
         gestor.addEventListener("item-saved", async (e) => {
             const { titulo, isNew, id } = e.detail;
+
             if (!isNew) return;
 
+            const ok = utilValidacionesJuegos.validarYRevertirTitulo(gestor, titulo, id, 600);
+            if (!ok) return;
+
+
             try {
-                const resp = await completarTextoService.crearRonda(Number(window.prodhab_juegos.juegoSeleccionado), titulo);
+                const resp = await completarTextoService.crearRonda(
+                    Number(window.prodhab_juegos.juegoSeleccionado),
+                    titulo
+                );
+
                 const idPregunta = resp.pregunta.idPregunta;
                 const items = gestor.getItems();
                 const item = items.find((i) => i.id === id);
                 if (item) item.id = idPregunta;
                 gestor.loadItems(items);
+
             } catch (err) {
                 utilModalJuegos.mostrarMensajeModal(
                     "Error",
@@ -170,9 +185,14 @@
             }
         });
 
+
+
         gestor.addEventListener("item-saved", async (e) => {
             const { titulo, isNew, id } = e.detail;
             if (isNew) return;
+            const ok = utilValidacionesJuegos.validarYRevertirTitulo(gestor, titulo, id, 600);
+            if (!ok) return;
+
 
             try {
                 const resp = await completarTextoService.actualizarRonda(
@@ -191,6 +211,7 @@
 
         gestor.shadowRoot.addEventListener("click", (e) => {
             if (!e.target.matches(".sublist .chip button")) return;
+
 
             const chipEl = e.target.closest(".chip");
             const subId = chipEl.dataset.id;

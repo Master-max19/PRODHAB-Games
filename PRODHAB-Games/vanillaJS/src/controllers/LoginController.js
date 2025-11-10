@@ -2,7 +2,6 @@
     const fondoLogin = document.querySelector(".fondo-login");
     const sideNav = document.querySelector("side-nav-component");
 
-    // ✅ Menú base (nunca se modifica)
     const menuBase = [
         { id: "id-admin-juegos-sidenav-option0", title: "Inicio", path: "#/inicio", event: "irAInicio" },
         { id: "id-admin-juegos-sidenav-option1", title: "Administrar usuarios", path: "#/html", event: "irAUsuario" },
@@ -39,15 +38,11 @@
 
                 actualizarVista();
 
-                // 🔄 Restaurar menú original
                 let menuActual = [...menuBase];
-
-                // 🚫 Filtrar si no es administrador
                 if (exito.rol.toLowerCase() !== "administrador") {
                     menuActual = menuActual.filter(op => op.id !== "id-admin-juegos-sidenav-option1");
                 }
 
-                // 🔥 Actualizar el sideNav con las opciones correctas
                 if (sideNav) sideNav.menuOptions = menuActual;
 
                 await TablaUsuariosController.cargarDatos();
@@ -69,10 +64,8 @@
         }
     }
 
-    // 🔁 Escuchar login y restaurar menú cada vez
     document.addEventListener("login-card-event", controlarLogin);
 
-    // 🔄 Si ya hay sesión guardada, aplicar menú correcto al recargar
     const sesionGuardada = sessionStorage.getItem("sesion_admin_juegos_prodhab");
     if (sesionGuardada) {
         const sesion = JSON.parse(sesionGuardada);

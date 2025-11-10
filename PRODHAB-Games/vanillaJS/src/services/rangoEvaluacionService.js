@@ -7,7 +7,7 @@ const RangoEvaluacionService = {
         idJuego: u.idJuego,
         rangoMinimo: u.rangoMinimo,
         rangoMaximo: u.rangoMaximo,
-        mensaje: decodeHtml(u.mensaje)
+        mensaje: u.mensaje
       }));
     } catch (error) {
       console.error("Error obteniendo rangos:", error);
@@ -15,9 +15,9 @@ const RangoEvaluacionService = {
     }
   },
 
-  async crear(rango) {
+  async crear(rango, idJuego) {
     try {
-      return await apiFetch(`${CONFIG.apiUrl}/api/RangoEvaluacion`, {
+      return await apiFetch(`${CONFIG.apiUrl}/api/RangoEvaluacion/${idJuego}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(rango)
@@ -55,8 +55,3 @@ const RangoEvaluacionService = {
   }
 };
 
-function decodeHtml(html) {
-  const txt = document.createElement("textarea");
-  txt.innerHTML = html;
-  return txt.value;
-}

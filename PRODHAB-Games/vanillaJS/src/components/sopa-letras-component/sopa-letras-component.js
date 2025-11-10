@@ -692,6 +692,8 @@ class SopaLetrasComponent extends HTMLElement {
 
                 const msg = this.shadowRoot.getElementById("msg");
                 if (msg) msg.textContent = `¡Felicidades! Lo lograste en ${timeText}`;
+           
+           
                 await resultadoJuegoService.registrarJuego(Number(this.getAttribute("id-sopa")) || this.idSopa || null);
 
                 if (this.timerInterval) clearInterval(this.timerInterval);

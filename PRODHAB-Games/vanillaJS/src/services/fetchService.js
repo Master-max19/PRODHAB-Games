@@ -11,15 +11,21 @@ async function apiFetch(url, options = {}) {
   };
 
   try {
-    
-    const res = await fetch(url, { ...options, headers, credentials: "include" });
 
+    const res = await fetch(url, { ...options, headers, credentials: "include" });
+    console.log(res)
     // Manejar 401: limpiar sesión y redirigir
     if (res.status === 401) {
       sessionStorage.removeItem("sesion_admin_juegos_prodhab");
-      const loginCard = document.querySelector("login-card-component");
+      const loginCard = document.querySelector(".fondo-login");
+      let sidenav = document.querySelector("side-nav-component");
+      if (sidenav) {
+        sidenav.style.display = 'none';
+      }
+
       if (loginCard) {
         loginCard.style.display = 'block';
+
       }
       return null;
     }

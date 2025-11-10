@@ -178,12 +178,17 @@ window.prodhab_juegos = window.prodhab_juegos || {};
 window.prodhab_juegos.juegoSeleccionado = 0;
 
 (() => {
+    const tipoJuego = Object.freeze({
+        TEST: 1,
+        ORDENAR_PALABRAS: 2,
+        COMPLETAR_TEXTO: 3,
+        SOPA_LETRAS: 4
+    });
 
     async function crearTablaDinamica(idTipoJuego, idContenedor, title) {
         const contenedor = document.getElementById(idContenedor);
 
         contenedor.innerHTML = "";
-        // Wrapper para la tabla
 
 
         const header = document.createElement("admin-header-component");
@@ -197,13 +202,10 @@ window.prodhab_juegos.juegoSeleccionado = 0;
         wrapper.id = `wrapper-tabla-${idTipoJuego}`;
         contenedor.appendChild(wrapper);
 
-        // Crear la tabla
         const tabla = document.createElement("simple-table-component");
         tabla.id = `tabla-juegos-${idTipoJuego}`;
         tabla.setAttribute("service-id", idTipoJuego);
         wrapper.appendChild(tabla);
-
-        // Configuración base
         const columnas = [
             { key: "idJuego", label: "ID" },
             { key: "nombre", label: "Nombre" },
@@ -237,15 +239,15 @@ window.prodhab_juegos.juegoSeleccionado = 0;
 
         function renderResumentActividad(idJuego) {
             return `<resumen-actividad-component
-         style="margin-bottom: 25px; margin-top: 25px;"
-    id-juego="${idJuego}"
-    label-mes="Actividad del mes actual"
-    label-30dias="Actividad últimos 30 días"
-    label-promedio="Calificación promedio (Últimos 30 días)"
-    tooltip-mes="Cantidad de actividades del mes actual (UTC)"
-    tooltip-30dias="Cantidad de actividades últimos 30 días (UTC)"
-    tooltip-promedio="Calificación promedio de los últimos 30 días (UTC)"
-></resumen-actividad-component>
+                    style="margin-bottom: 25px; margin-top: 25px;"
+                    id-juego="${idJuego}"
+                    label-mes="Actividad del mes actual"
+                    label-30dias="Actividad últimos 30 días"
+                    label-promedio="Calificación promedio (Últimos 30 días)"
+                    tooltip-mes="Cantidad de actividades del mes actual (UTC)"
+                    tooltip-30dias="Cantidad de actividades últimos 30 días (UTC)"
+                    tooltip-promedio="Calificación promedio de los últimos 30 días (UTC)"
+                    ></resumen-actividad-component>
 `;
 
 
@@ -253,14 +255,9 @@ window.prodhab_juegos.juegoSeleccionado = 0;
 
         }
 
-        // Cargar datos
         async function cargarJuegos(idTipoJuego = 1) {
-
-
             try {
                 const data = await juegoService.obtenerJuegosPorTipo(idTipoJuego);
-                console.log(data)
-                // Normalizar claves y asegurar strings
                 const dataString = data.map((item) => ({
                     idJuego: String(item.idJuego ?? ""),
                     nombre: String(item.nombre ?? item.Nombre ?? ""),
@@ -283,10 +280,10 @@ window.prodhab_juegos.juegoSeleccionado = 0;
 
         await cargarJuegos(idTipoJuego);
 
-        // Listener row-action
 
         tabla.addEventListener("row-action", async (e) => {
             const datos = e.detail.row;
+            let idJuegoSeleccionado = datos.idJuego;
 
             if (e.detail.action === "ver-estado") {
                 const estadoActual = datos.activo === 'activo';
@@ -307,22 +304,22 @@ window.prodhab_juegos.juegoSeleccionado = 0;
 
 
             if (e.detail.action === "ver") {
-                window.prodhab_juegos.juegoSeleccionado = Number(e.detail.row.idJuego);
+                window.prodhab_juegos.juegoSeleccionado = Number(idJuegoSeleccionado);
 
-                if (idTipoJuego === 1) {
+                if (idTipoJuego === tipoJuego.TEST) {
                     document.getElementById(idContenedor).innerHTML = `    
  <admin-header-component title="${e.detail.row.nombre}"></admin-header-component>
-    <form-test-component modo="registrar" service-id='${e.detail.row.idJuego}'></form-test-component>
-    <test-viewer-component service-id='${e.detail.row.idJuego}'></test-viewer-component>
-    <table-component id="tabla-rango-evaluacion" style="margin-bottom: 15px; margin-top: 25px;" service-id='${e.detail.row.idJuego}'></table-component>
-                   ${renderResumentActividad(e.detail.row.idJuego)}
+    <form-test-component modo="registrar" service-id='${idJuegoSeleccionado}'></form-test-component>
+    <test-viewer-component service-id='${idJuegoSeleccionado}'></test-viewer-component>
+    <table-component id="tabla-rango-evaluacion" style="margin-bottom: 15px; margin-top: 25px;" service-id='${idJuegoSeleccionado}'></table-component>
+                   ${renderResumentActividad(idJuegoSeleccionado)}
 `;
                     const form = document.querySelector("form-test-component");
                     const viewer = document.querySelector("test-viewer-component");
                     if (form && viewer) {
                         form.testViewer = viewer;
                     }
-                } else if (idTipoJuego === 2) {
+                } else if (idTipoJuego === tipoJuego.ORDENAR_PALABRAS) {
                     document.getElementById(idContenedor).innerHTML = `
   <admin-header-component
           title="Ordenar palabras"
@@ -345,10 +342,10 @@ window.prodhab_juegos.juegoSeleccionado = 0;
           hide-add-item
           hide-delete-button
         ></admin-palabra-component>
-                   ${renderResumentActividad(e.detail.row.idJuego)}
+                   ${renderResumentActividad(idJuegoSeleccionado)}
 
   `;
-                } else if (idTipoJuego === 3) {
+                } else if (idTipoJuego === tipoJuego.COMPLETAR_TEXTO) {
                     document.getElementById(
                         idContenedor).innerHTML = `  <admin-header-component
           title="Completar texto"
@@ -370,15 +367,15 @@ window.prodhab_juegos.juegoSeleccionado = 0;
           cancel-button-text="Cancelar"
    
         ></admin-palabra-component>
-                   ${renderResumentActividad(e.detail.row.idJuego)}
+                   ${renderResumentActividad(idJuegoSeleccionado)}
 `;
-                } else if (idTipoJuego === 4) {
+                } else if (idTipoJuego === tipoJuego.SOPA_LETRAS) {
                     document.getElementById(idContenedor).innerHTML = `
-  <admin-header-component
+        <admin-header-component
           title="Sopa de letras"
-          hide-buttons
-        ></admin-header-component>
-        <admin-palabra-component
+          hide-buttons>
+          </admin-header-component>
+          <admin-palabra-component
           id="admin-palabra-sopa-letras"
           title="Gestor de Preguntas"
           add-button-text="Agregar"
@@ -396,7 +393,7 @@ window.prodhab_juegos.juegoSeleccionado = 0;
           hide-add-item
           hide-delete-button
         ></admin-palabra-component>
-                   ${renderResumentActividad(e.detail.row.idJuego)}
+                   ${renderResumentActividad(idJuegoSeleccionado)}
 
   `;
                 }
@@ -409,18 +406,33 @@ window.prodhab_juegos.juegoSeleccionado = 0;
             e.preventDefault();
             const { row, newValues } = e.detail;
 
-            // Validate nombre
-            if (!newValues.nombre) {
+            if (!newValues.nombre || newValues.nombre.trim() === "") {
                 tabla.errorMessage = "El campo 'nombre' es obligatorio.";
+                tabla._render();
+                return;
+            }
+            if (newValues.nombre.length > 100) {
+                tabla.errorMessage = "El nombre no puede superar los 100 caracteres.";
+                tabla._render();
+                return;
+            }
+
+            if (newValues.descripcion && newValues.descripcion.length > 500) {
+                tabla.errorMessage = "La descripción no puede superar los 500 caracteres.";
+                tabla._render();
+                return;
+            }
+
+            if (newValues.detalle && newValues.detalle.length > 500) {
+                tabla.errorMessage = "El detalle no puede superar los 500 caracteres.";
                 tabla._render();
                 return;
             }
 
             try {
                 if (row.idJuego && parseInt(row.idJuego) > 0) {
-                    // Update existing game (PUT)
                     try {
-                        const updatedJuego = await juegoService.actualizarJuego(
+                        await juegoService.actualizarJuego(
                             row.idJuego,
                             {
                                 idJuego: parseInt(row.idJuego),
@@ -487,15 +499,13 @@ window.prodhab_juegos.juegoSeleccionado = 0;
                 tabla._render();
                 return;
             }
-
-            // Mostrar modal de confirmación
             utilModalJuegos.mostrarMensajeModal(
                 "Confirmar eliminación",
                 `¿Seguro que quieres eliminar este juego?`,
                 async () => {
                     try {
-                        await juegoService.eliminarJuego(row.idJuego); // elimina el juego
-                        await cargarJuegos(idTipoJuego); // recarga la tabla
+                        await juegoService.eliminarJuego(row.idJuego);
+                        await cargarJuegos(idTipoJuego);
 
                         tabla.dispatchEvent(
                             new CustomEvent("delete-row", {
@@ -518,7 +528,6 @@ window.prodhab_juegos.juegoSeleccionado = 0;
             await cargarJuegos(idTipoJuego);
         });
     }
-
 
     window.prodhab_juegos.crearTablaDinamica = crearTablaDinamica;
 

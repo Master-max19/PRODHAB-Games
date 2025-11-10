@@ -2,6 +2,7 @@ using System.Runtime.InteropServices;
 using APIJuegos.Data;
 using APIJuegos.DTOs;
 using APIJuegos.Modelos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +11,8 @@ namespace APIJuegos.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [EnableCors("AllowAll")]
+    [Authorize]
+    [EnableCors("FrontWithCookies")]
     public class JuegoController : ControllerBase
     {
         private readonly JuegosProdhabContext _context;
@@ -21,10 +23,10 @@ namespace APIJuegos.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<JuegoDTO>>> GetAll()
+        public async Task<ActionResult<IEnumerable<JuegoDto>>> GetAll()
         {
             var juegos = await _context
-                .Juegos.Select(j => new JuegoDTO
+                .Juegos.Select(j => new JuegoDto
                 {
                     IdJuego = j.IdJuego,
                     Nombre = j.Nombre,
@@ -48,17 +50,37 @@ namespace APIJuegos.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<PostJuegoRespuestaDto>> Create(CrearJuegoDto nuevoJuegoDto)
+        public async Task<ActionResult<JuegoDto>> Create(CrearJuegoDto nuevoJuegoDto)
         {
             if (nuevoJuegoDto == null || string.IsNullOrWhiteSpace(nuevoJuegoDto.Nombre))
-                return BadRequest("El juego debe tener un nombre.");
+                return BadRequest(new { mensaje = "El juego debe tener un nombre." });
+
+            if (nuevoJuegoDto.Nombre.Length > 100)
+                return BadRequest(
+                    new { mensaje = "El nombre no puede superar los 100 caracteres." }
+                );
+
+            if (!string.IsNullOrEmpty(nuevoJuegoDto.Detalle) && nuevoJuegoDto.Detalle.Length > 500)
+                return BadRequest(
+                    new { mensaje = "El detalle no puede superar los 500 caracteres." }
+                );
+
+            if (
+                !string.IsNullOrEmpty(nuevoJuegoDto.Descripcion)
+                && nuevoJuegoDto.Descripcion.Length > 500
+            )
+                return BadRequest(
+                    new { mensaje = "La descripción no puede superar los 500 caracteres." }
+                );
 
             var tipoJuegoExiste = await _context.TipoJuegos.AnyAsync(t =>
                 t.IdTipoJuego == nuevoJuegoDto.IdTipoJuego
             );
 
             if (!tipoJuegoExiste)
-                return BadRequest($"El TipoJuego con Id {nuevoJuegoDto.IdTipoJuego} no existe.");
+                return BadRequest(
+                    new { mensaje = $"El TipoJuego con Id {nuevoJuegoDto.IdTipoJuego} no existe." }
+                );
 
             var juegoEntidad = new Juego
             {
@@ -72,7 +94,7 @@ namespace APIJuegos.Controllers
             _context.Juegos.Add(juegoEntidad);
             await _context.SaveChangesAsync();
 
-            var juegoRespuesta = new PostJuegoRespuestaDto
+            var juegoRespuesta = new JuegoDto
             {
                 IdJuego = juegoEntidad.IdJuego,
                 Nombre = juegoEntidad.Nombre,
@@ -90,7 +112,7 @@ namespace APIJuegos.Controllers
         }
 
         [HttpPatch("{idJuego}")]
-        public async Task<ActionResult<PostJuegoRespuestaDto>> UpdatePartial(
+        public async Task<ActionResult<JuegoDto>> UpdatePartial(
             int idJuego,
             [FromBody] JuegoUpdateDto juegoDto
         )
@@ -114,7 +136,7 @@ namespace APIJuegos.Controllers
             await _context.SaveChangesAsync();
 
             // Mapear a Dto de respuesta
-            var juegoRespuesta = new PostJuegoRespuestaDto
+            var juegoRespuesta = new JuegoDto
             {
                 IdJuego = juego.IdJuego,
                 Nombre = juego.Nombre,
@@ -141,7 +163,7 @@ namespace APIJuegos.Controllers
         }
 
         [HttpGet("buscar")]
-        public async Task<ActionResult<IEnumerable<PostJuegoRespuestaDto>>> Buscar(
+        public async Task<ActionResult<IEnumerable<JuegoDto>>> Buscar(
             [FromQuery] string? nombre = null,
             [FromQuery] int? idTipoJuego = null,
             [FromQuery] bool? activo = null
@@ -159,7 +181,7 @@ namespace APIJuegos.Controllers
                 query = query.Where(j => j.Activo == activo.Value);
 
             var juegosFiltrados = await query
-                .Select(j => new PostJuegoRespuestaDto
+                .Select(j => new JuegoDto
                 {
                     IdJuego = j.IdJuego,
                     Nombre = j.Nombre,
@@ -171,7 +193,9 @@ namespace APIJuegos.Controllers
                 .ToListAsync();
 
             if (!juegosFiltrados.Any())
-                return NotFound("No se encontraron juegos que coincidan con los criterios.");
+                return NotFound(
+                    new { mensaje = "No se encontraron juegos que coincidan con los criterios." }
+                );
 
             return Ok(juegosFiltrados);
         }

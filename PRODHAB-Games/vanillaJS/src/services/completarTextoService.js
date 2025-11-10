@@ -14,11 +14,7 @@ const completarTextoService = (() => {
 
         palabras.forEach(palabra => {
             if (!palabra.trim()) return;
-
-            // Escapamos caracteres especiales
             const palabraEscape = palabra.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-
-            // Regex con \b para que coincida solo palabras completas
             const regex = new RegExp(`\\b${palabraEscape}\\b`, "gi");
 
             formato = formato.replace(regex, (match) => {
@@ -59,16 +55,15 @@ const completarTextoService = (() => {
                     if (palabrasLimpias.length === 0) return null;
 
                     const { formato, matches, distractores } = transformarFraseOrdenSecuencial(ronda.texto, palabrasLimpias);
-
-                    // Solo devolvemos la ronda si hay al menos un espacio reemplazado
                     if (matches.length === 0) return null;
 
                     return { texto: formato, espacios: matches, distractores };
                 })
-                .filter(r => r !== null); // eliminamos las rondas vacías
+                .filter(r => r !== null);
 
-            return {idJuego, rondas: rondasFormateadas, descripcion: data.descripcion, detalle: data.detalle };
+            return { idJuego, rondas: rondasFormateadas, descripcion: data.descripcion, detalle: data.detalle };
         },
+
         async obtenerRondasMapeadas(idJuego = 3) {
             const data = await this.obtenerDatosCompletarTextoAdmin(idJuego);
             if (!Array.isArray(data.rondas)) return { tema: data.descripcion, rondas: [] };
@@ -86,118 +81,128 @@ const completarTextoService = (() => {
         }
         ,
         async obtenerDatosCompletarTextoAdmin(idJuego = 3) {
-            const response = await fetch(`${CONFIG.apiUrl}/api/completar-texto/admin/${idJuego}`);
-            if (!response.ok) throw new Error(`Error: ${response.status}`);
-            const data = await response.json();
-            if (!data.exito) throw new Error(data.mensaje);
-            return data;
+            try {
+                const data = await apiFetch(`${CONFIG.apiUrl}/api/completar-texto/admin/${idJuego}`, {
+                    method: "GET",
+                });
+
+                if (!data) throw new Error("No se recibió respuesta del servidor");
+                if (!data.exito) throw new Error(data.mensaje);
+
+                return data;
+            } catch (err) {
+                console.error("Error en obtenerDatosCompletarTextoAdmin:", err);
+                throw err;
+            }
         },
 
         async eliminarRonda(idRonda) {
             if (!idRonda) throw new Error("Debes proporcionar el ID de la ronda");
 
-            const response = await fetch(`${CONFIG.apiUrl}/api/completar-texto/ronda/${idRonda}`, {
-                method: "DELETE",
-                headers: { "Content-Type": "application/json" }
-            });
+            try {
+                const data = await apiFetch(`${CONFIG.apiUrl}/api/completar-texto/ronda/${idRonda}`, {
+                    method: "DELETE",
+                    headers: { "Content-Type": "application/json" }
+                });
 
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(`Error al eliminar la ronda: ${response.status} - ${errorText}`);
+                // apiFetch ya retorna null si hay 401
+                if (!data) return null;
+
+                if (!data.exito) throw new Error(data.mensaje);
+
+                return data;
+            } catch (err) {
+                console.error("Error en eliminarRonda:", err);
+                throw err;
             }
-
-            // Intentamos parsear JSON solo si hay contenido
-            let data = {};
-            const text = await response.text();
-            if (text) {
-                try {
-                    data = JSON.parse(text);
-                    if (!data.exito) throw new Error(data.mensaje);
-                } catch {
-                    // No era JSON, pero la eliminación fue exitosa
-                    data = { success: true };
-                }
-            } else {
-                data = { success: true };
-            }
-
-            return data;
-        },
-
+        }
+        ,
         async crearRonda(idJuego, enunciado) {
-            const res = await fetch(`${CONFIG.apiUrl}/api/completar-texto/crear-ronda/${idJuego}`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Accept: "*/*",
-                },
-                body: JSON.stringify({ enunciado }),
-            });
+            if (!idJuego) throw new Error("Debes proporcionar el ID del juego");
+            if (!enunciado) throw new Error("Debes proporcionar el enunciado de la ronda");
 
-            if (!res.ok) {
-                const errorText = await res.text();
-                throw new Error(errorText || "Error al crear ronda");
+            try {
+                const data = await apiFetch(`${CONFIG.apiUrl}/api/completar-texto/crear-ronda/${idJuego}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Accept: "*/*",
+                    },
+                    body: JSON.stringify({ enunciado }),
+                });
+
+                if (!data) return null; // sesión expirada manejada por apiFetch
+                if (!data.exito) throw new Error(data.mensaje);
+
+                return data;
+            } catch (err) {
+                console.error("Error en crearRonda:", err);
+                throw err;
             }
-
-            return res.json();
-        },
-
+        }
+        ,
 
 
 
         async guardarSubitems(idItem, respuestas) {
+            if (!idItem) throw new Error("Debes proporcionar el ID del item");
+            if (!Array.isArray(respuestas)) throw new Error("Respuestas inválidas");
+
             try {
-                const res = await fetch(`${CONFIG.apiUrl}/api/completar-texto/opciones/${idItem}`, {
+                const data = await apiFetch(`${CONFIG.apiUrl}/api/completar-texto/opciones/${idItem}`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ respuestas }),
                 });
 
-                if (!res.ok) {
-                    const text = await res.text();
-                    throw new Error(text || "Error al guardar subitems");
-                }
+                if (!data) return null; // sesión expirada manejada por apiFetch
+                if (!data.exito) throw new Error(data.mensaje);
 
-                const data = await res.json();
-                return data; // retorna la respuesta del backend
+                return data;
             } catch (err) {
-                console.error("SubitemsService.guardarSubitems:", err);
+                console.error("Error en guardarSubitems:", err);
                 throw err;
             }
-        },
-
-
+        }
+        ,
         async eliminarSubitem(idOpcion) {
             if (!idOpcion) throw new Error("Debes proporcionar el ID del subitem");
 
-            const url = `${CONFIG.apiUrl}/api/completar-texto/opcion-completar${idOpcion}`;
-
-            const response = await fetch(url, {
-                method: "DELETE",
-                headers: { "accept": "*/*" },
-            });
-
-            if (!response.ok) {
-                const text = await response.text();
-                throw new Error(text || `Error al eliminar subitem (status ${response.status})`);
-            }
-
             try {
-                const data = await response.json();
-                return data; // Puede ser { exito: true } o algún mensaje
-            } catch {
-                return { exito: true }; // Si no retorna JSON, asumimos éxito
+                const data = await apiFetch(`${CONFIG.apiUrl}/api/completar-texto/opcion-completar/${idOpcion}`, {
+                    method: "DELETE",
+                    headers: { "accept": "*/*" },
+                });
+
+                // apiFetch devuelve null si la sesión expiró
+                if (!data) return null;
+
+                // Si la API devuelve exito: false
+                if (data.exito === false) throw new Error(data.mensaje || "Error al eliminar subitem");
+
+                return data; // normalmente { exito: true } o mensaje
+            } catch (err) {
+                console.error("Error en eliminarSubitem:", err);
+                throw err;
             }
-        },
-        async actualizarRonda(id, enunciado) {
-            const resp = await fetch(`${CONFIG.apiUrl}/api/completar-texto/${id}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ enunciado }),
-            });
-            if (!resp.ok) throw new Error(`Error ${resp.status}`);
-            return await resp.json();
         }
+        , async actualizarRonda(id, enunciado) {
+            try {
+                const data = await apiFetch(`${CONFIG.apiUrl}/api/completar-texto/${id}`, {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ enunciado }),
+                });
+
+                if (!data) return null; // sesión expirada
+
+                return data;
+            } catch (err) {
+                console.error("Error en actualizarRonda:", err);
+                throw err;
+            }
+        }
+
     };
 })();
 

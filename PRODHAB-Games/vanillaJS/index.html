@@ -45,18 +45,11 @@
       }
 
       .container {
-        max-width: 1280px;
+        max-width: 3000px;
         margin: 0 auto;
-        padding: 2rem 1rem;
       }
 
-      /* Header */
-      header {
-        text-align: center;
-        margin-bottom: 3rem;
-      }
-
-      h1 {
+      h2 {
         font-size: 2.5rem;
         font-weight: 700;
         color: var(--text);
@@ -242,6 +235,11 @@
         font-size: 0.9rem;
       }
 
+      #nextBtn,
+      #prevBtn {
+        width: 100px;
+      }
+
       .paginacion-btn:hover:not(:disabled) {
         background: var(--primary);
         color: white;
@@ -262,28 +260,28 @@
 
       /* Juego Activo */
       .juego-activo {
-        background: var(--card);
-        padding: 2rem;
-        border-radius: var(--radius);
-        box-shadow: var(--shadow);
-        margin-bottom: 2rem;
-        border: 1px solid var(--border);
+        position: relative;
+      }
+      .volver-container {
+        display: flex;
+        justify-content: flex-start; /* fuerza a la izquierda */
+        padding: 1rem;
       }
 
       .volver-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.75rem 1.25rem;
-        background: var(--secondary);
-        color: white;
-        border: none;
+        padding: 0.6rem 1.25rem;
+        background: var(--card);
+        color: var(--text);
+        border: 1.5px solid var(--border);
         border-radius: 8px;
         font-weight: 600;
+        font-size: 0.95rem;
         cursor: pointer;
         transition: var(--transition);
-        margin-bottom: 1.5rem;
-        font-size: 0.95rem;
+        display: inline-flex; /* para mantener iconos y texto alineados */
+        align-items: center;
+        gap: 0.5rem;
+        box-shadow: var(--shadow);
       }
 
       .volver-btn:hover {
@@ -295,7 +293,6 @@
         max-width: 100% !important;
         width: 100% !important;
         margin: 0 !important;
-        padding: 1.5rem !important;
         border-radius: 0 !important;
         box-shadow: none !important;
         background: var(--bg) !important;
@@ -315,10 +312,7 @@
 
       /* Responsive */
       @media (max-width: 768px) {
-        .container {
-          padding: 1.5rem 1rem;
-        }
-        h1 {
+        h2 {
           font-size: 2.1rem;
         }
         .grid {
@@ -334,16 +328,10 @@
           max-width: 300px;
           justify-content: center;
         }
-        .juego-activo {
-          padding: 1.5rem;
-        }
       }
 
       @media (max-width: 480px) {
-        .container {
-          padding: 1rem;
-        }
-        h1 {
+        h2 {
           font-size: 1.8rem;
         }
         .card-header,
@@ -359,13 +347,6 @@
   </head>
   <body>
     <div class="container">
-      <header>
-        <h1>Pruebas - Catálogo de Juegos</h1>
-        <p class="subtitle">
-          Desafíos educativos interactivos para el aprendizaje
-        </p>
-      </header>
-
       <div class="filtros">
         <button class="filtro-btn active" data-filtro="todos">Todos</button>
         <button class="filtro-btn" data-filtro="1">Test</button>
@@ -379,6 +360,8 @@
     </div>
 
     <!-- Scripts -->
+    <script src="src/util/juegoFunctionUtility.js"></script>
+
     <script src="src/components/test/test.js"></script>
     <script src="src/services/testService.js"></script>
     <script src="src/services/juegosService.js"></script>
@@ -482,12 +465,15 @@
       function mostrarJuego(juego) {
         const container = document.querySelector(".container");
         container.innerHTML = `
-        <div class="juego-activo juego-fullwidth">
-          <button class="volver-btn" id="volverBtn">
-            Volver al Catálogo
-          </button>
-          <div id="juegoContainer"></div>
-        </div>
+<div class="juego-activo juego-fullwidth">
+  <div class="volver-container">
+    <button class="volver-btn" id="volverBtn">
+      Volver al Catálogo
+    </button>
+  </div>
+  <div id="juegoContainer"></div>
+</div>
+
       `;
 
         document.body.classList.add("juego-abierto");

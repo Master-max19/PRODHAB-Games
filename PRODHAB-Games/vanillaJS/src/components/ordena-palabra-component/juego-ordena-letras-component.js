@@ -70,8 +70,8 @@ this.shadowRoot.innerHTML = `
     .cards-wrapper {
       position: relative;
       width: 100%;
-      height: 100%;             /* Ocupa todo el espacio disponible */
-      min-height: 500px;        /* Altura mínima para evitar colapso */
+      height: 100%;           
+      min-height: 500px;
     }
 
     .card {

@@ -49,15 +49,6 @@ function convertirLinkConEstiloTest(texto) {
 }
 
 
-const mezclarOpcionesTest = (pregunta) => {
-    const opciones = [...pregunta.opciones]; // Copy to avoid mutating original
-    for (let i = opciones.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [opciones[i], opciones[j]] = [opciones[j], opciones[i]];
-    }
-    return opciones;
-};
-
 
 const mapearPreguntaAPITest = (preguntaAPI) => {
     const opciones = preguntaAPI.respuestas

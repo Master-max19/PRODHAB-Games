@@ -1,19 +1,17 @@
 class TestComponent extends HTMLElement {
 
     static componente = {
-        styleURL: "test.css",
         serverURL: CONFIG.apiUrl,
         public: CONFIG.publicPath
     };
 
     static get observedAttributes() {
-        return ["style-url", "correcta_svg", "incorrecta_svg", "character_png"];
+        return [ "correcta_svg", "incorrecta_svg", "character_png"];
     }
 
 
     constructor() {
         super();
-        this.styleURL = this.getAttribute("style-url") || TestComponent.componente.styleURL;
         this.serverURL = this.getAttribute("server-url") || TestComponent.componente.serverURL;
         this.publicURL = this.getAttribute("public") || TestComponent.componente.public;
         this.correctaSVG = this.getAttribute("correcta_svg") || `${TestComponent.componente.public}/correcta.svg`;
@@ -25,7 +23,7 @@ class TestComponent extends HTMLElement {
         this.attachShadow({ mode: 'open' }); // Shadow DOM para encapsular estilos
         this.shadowRoot.innerHTML = ` `;
         this.listaPreguntas = [];
-        this.test = null;
+        this.test = new Test();
         this.posicionPregunta = 0;
         this.shuffledOptionsMap = new Map();
         this.img = new Image();
@@ -49,7 +47,7 @@ class TestComponent extends HTMLElement {
     renderizar() {
         this.shadowRoot.innerHTML =
             ` 
-      <link rel="stylesheet" href="${this.styleURL}" />
+    <style>${this.test.getTestStyle()}</style>
 
           <div class="container">
 
@@ -109,9 +107,16 @@ class TestComponent extends HTMLElement {
     }
 
     eventoReiniciar() {
-        this.shadowRoot.getElementById('btn-reiniciar').addEventListener('click', () => this.reiniciarExamen());
+        this.shadowRoot.getElementById('btn-reiniciar').addEventListener('click', () => {
+            utilModalJuegos2.mostrarMensajeModal(
+                "Reiniciar examen",
+                "¿Estás seguro que deseas reiniciar el test?",
+                () => {
+                    this.reiniciarExamen();
+                }
+            );
+        });
     }
-
 
 
 
@@ -167,7 +172,7 @@ class TestComponent extends HTMLElement {
 
     obtenerOpcionesHTML = (pregunta) => {
         const preguntaId = Number(String(pregunta.id).replace(/^pregunta/, '')); // Numeric ID
-        const opciones = mezclarOpcionesTest(pregunta);
+        const opciones = utilHtmlJuegos.mezclar(pregunta.opciones);
         // Store shuffled options
         this.shuffledOptionsMap.set(preguntaId, opciones);
         return opciones.map(opcion => {
@@ -301,11 +306,12 @@ class TestComponent extends HTMLElement {
                         this.mostrarResultados(serverResponse.detalle);
                         this.actualizarResumen(
                             serverResponse.totalFallos,
-                            serverResponse.totalAciertos,
+                            this.test.obtenerCantidadOpcionesCorrectas(serverResponse.detalle),
                             Number(serverResponse.calificacion).toFixed(2),
                             false, // reiniciar
                             utilHtmlJuegos.escapeHtml(serverResponse.mensaje),
-                            this.test.obtenerCantidadPreguntasCorrecta(serverResponse.detalle)
+                            serverResponse.totalAciertos,
+
 
                         );
 
@@ -665,10 +671,10 @@ class TestComponent extends HTMLElement {
         Items correctos: <strong>${totalPreguntasCorrectas}</strong> de <strong>${this.listaPreguntas.length}</strong>
     </div>
     <div title="Número total de opciones correctas seleccionadas.">
-        Respuestas correctas: <strong>${correctas}</strong>
+        Selecciones correctas: <strong>${correctas}</strong>
     </div>
     <div title="Número total de respuestas incorrectas seleccionadas.">
-        Total de fallos: <strong>${fallos}</strong>
+        Selecciones incorrectas: <strong>${fallos}</strong>
     </div>
     <div title="Porcentaje de preguntas correctas sobre el total.">
         Calificación: <strong>${calificacion}%</strong>
@@ -764,6 +770,8 @@ class TestComponent extends HTMLElement {
             this.mostrarPregunta(0);
             this.actualizarBarraProgreso(this.posicionPregunta);
             this.actualizarResumen(0, 0, 0, true, utilHtmlJuegos.escapeHtml(juegoConPreguntas.detalle), 0);
+            this.shadowRoot.querySelector('.summary').innerHTML = tituloTest.title;
+
         } else {
             const divStack = this.shadowRoot.getElementById('div-stack');
             divStack.innerHTML = '<p>Error al cargar el test</p>';

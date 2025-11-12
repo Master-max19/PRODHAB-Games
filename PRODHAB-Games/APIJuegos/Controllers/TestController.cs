@@ -183,6 +183,7 @@ namespace APIJuegos.Controllers
             double totalAciertos = 0;
             int totalFallos = 0;
             int totalPreguntas = respuestas.Count;
+            int cantidadTodosCorrectas = 0;
 
             var resultadoDetalle = new List<object>(totalPreguntas);
 
@@ -229,6 +230,10 @@ namespace APIJuegos.Controllers
                     : (fallos == 0 && aciertos == 1) ? 1
                     : 0;
 
+                if (puntos == 1)
+                {
+                    cantidadTodosCorrectas++;
+                }
                 totalAciertos += puntos;
                 totalFallos += fallos;
 
@@ -253,7 +258,7 @@ namespace APIJuegos.Controllers
                 {
                     IdJuego = idTest,
                     CantidadItems = totalPreguntas,
-                    CantidadAciertos = (int)Math.Round(totalAciertos),
+                    CantidadAciertos = cantidadTodosCorrectas,
                     Nota = (decimal)calificacion,
                     FechaRegistro = DateTime.UtcNow,
                 };
@@ -282,9 +287,9 @@ namespace APIJuegos.Controllers
 
             // 7. RESULTADO FINAL
             return Ok(
-                CalcularResultadoFinal(
+                ObtenerResultadoFinal(
                     totalPreguntas,
-                    (int)Math.Round(totalAciertos),
+                    cantidadTodosCorrectas,
                     totalFallos,
                     calificacion,
                     resultadoDetalle,
@@ -293,7 +298,7 @@ namespace APIJuegos.Controllers
             );
         }
 
-        private object CalcularResultadoFinal(
+        private object ObtenerResultadoFinal(
             int totalPreguntas,
             int totalAciertos,
             int totalFallos,

@@ -1,36 +1,98 @@
 const completarTextoService = (() => {
-
-
-
     function normalizarTextoCompletar(texto) {
-        return texto.trim().toLowerCase();
+        return texto
+            .trim()
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "");
     }
 
     function transformarFraseOrdenSecuencial(texto, palabras) {
-        const distractores = [...palabras.map(p => p.trim()).filter(p => p.length > 0)];
-        let matches = [];
-        let contador = 1;
-        let formato = texto;
+        const palabrasLimpias = palabras
+            .map(p => p.trim())
+            .filter(p => p.length > 0);
 
-        palabras.forEach(palabra => {
-            if (!palabra.trim()) return;
-            const palabraEscape = palabra.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-            const regex = new RegExp(`\\b${palabraEscape}\\b`, "gi");
+        // 1. Encontrar TODAS las coincidencias en el texto (en orden real)
+        const coincidencias = [];
+        const textoMinus = normalizarTextoCompletar(texto);
 
-            formato = formato.replace(regex, (match) => {
-                matches.push(match);
-                const idx = distractores.findIndex(p => normalizarTextoCompletar(p) === normalizarTextoCompletar(match));
-                if (idx !== -1) distractores.splice(idx, 1);
-                return `___${contador++}___`;
-            });
+        // Recorrer cada palabra y buscar TODAS sus apariciones
+        palabrasLimpias.forEach(palabraOriginal => {
+            const norma = normalizarTextoCompletar(palabraOriginal);
+            const escape = palabraOriginal.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+            const regex = new RegExp(`\\b${escape}\\b`, "gi");
+
+            let match;
+            while ((match = regex.exec(texto)) !== null) {
+                const inicio = match.index;
+                const fin = regex.lastIndex;
+                const textoEncontrado = match[0];
+
+                coincidencias.push({
+                    palabra: textoEncontrado,
+                    inicio,
+                    fin,
+                    normalizado: norma
+                });
+            }
         });
 
-        return { formato, matches, distractores };
+        // 2. Ordenar por posición en el texto (¡esto es clave!)
+        coincidencias.sort((a, b) => a.inicio - b.inicio);
+
+        // 3. Eliminar duplicados que se solapen o repitan en la misma posición
+        const unicos = [];
+        const posicionesUsadas = new Set();
+
+        for (const c of coincidencias) {
+            let solapado = false;
+            for (const pos of posicionesUsadas) {
+                if (c.inicio < pos.fin && c.fin > pos.inicio) {
+                    solapado = true;
+                    break;
+                }
+            }
+            if (!solapado) {
+                unicos.push(c);
+                posicionesUsadas.add(c);
+            }
+        }
+
+        // 4. Reemplazar en orden correcto
+        let formato = texto;
+        const matches = [];
+        let offset = 0;
+        let contador = 1;
+
+        unicos.forEach(coincidencia => {
+            const inicio = coincidencia.inicio + offset;
+            const fin = coincidencia.fin + offset;
+            const reemplazo = `___${contador++}___`;
+
+            formato = formato.slice(0, inicio) + reemplazo + formato.slice(fin);
+            matches.push(coincidencia.palabra);
+
+            offset += reemplazo.length - (fin - inicio);
+        });
+
+        // 5. Distractores = palabras que NO aparecieron en el texto
+        const usadas = new Set(matches.map(m => normalizarTextoCompletar(m)));
+        const distractores = palabrasLimpias.filter(p =>
+            !usadas.has(normalizarTextoCompletar(p))
+        );
+
+        return {
+            formato,
+            matches,
+            distractores
+        };
     }
-
-
     return {
         async obtenerDatosCompletarTexto(idJuego) {
+            if (!idJuego) {
+                const params = new URLSearchParams(window.location.search);
+                idJuego = params.get('idCompletar');
+            }
             const response = await fetch(`${CONFIG.apiUrl}/api/completar-texto/${idJuego}`);
             if (!response.ok) throw new Error(`Error: ${response.status}`);
             const data = await response.json();
@@ -38,13 +100,15 @@ const completarTextoService = (() => {
             return data;
         },
         async obtenerRondas(idJuego = 3) {
-            const data = await this.obtenerDatosCompletarTexto(idJuego);
-            if (!Array.isArray(data.rondas)) return [];
-
             if (!idJuego) {
                 const params = new URLSearchParams(window.location.search);
                 idJuego = params.get('idCompletar');
             }
+
+            const data = await this.obtenerDatosCompletarTexto(idJuego);
+
+            if (!Array.isArray(data.rondas)) return [];
+
 
 
             const rondasFormateadas = data.rondas
@@ -56,8 +120,8 @@ const completarTextoService = (() => {
 
                     const { formato, matches, distractores } = transformarFraseOrdenSecuencial(ronda.texto, palabrasLimpias);
                     if (matches.length === 0) return null;
-
                     return { texto: formato, espacios: matches, distractores };
+
                 })
                 .filter(r => r !== null);
 

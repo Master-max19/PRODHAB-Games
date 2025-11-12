@@ -23,6 +23,8 @@ namespace APIJuegos.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
+        [EnableCors("AllowAll")]
         public async Task<ActionResult<IEnumerable<JuegoDto>>> GetAll()
         {
             var juegos = await _context

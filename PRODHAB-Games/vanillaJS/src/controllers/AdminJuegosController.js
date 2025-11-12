@@ -335,7 +335,7 @@ window.prodhab_juegos.juegoSeleccionado = 0;
           next-button-text="Adelante"
           confirm-delete-text="¿Eliminar este ítem?"
           items-per-page-label-text="Elementos por página:"
-          sub-placeholder-text="Añadir opción..."
+          sub-placeholder-text="Añadir una palabra..."
           save-button-text="Guardar Cambios"
           cancel-button-text="Cancelar"
           hide-pagination
@@ -357,14 +357,16 @@ window.prodhab_juegos.juegoSeleccionado = 0;
           add-button-text="Agregar"
           edit-button-text="Modificar"
           delete-button-text="Quitar"
-          add-sub-button-text="Añadir opción"
+          add-sub-button-text="Añadir palabra"
           prev-button-text="Atrás"
           next-button-text="Adelante"
           confirm-delete-text="¿Eliminar este ítem?"
           items-per-page-label-text="Elementos por página:"
-          sub-placeholder-text="Añadir opción..."
+          sub-placeholder-text="Añadir una palabra..."
           save-button-text="Guardar Cambios"
           cancel-button-text="Cancelar"
+          placeholder-text="Crear una nueva ronda..."
+
    
         ></admin-palabra-component>
                    ${renderResumentActividad(idJuegoSeleccionado)}
@@ -381,7 +383,7 @@ window.prodhab_juegos.juegoSeleccionado = 0;
           add-button-text="Agregar"
           edit-button-text="Modificar"
           delete-button-text="Quitar"
-          add-sub-button-text="Añadir opción"
+          add-sub-button-text="Añadir palabra"
           prev-button-text="Atrás"
           next-button-text="Adelante"
           confirm-delete-text="¿Eliminar este ítem?"

@@ -537,7 +537,7 @@ validarPregunta({ enunciado, tipo, respuestas }) {
 
   // Respuestas
   if (!Array.isArray(respuestas) || respuestas.length === 0) {
-    return ["Debes agregar por lo menos una respuesta."];
+    return ["Debes ingresar o agregar por lo menos una respuesta."];
   }
 
   for (let i = 0; i < respuestas.length; i++) {

@@ -58,7 +58,7 @@ class OrdenaLetrasComponent extends HTMLElement {
       palabras = ["ejemplo"];
     }
 
-    this.palabras = this.mezclarArray([...palabras]);
+    this.palabras = utilHtmlJuegos.mezclar([...palabras]);
 
     this.shadowRoot.innerHTML = `
       <style>
@@ -442,13 +442,7 @@ class OrdenaLetrasComponent extends HTMLElement {
     this._disableKeyboard();
   }
 
-  mezclarArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-  }
+
 
   resaltarPalabras(texto, palabras) {
     const normalizar = (str) =>
@@ -645,8 +639,8 @@ class OrdenaLetrasComponent extends HTMLElement {
 
       this.palabras =
         palabrasOriginales.length > 0
-          ? this.mezclarArray([...palabrasOriginales])
-          : this.mezclarArray(["ejemplo"]);
+          ? utilHtmlJuegos.mezclar([...palabrasOriginales])
+          : utilHtmlJuegos.mezclar(["ejemplo"]);
 
       if (this.introduccion) this.introduccion.classList.remove("oculto");
       if (this.juego) this.juego.classList.add("oculto");

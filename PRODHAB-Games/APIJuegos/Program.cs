@@ -43,7 +43,10 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy
-                .WithOrigins("http://localhost:8080") // solo tu frontend
+                .WithOrigins(
+                    "http://localhost:8080",
+                    "https://apipracticajuegos-crcxccchdhd0dcag.eastus2-01.azurewebsites.net"
+                )
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials(); // importante para enviar cookies de sesión

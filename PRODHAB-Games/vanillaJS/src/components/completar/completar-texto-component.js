@@ -470,7 +470,7 @@ class CompletarTextoComponent extends HTMLElement {
     const todasLasPalabras = [...ronda.espacios, ...ronda.distractores];
 
     // Mezclar SOLO PARA VISUALIZACIÓN
-    const palabrasMezcladas = this.mezclar([...todasLasPalabras]);
+    const palabrasMezcladas = utilHtmlJuegos.mezclar([...todasLasPalabras]);
 
     palabrasMezcladas.forEach((palabra, indice) => {
       const btn = document.createElement("button");
@@ -571,13 +571,7 @@ class CompletarTextoComponent extends HTMLElement {
     }
   }
 
-  mezclar(a) {
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
-  }
+
 
   reiniciarJuego() {
     this.indiceRonda = -1;
@@ -665,4 +659,4 @@ class CompletarTextoComponent extends HTMLElement {
 
 }
 
-customElements.define("completar-texto-component", CompletarTextoComponent);
+customElements.define("completar-texto-component", CompletarTextoComponent);////sin modifcar la funcionalidad como evito que el barajar afecte la e l juego dame la correcion toda sin afectar el diseño

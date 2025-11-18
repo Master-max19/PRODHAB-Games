@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button onclick="alert()">dsdssssssssss</button>
+    <script src="src/util/juegoFunctionUtility.js"></script>
+
+    <script>
+
+let correoGlobal = "";
+let codigoGlobal = "";
+let nuevaClaveGlobal = "";
+
+utilModalJuegos3.mostrarModalConInput(
+  "Recuperación de cuenta",
+  "Ingresa tu correo electrónico:",
+  { type: "text", placeholder: "Correo electrónico" },
+
+  (correoIngresado) => {
+
+    correoGlobal = correoIngresado; // guardar
+
+    utilModalJuegos2.mostrarMensajeModal(
+      "Correo enviado",
+      "Te enviamos un código de verificación.",
+      () => {
+
+        utilModalJuegos3.mostrarModalConInput(
+          "Código de verificación",
+          "Ingresa el código enviado a tu correo:",
+          { type: "text", placeholder: "Código OTP" },
+
+          (codigoIngresado) => {
+
+            codigoGlobal = codigoIngresado; // guardar
+
+            utilModalJuegos3.mostrarModalConInput(
+              "Nueva contraseña",
+              "Ingresa tu nueva contraseña:",
+              { type: "password", placeholder: "Nueva contraseña" },
+
+              (nuevaClave) => {
+
+                nuevaClaveGlobal = nuevaClave; // guardar
+
+                utilModalJuegos2.mostrarMensajeModal(
+                  "Contraseña actualizada",
+                  "Tu contraseña ha sido cambiada correctamente.",
+                  false
+                );
+
+                console.log("=== DATOS DE RECUPERACIÓN ===");
+                console.log("Correo:", correoGlobal);
+                console.log("Código OTP:", codigoGlobal);
+                console.log("Nueva contraseña:", nuevaClaveGlobal);
+              }
+            );
+
+          }
+        );
+
+      }
+    );
+  }
+);
+
+
+    </script>
+  </body>
+</html>

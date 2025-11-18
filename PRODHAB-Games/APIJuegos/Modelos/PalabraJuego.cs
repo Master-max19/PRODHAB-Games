@@ -12,10 +12,10 @@ namespace APIJuegos.Modelos
 
         [Required]
         [StringLength(255)]
-        public string Palabra { get; set; }
+        public string Palabra { get; set; } = string.Empty;
         public bool Activa { get; set; } = true;
 
         [ForeignKey("IdJuego")]
-        public Juego Juego { get; set; }
+        public Juego? Juego { get; set; } 
     }
 }

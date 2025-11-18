@@ -1,14 +1,14 @@
 ﻿using System.Security.Claims;
 using APIJuegos.Data;
+using APIJuegos.Enums;
 using APIJuegos.Helpers;
 using APIJuegos.Modelos;
+using APIJuegos.Services;
 //John--------------------------------------------------
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
-//---------------------------------------------------
 
 namespace APIJuegos.Controllers
 {
@@ -19,13 +19,14 @@ namespace APIJuegos.Controllers
     public class UsuarioController : ControllerBase
     {
         private readonly JuegosProdhabContext _context;
+        private readonly IEmailService _emailService;
 
-        public UsuarioController(JuegosProdhabContext context)
+        public UsuarioController(JuegosProdhabContext context, IEmailService emailService)
         {
             _context = context;
+            _emailService = emailService;
         }
 
-        // GET: api/usuarios
         [HttpGet]
         [Authorize]
         public IActionResult Get()
@@ -36,7 +37,7 @@ namespace APIJuegos.Controllers
                 {
                     u.Correo,
                     Estado = u.Activo,
-                    Rol = u.Rol.Nombre,
+                    Rol = u.Rol != null ? u.Rol.Nombre : null,
                     u.FechaCreacion,
                 })
                 .ToList();
@@ -44,7 +45,6 @@ namespace APIJuegos.Controllers
             return Ok(usuarios);
         }
 
-        // GET: api/Usuarios/5
         [HttpGet("{idUsuario}")]
         public ActionResult<Usuario> GetById(int idUsuario)
         {
@@ -54,7 +54,6 @@ namespace APIJuegos.Controllers
             return usuario;
         }
 
-        // GET api/usuarios/correo/{correo}
         [HttpGet("correo/{correo}")]
         public async Task<ActionResult<Usuario>> GetByCorreo(string correo)
         {
@@ -66,7 +65,6 @@ namespace APIJuegos.Controllers
             return Ok(usuario);
         }
 
-        // POST: api/usuarios
         [HttpPost]
         public ActionResult<Usuario> Create(Usuario nuevoUsuario)
         {
@@ -83,7 +81,6 @@ namespace APIJuegos.Controllers
             );
         }
 
-        // PUT: api/Usuario/5
         [HttpPut("{idUsuario}")]
         public ActionResult Update(int id, Usuario usuarioActualizado)
         {
@@ -99,9 +96,6 @@ namespace APIJuegos.Controllers
             return Ok(usuario);
         }
 
-        // DELETE: api/Usuario?correo=ejemplo@correo.com
-
-        // DELETE: api/Usuarios/{correo}
         [HttpDelete("{correo}")] // correo viene en la URL
         public ActionResult DeleteByEmail(string correo)
         {
@@ -158,22 +152,21 @@ namespace APIJuegos.Controllers
                     existingUser.Clave = hash;
 
                     existingUser.IdRol = req.IdRol;
-                    existingUser.Activo = true; // lo marcamos como activo
+                    existingUser.Activo = true;
 
                     await _context.SaveChangesAsync();
                     return Ok(new { message = "Usuario reactivado correctamente" });
                 }
             }
 
-            // 🔹 Si no existe, se crea nuevo
             var nuevoSalt = PasswordHelper.GenerateSalt();
             var nuevoHash = PasswordHelper.HashPassword(req.Password, nuevoSalt);
 
             var user = new Usuario
             {
                 Correo = req.Correo,
-                Clave = nuevoHash, // byte[]
-                Salt = Convert.ToBase64String(nuevoSalt), // string
+                Clave = nuevoHash,
+                Salt = Convert.ToBase64String(nuevoSalt),
                 IdRol = req.IdRol,
                 FechaCreacion = DateTime.UtcNow,
                 Activo = req.Activo,
@@ -188,17 +181,14 @@ namespace APIJuegos.Controllers
         [HttpPut("desactivar/{correo}")]
         public async Task<IActionResult> DesactivarUsuario(string correo)
         {
-            // Obtener el correo del usuario logueado desde el JWT
             var correoLogueado = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
 
             if (correoLogueado == null)
                 return Unauthorized(new { message = "Token inválido" });
 
-            // Evitar que el admin se desactive a sí mismo
             if (correoLogueado.ToLower() == correo.ToLower())
                 return BadRequest(new { message = "No puedes desactivar tu propia cuenta" });
 
-            // Buscar el usuario a desactivar
             var usuario = await _context.Usuarios.FirstOrDefaultAsync(u =>
                 u.Correo.ToLower() == correo.ToLower()
             );
@@ -218,7 +208,6 @@ namespace APIJuegos.Controllers
         [HttpPut("activar/{correo}")]
         public async Task<IActionResult> ActivarUsuario(string correo)
         {
-            // Buscar el usuario por correo (sin distinguir mayúsculas/minúsculas)
             var usuario = await _context.Usuarios.FirstOrDefaultAsync(u =>
                 u.Correo.ToLower() == correo.ToLower()
             );
@@ -256,8 +245,10 @@ namespace APIJuegos.Controllers
             var usuarioLogueado = await _context
                 .Usuarios.Include(u => u.Rol)
                 .FirstOrDefaultAsync(u => u.Correo.ToLower() == correoLogueado.ToLower());
+            if (usuarioLogueado == null)
+                return Unauthorized(new { message = "Usuario logueado no encontrado" });
 
-            if (usuarioLogueado.IdRol == 2)
+            if (usuarioLogueado.IdRol == (int)TipoRolAdmin.JuegoAdmin)
             {
                 return StatusCode(
                     403,
@@ -266,9 +257,8 @@ namespace APIJuegos.Controllers
             }
 
             // Administrador (IdRol == 1)
-            if (usuario.IdRol == 1)
+            if (usuario.IdRol == (int)TipoRolAdmin.SuperAdmin)
             {
-                // Solo él mismo puede cambiar su contraseña
                 if (usuario.Correo?.ToLower() != correoLogueado?.ToLower())
                     return StatusCode(
                         403,
@@ -279,7 +269,7 @@ namespace APIJuegos.Controllers
             {
                 // Si no es administrador, solo un admin puede cambiar la contraseña de otro usuario
                 if (
-                    usuarioLogueado.IdRol != 1
+                    usuarioLogueado.IdRol != (int)TipoRolAdmin.SuperAdmin
                     && usuario.Correo?.ToLower() != correoLogueado?.ToLower()
                 )
                 {
@@ -299,8 +289,137 @@ namespace APIJuegos.Controllers
             usuario.Clave = nuevoHash;
 
             await _context.SaveChangesAsync();
-
             return Ok(new { message = "Clave actualizada correctamente" });
+        }
+
+        public record ResetPasswordRequest(string Correo, string Codigo, string NuevaClave);
+
+        [AllowAnonymous]
+        [EnableCors("AllowAll")]
+        [HttpPost("restablecer")]
+        public async Task<IActionResult> RestablecerClave([FromBody] ResetPasswordRequest req)
+        {
+            if (
+                string.IsNullOrWhiteSpace(req.Correo)
+                || string.IsNullOrWhiteSpace(req.Codigo)
+                || string.IsNullOrWhiteSpace(req.NuevaClave)
+            )
+            {
+                return BadRequest(
+                    new { mensaje = "Correo, código y nueva clave son obligatorios" }
+                );
+            }
+
+            // Buscar usuario
+            var usuario = await _context.Usuarios.FirstOrDefaultAsync(u =>
+                u.Correo.ToLower() == req.Correo.ToLower()
+            );
+
+            if (usuario == null)
+                return NotFound(new { mensaje = "Usuario no existe" });
+
+            // Buscar el código activo más reciente
+            var codigoDb = await _context
+                .CodigosVerificaciones.Where(c =>
+                    c.IdUsuario == usuario.IdUsuario && c.Codigo == req.Codigo && c.Activo
+                )
+                .OrderByDescending(c => c.IdCodigoVerificacion)
+                .FirstOrDefaultAsync();
+
+            if (codigoDb == null)
+                return BadRequest(new { mensaje = "Código inválido o ya utilizado" });
+
+            // Verificar expiración
+            if (codigoDb.Expiracion < DateTime.UtcNow)
+            {
+                codigoDb.Activo = false;
+                await _context.SaveChangesAsync();
+                return BadRequest(new { mensaje = "El código ha expirado" });
+            }
+
+            // Cambiar contraseña
+            var nuevoSalt = PasswordHelper.GenerateSalt();
+            var nuevoHash = PasswordHelper.HashPassword(req.NuevaClave, nuevoSalt);
+
+            usuario.Salt = Convert.ToBase64String(nuevoSalt);
+            usuario.Clave = nuevoHash;
+
+            // Desactivar el código (solo se usa una vez)
+            codigoDb.Activo = false;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new { mensaje = "Contraseña actualizada correctamente" });
+        }
+
+        [AllowAnonymous]
+        [EnableCors("AllowAll")]
+        [HttpPost("solicitar/{correo}")]
+        public async Task<IActionResult> SolicitarCodigo(string correo)
+        {
+            // Buscar usuario por correo
+            var usuario = await _context.Usuarios.FirstOrDefaultAsync(u =>
+                u.Correo.ToLower() == correo.ToLower()
+            );
+
+            if (usuario == null)
+                return NotFound(new { mensaje = "Usuario no existe" });
+
+            // Generar código de 6 dígitos
+            var codigo = new Random().Next(100000, 999999).ToString();
+
+            var nuevoCodigo = new CodigoVerificacion
+            {
+                Codigo = codigo,
+                Expiracion = DateTime.UtcNow.AddMinutes(10),
+                Activo = true,
+                IdUsuario = usuario.IdUsuario,
+            };
+
+            _context.CodigosVerificaciones.Add(nuevoCodigo);
+            await _context.SaveChangesAsync();
+
+            // Enviar correo con el código
+            await _emailService.SendEmailAsync(
+                correo,
+                "Código de verificación",
+                GenerarHtmlCodigo(codigo)
+            );
+
+            return Ok(new { mensaje = "Código enviado exitosamente" });
+        }
+
+        private string GenerarHtmlCodigo(string codigo)
+        {
+            return $@"
+                    <div style='font-family: Arial, sans-serif; color: #333; text-align: center'>
+                    <h2 style='font-weight: 600; margin-bottom: 10px'>Código de verificación</h2>
+
+                    <p style='font-size: 15px; margin: 0 0 15px 0'>
+                        Usa el siguiente código para continuar:
+                    </p>
+
+                    <div
+                        style='
+                        display: inline-block;
+                        padding: 12px 20px;
+                        font-size: 32px;
+                        font-weight: bold;
+                        letter-spacing: 4px;
+                        border-radius: 8px;
+                        border: 1px solid #ddd;
+                        background: #1e355e;
+                        color: #ffffff;
+                        margin-bottom: 20px;
+                        '
+                    >
+                        {codigo}
+                    </div>
+
+                    <p style='font-size: 14px; color: #777; margin-top: 10px'>
+                        Este código expira en <strong>10 minutos</strong>.
+                    </p>
+                    </div>";
         }
     }
 }

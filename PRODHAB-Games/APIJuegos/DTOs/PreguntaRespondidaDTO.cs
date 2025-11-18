@@ -8,16 +8,6 @@ using System.Collections.Generic;
 
 namespace APIJuegos.DTOs
 {
-    /*
-     * Representa una opción de respuesta dentro de una pregunta en un test o juego.
-     */
-    public class OpcionDto
-    {
-        // Identificador único de la opción
-        public long IdOpcion { get; set; }
-        // Indica si el usuario seleccionó esta opción
-        public bool Seleccionada { get; set; }
-    }
 
     /*
      * Representa una pregunta respondida por el usuario,
@@ -27,6 +17,7 @@ namespace APIJuegos.DTOs
     {
         // Identificador único de la pregunta
         public long IdPregunta { get; set; }
+
         // Lista de opciones disponibles para la pregunta y su estado de selección
         public List<OpcionDto> Opciones { get; set; } = new List<OpcionDto>();
     }

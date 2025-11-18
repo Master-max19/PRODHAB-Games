@@ -2,6 +2,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using APIJuegos.Data;
 using APIJuegos.DTOs;
+using APIJuegos.Enums;
 using APIJuegos.Modelos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
@@ -22,7 +23,6 @@ namespace APIJuegos.Controllers
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-  
         [AllowAnonymous]
         [EnableCors("AllowAll")]
         [HttpPost("registrar/{idJuego:int}")]
@@ -90,8 +90,7 @@ namespace APIJuegos.Controllers
                 .Where(r => r.FechaRegistro >= inicioMes)
                 .CountAsync();
 
-            // Si es tipo 1 (por ejemplo, evaluaciones que tienen nota promedio)
-            if (infoJuego.IdTipoJuego == 1)
+            if ((APIJuegos.Enums.TipoJuego)infoJuego.IdTipoJuego == APIJuegos.Enums.TipoJuego.Test)
             {
                 var promedio =
                     await resultados
@@ -110,7 +109,6 @@ namespace APIJuegos.Controllers
                 );
             }
 
-            // Otros tipos de juego sin promedio
             return Ok(
                 new
                 {

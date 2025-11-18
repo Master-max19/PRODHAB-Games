@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Completar palabra</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        font-family: "Raleway", sans-serif;
+        background: #ffffff;
+      }
+
+      .contenedor {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+      }
+
+      completar-texto-component {
+        width: 80%;
+        max-width: 900px;
+        height: auto;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="contenedor">
+      <completar-texto-component
+        img-intro="public/images/superdato_1.png"
+        webm-final="public/video/superdato_escribe.webm"
+        img-rondas="public/images/superdato_manos_cintura.png"
+      ></completar-texto-component>
+    </div>
+
+    <script src="src/util/juegoFunctionUtility.js"></script>
+    <script src="src/juegosEnvironments.js"></script>
+    <script src="src/services/resultadoJuegoService.js"></script>
+    <script src="src/services/completarTextoService.js"></script>
+    <script src="src/components/completar/completar-texto-component.js"></script>
+  </body>
+</html>

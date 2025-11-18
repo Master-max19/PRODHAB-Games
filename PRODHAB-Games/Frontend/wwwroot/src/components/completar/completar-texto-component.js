@@ -341,7 +341,9 @@ class CompletarTextoComponent extends HTMLElement {
             <button class="boton-reiniciar" id="btnReiniciarFinal">Reiniciar Juego</button>
           </div>
         `;
-  }
+ 
+ 
+      }
 
   async connectedCallback() {
     const tituloJuego = this.shadowRoot.getElementById("titulo-juego");

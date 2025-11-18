@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using System.Text;
 using APIJuegos.Data;
+using APIJuegos.DTOs;
 using APIJuegos.Helpers;
 using APIJuegos.Modelos;
 using Microsoft.AspNetCore.Authorization;
@@ -26,8 +27,6 @@ namespace APIJuegos.Controllers
             _context = context;
         }
 
-        public record LoginRequestDto(string Username, string Password);
-
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginRequestDto request)
         {
@@ -42,23 +41,20 @@ namespace APIJuegos.Controllers
                 if (string.IsNullOrEmpty(request.Password))
                     return BadRequest(new { message = "La contraseña es obligatoria" });
 
-                string username = request.Username;
-
                 var usuario = _context
                     .Usuarios.Include(u => u.Rol)
-                    .FirstOrDefault(u => u.Correo == username);
+                    .FirstOrDefault(u => u.Correo == request.Username);
 
-                bool credentialsAreValid = false;
+                if (usuario == null)
+                    return Unauthorized(new { message = "Usuario o contraseña inválidos" });
 
-                if (usuario != null)
-                {
-                    var saltBytes = Convert.FromBase64String(usuario.Salt);
-                    credentialsAreValid = PasswordHelper.VerifyPassword(
-                        request.Password,
-                        saltBytes,
-                        usuario.Clave
-                    );
-                }
+                // Validar contraseña
+                var saltBytes = Convert.FromBase64String(usuario.Salt ?? "");
+                bool credentialsAreValid = PasswordHelper.VerifyPassword(
+                    request.Password,
+                    saltBytes,
+                    usuario.Clave ?? Array.Empty<byte>()
+                );
 
                 if (!credentialsAreValid)
                     return Unauthorized(new { message = "Usuario o contraseña inválidos" });
@@ -81,9 +77,11 @@ namespace APIJuegos.Controllers
                     }
                 );
 
-                return Ok(new { message = "Login exitoso", rol = usuario.Rol.Nombre });
+                return Ok(
+                    new { message = "Login exitoso", rol = usuario.Rol?.Nombre ?? "sin-rol" }
+                );
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return StatusCode(500, new { message = "Error interno en el servidor" });
             }
@@ -107,13 +105,19 @@ namespace APIJuegos.Controllers
 
         private string GenerateJwtToken(Usuario usuario)
         {
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
+            var keyString =
+                _config["Jwt:Key"]
+                ?? throw new InvalidOperationException(
+                    "Jwt:Key no configurado en appsettings.json"
+                );
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(keyString));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var claims = new[]
             {
                 new Claim(ClaimTypes.Name, usuario.Correo),
-                new Claim(ClaimTypes.Role, usuario.Rol.Nombre), 
+                new Claim(ClaimTypes.Role, usuario.Rol?.Nombre ?? "SinRol"),
             };
 
             var token = new JwtSecurityToken(

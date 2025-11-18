@@ -17,4 +17,3 @@ dotnet add package Microsoft.EntityFrameworkCore.SqlServer
 
 // Generar modelos a partir de las tablas que hay en la base de datos
 
-dotnet ef dbcontext scaffold 'Server=prodhabpractica.database.windows.net;Database=practicaJuegosUCR;User Id=prodhabpractica;Password=Master;Encrypt=False;' Microsoft.EntityFrameworkCore.SqlServer --context-dir ./Data --output-dir ./Data/Modelos --force

@@ -1,5 +1,7 @@
 namespace APIJuegos.DTOs
 {
+
+    /*Dto Para crear un nuevo rango de evaluacion.*/
     public class PostRangoEvaluacionDto
     {
         public int RangoMinimo { get; set; }

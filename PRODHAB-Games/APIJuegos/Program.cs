@@ -1,18 +1,17 @@
+using System.Net.Http;
 using System.Text;
 using APIJuegos.Data;
-using APIJuegos.Modelos; // <- Ajusta según tu carpeta donde está TipoJuego
+using APIJuegos.Modelos;
+using APIJuegos.Services;
 //John---------------------------------------------------
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 //-----------------------------------------------
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -21,7 +20,8 @@ builder.Services.AddDbContext<JuegosProdhabContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
 
-// 🔹 Permitir CORS desde cualquier origen
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddSingleton<IEmailService, EmailService>();
 
 builder.Services.AddCors(options =>
 {
@@ -30,14 +30,13 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy
-                .SetIsOriginAllowed(origin => true) // permite cualquier origen
+                .SetIsOriginAllowed(origin => true)
                 .AllowAnyHeader()
                 .AllowAnyMethod()
-                .AllowCredentials(); // si quieres incluir cookies
+                .AllowCredentials();
         }
     );
 
-    // 2️⃣ Política para frontend con cookies (producción)
     options.AddPolicy(
         "FrontWithCookies",
         policy =>
@@ -49,7 +48,7 @@ builder.Services.AddCors(options =>
                 )
                 .AllowAnyHeader()
                 .AllowAnyMethod()
-                .AllowCredentials(); // importante para enviar cookies de sesión
+                .AllowCredentials();
         }
     );
 });
@@ -59,7 +58,6 @@ builder.Services.AddCors(options =>
 var jwtKey = builder.Configuration["Jwt:Key"];
 var jwtIssuer = builder.Configuration["Jwt:Issuer"];
 
-// 🔹 Configuración de JWT
 builder
     .Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -68,14 +66,13 @@ builder
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
-            ValidateAudience = false, // si quieres, agrega audience y valídala
+            ValidateAudience = false,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
             ValidIssuer = jwtIssuer,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey!)),
         };
 
-        // Leer el token desde la cookie HttpOnly "jwt"
         options.Events = new JwtBearerEvents
         {
             OnMessageReceived = ctx =>
@@ -89,15 +86,13 @@ builder
         };
     });
 
-//-----------------------------------------------------
-
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<JuegosProdhabContext>();
 
-    using var transaction = db.Database.BeginTransaction(); // Inicia la transacción
+    using var transaction = db.Database.BeginTransaction();
 
     var tiposIniciales = new List<TipoJuego>
     {
@@ -116,10 +111,9 @@ using (var scope = app.Services.CreateScope())
     }
 
     db.SaveChanges();
-    transaction.Commit(); // Confirma los cambios
+    transaction.Commit();
 }
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -128,11 +122,6 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Mi API v1");
     });
 }
-
-// 🔹 Activar CORS globalmente
-
-//app.UseCors("AllowAll");   LOS LLAME ESPESIFICAMENTE EN LAS CLASES QUE LOS VOY A USAR
-//app.UseCors("FrontWithCookies");       LOS LLAME ESPESIFICAMENTE EN LAS CLASES QUE LOS VOY A USAR
 
 app.UseHttpsRedirection();
 
@@ -149,6 +138,8 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Mi API v1");
 });
 
+app.UseDefaultFiles();
+app.UseStaticFiles();
 app.MapControllers();
 
 app.Run();

@@ -1,14 +1,16 @@
 /**
+ * Controlador: RangoEvaluacionController
+ *
  * Documentación: Validación de Rangos de Evaluación (Semiabiertos)
  *
  * Contexto:
- * Cada juego puede tener varios rangos de puntuación (RangoEvaluacion) con límite mínimo y máximo.
- * Estos rangos determinan la calificación o mensaje asociado a un resultado numérico.
+ * Cada juego puede tener varios rangos de puntuación (RangoEvaluacion) definidos por un valor mínimo y máximo.
+ * Estos rangos determinan la calificación o mensaje que se mostrará según el resultado numérico de un jugador.
  *
  * Definición de Rango Semiabierto:
  * Cada rango se interpreta como [RangoMinimo, RangoMaximo)
- * - RangoMinimo: incluyente (valor pertenece al rango)
- * - RangoMaximo: excluyente (valor no pertenece al rango)
+ * - RangoMinimo: incluyente (el valor pertenece al rango)
+ * - RangoMaximo: excluyente (el valor no pertenece al rango)
  *
  * Ejemplo:
  * ID | RangoMinimo | RangoMaximo | Intervalo | Valores que incluye
@@ -21,32 +23,28 @@
  * - Valor 100 → fuera de cualquier rango
  *
  * Justificación:
- * - Evita solapamientos: valores exactos de límite no quedan en dos rangos.
- * - Evita huecos: todos los valores continuos dentro del límite quedan cubiertos.
+ * - Evita solapamientos: ningún valor puede estar en dos rangos a la vez.
+ * - Evita huecos: todos los valores dentro del rango total están cubiertos.
  *
- * Implementación:
+ * Método auxiliar:
  * private async Task<bool> ExisteRangoSolapado(RangoEvaluacion rango, int? idIgnorar = null)
- * - Detecta si un rango se superpone con alguno existente.
- * - r.RangoMaximo <= rango.RangoMinimo → no hay solapamiento
- * - r.RangoMinimo >= rango.RangoMaximo → no hay solapamiento
- * - Negación !() → detecta solapamiento
- * - idIgnorar → permite omitir un rango específico (útil al editar)
+ * - Detecta si un nuevo rango se superpone con alguno ya existente para el mismo juego.
+ * - idIgnorar: permite excluir un rango al momento de editarlo.
  *
  * Resultado:
- * - Evita rangos duplicados o solapados
- * - Garantiza cobertura continua de valores
- * - Cada valor numérico pertenece a un único rango
+ * - Previene rangos duplicados o solapados.
+ * - Garantiza que cada valor numérico pertenezca a un único rango.
  */
 
 using System.Net;
 using APIJuegos.Data;
 using APIJuegos.DTOs;
+using APIJuegos.Helpers;
 using APIJuegos.Modelos;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Cors;
-
 
 namespace APIJuegos.Controllers
 {
@@ -68,7 +66,7 @@ namespace APIJuegos.Controllers
         {
             var rangos = await _context
                 .RangoEvaluaciones.Where(r => r.IdJuego == idJuego)
-                .OrderBy(r => r.RangoMinimo) // <-- orden ascendente por RangoMinimo
+                .OrderBy(r => r.RangoMinimo)
                 .ToListAsync();
 
             if (!rangos.Any())
@@ -77,6 +75,14 @@ namespace APIJuegos.Controllers
             return Ok(rangos);
         }
 
+        /*
+         *
+         * Crea un nuevo rango de evaluación para un juego.
+         * Realiza validaciones de coherencia y evita solapamientos entre rangos.
+         * @param idJuego Identificador del juego.
+         * @param dto Datos del nuevo rango (mínimo, máximo, mensaje).
+         * @return Objeto creado o error de validación.
+         */
         [HttpPost("{idJuego}")]
         public async Task<ActionResult<RangoEvaluacion>> Crear(
             int idJuego,
@@ -104,7 +110,7 @@ namespace APIJuegos.Controllers
                 IdJuego = idJuego,
                 RangoMinimo = dto.RangoMinimo,
                 RangoMaximo = dto.RangoMaximo,
-                Mensaje = dto.Mensaje,
+                Mensaje = SanitizeHtmlHelper.Clean(dto.Mensaje),
             };
 
             if (await ExisteRangoSolapado(rango))
@@ -121,6 +127,14 @@ namespace APIJuegos.Controllers
             return CreatedAtAction(nameof(GetPorJuego), new { idJuego = rango.IdJuego }, rango);
         }
 
+        /*
+         *
+         * Actualiza un rango de evaluación existente.
+         * Aplica las mismas validaciones que la creación.
+         * @param idRangoEvaluacion Identificador del rango a modificar.
+         * @param dto Datos actualizados del rango.
+         * @return Objeto actualizado o mensaje de error.
+         */
         [HttpPut("{idRangoEvaluacion}")]
         public async Task<IActionResult> Editar(
             int idRangoEvaluacion,
@@ -164,13 +178,19 @@ namespace APIJuegos.Controllers
             // Mapear los valores del DTO a la entidad existente
             existente.RangoMinimo = dto.RangoMinimo;
             existente.RangoMaximo = dto.RangoMaximo;
-            existente.Mensaje = dto.Mensaje;
+            existente.Mensaje = SanitizeHtmlHelper.Clean(dto.Mensaje);
 
             await _context.SaveChangesAsync();
 
             return Ok(existente);
         }
 
+        /*
+         *
+         * Elimina un rango de evaluación existente por su identificador.
+         * @param idRangoEvaluacion ID del rango a eliminar.
+         * @return 204 NoContent si se elimina correctamente.
+         */
         [HttpDelete("{idRangoEvaluacion}")]
         public async Task<IActionResult> Eliminar(int idRangoEvaluacion)
         {
@@ -183,9 +203,17 @@ namespace APIJuegos.Controllers
             return NoContent();
         }
 
-        // No hay solapamiento si
-        // nuevo.Max <= existente.Min  o nuevo.Min >= existente.Max
-        // Entonces se solapa si no se cumple eso:
+        /*
+        *
+         * Verifica si un rango se solapa con alguno existente.
+         * No hay solapamiento si:
+         * - r.RangoMaximo <= rango.RangoMinimo
+         * - r.RangoMinimo >= rango.RangoMaximo
+         *
+         * @param rango Rango a evaluar.
+         * @param idIgnorar (opcional) ID de rango a excluir de la comparación.
+         * @return true si hay solapamiento, false en caso contrario.
+         */
         private async Task<bool> ExisteRangoSolapado(RangoEvaluacion rango, int? idIgnorar = null)
         {
             return await _context.RangoEvaluaciones.AnyAsync(r =>

@@ -1,6 +1,8 @@
 using System.Runtime.InteropServices;
 using APIJuegos.Data;
 using APIJuegos.DTOs;
+using APIJuegos.Enums;
+using APIJuegos.Helpers;
 using APIJuegos.Modelos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
@@ -84,33 +86,79 @@ namespace APIJuegos.Controllers
                     new { mensaje = $"El TipoJuego con Id {nuevoJuegoDto.IdTipoJuego} no existe." }
                 );
 
-            var juegoEntidad = new Juego
+            using var transaction = await _context.Database.BeginTransactionAsync();
+
+            try
             {
-                Nombre = nuevoJuegoDto.Nombre,
-                Descripcion = nuevoJuegoDto.Descripcion ?? string.Empty,
-                Detalle = nuevoJuegoDto.Detalle ?? string.Empty,
-                Activo = nuevoJuegoDto.Activo,
-                IdTipoJuego = nuevoJuegoDto.IdTipoJuego,
-            };
+                var juegoEntidad = new Juego
+                {
+                    Nombre = SanitizeHtmlHelper.Clean(nuevoJuegoDto.Nombre ?? string.Empty),
+                    Descripcion = SanitizeHtmlHelper.Clean(
+                        nuevoJuegoDto.Descripcion ?? string.Empty
+                    ),
+                    Detalle = SanitizeHtmlHelper.Clean(nuevoJuegoDto.Detalle ?? string.Empty),
+                    Activo = nuevoJuegoDto.Activo,
+                    IdTipoJuego = nuevoJuegoDto.IdTipoJuego,
+                };
 
-            _context.Juegos.Add(juegoEntidad);
-            await _context.SaveChangesAsync();
+                _context.Juegos.Add(juegoEntidad);
+                await _context.SaveChangesAsync();
 
-            var juegoRespuesta = new JuegoDto
+                // Si el tipo de juego es 1, crear rango por defecto
+                if (
+                    (APIJuegos.Enums.TipoJuego)nuevoJuegoDto.IdTipoJuego
+                    == APIJuegos.Enums.TipoJuego.Test
+                )
+                {
+                    var rangosPorDefecto = new List<RangoEvaluacion>
+                    {
+                        new RangoEvaluacion
+                        {
+                            IdJuego = juegoEntidad.IdJuego,
+                            RangoMinimo = 0,
+                            RangoMaximo = 70,
+                            Mensaje =
+                                "¡Vamos! Aún puedes seguir mejorando. Visita el siguiente enlace: https://www.prodhab.go.cr/.",
+                        },
+                        new RangoEvaluacion
+                        {
+                            IdJuego = juegoEntidad.IdJuego,
+                            RangoMinimo = 70,
+                            RangoMaximo = 101,
+                            Mensaje =
+                                "¡Excelente! Has obtenido ${nota}pts. Tu conocimiento sobre este tema es increíble.",
+                        },
+                    };
+
+                    _context.RangoEvaluaciones.AddRange(rangosPorDefecto);
+                    await _context.SaveChangesAsync();
+                }
+
+                // Confirmar transacción
+                await transaction.CommitAsync();
+
+                var juegoRespuesta = new JuegoDto
+                {
+                    IdJuego = juegoEntidad.IdJuego,
+                    Nombre = juegoEntidad.Nombre,
+                    Descripcion = juegoEntidad.Descripcion,
+                    Detalle = juegoEntidad.Detalle,
+                    Activo = juegoEntidad.Activo,
+                    IdTipoJuego = juegoEntidad.IdTipoJuego,
+                };
+
+                return CreatedAtAction(
+                    nameof(GetById),
+                    new { idJuego = juegoEntidad.IdJuego },
+                    juegoRespuesta
+                );
+            }
+            catch (Exception)
             {
-                IdJuego = juegoEntidad.IdJuego,
-                Nombre = juegoEntidad.Nombre,
-                Descripcion = juegoEntidad.Descripcion,
-                Detalle = juegoEntidad.Detalle,
-                Activo = juegoEntidad.Activo,
-                IdTipoJuego = juegoEntidad.IdTipoJuego,
-            };
-
-            return CreatedAtAction(
-                nameof(GetById),
-                new { idJuego = juegoEntidad.IdJuego },
-                juegoRespuesta
-            );
+                // Revertir transacción en caso de error
+                await transaction.RollbackAsync();
+                return StatusCode(500, new { mensaje = "Error al crear el juego." });
+            }
         }
 
         [HttpPatch("{idJuego}")]
@@ -124,13 +172,13 @@ namespace APIJuegos.Controllers
                 return NotFound();
 
             if (juegoDto.Nombre != null)
-                juego.Nombre = juegoDto.Nombre;
+                juego.Nombre = SanitizeHtmlHelper.Clean(juegoDto.Nombre);
 
             if (juegoDto.Descripcion != null)
-                juego.Descripcion = juegoDto.Descripcion;
+                juego.Descripcion = SanitizeHtmlHelper.Clean(juegoDto.Descripcion);
 
             if (juegoDto.Detalle != null)
-                juego.Detalle = juegoDto.Detalle;
+                juego.Detalle = SanitizeHtmlHelper.Clean(juegoDto.Detalle);
 
             if (juegoDto.Activo.HasValue)
                 juego.Activo = juegoDto.Activo.Value;

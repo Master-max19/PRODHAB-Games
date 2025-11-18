@@ -3,6 +3,7 @@ using System.Net;
 using System.Text.Json;
 using APIJuegos.Data;
 using APIJuegos.DTOs;
+using APIJuegos.Helpers;
 using APIJuegos.Modelos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
@@ -25,14 +26,6 @@ namespace APIJuegos.Controllers
             _context = context;
         }
 
-        // GET: api/Preguntas
-
-        /*  [HttpGet]
-          public IEnumerable<Pregunta> Get()
-          {
-              return _context.Preguntas.ToList();
-          }*/
-
         [HttpGet("{idPregunta}")]
         public ActionResult<Pregunta> GetById(long idPregunta)
         {
@@ -40,44 +33,6 @@ namespace APIJuegos.Controllers
             if (pregunta == null)
                 return NotFound();
             return pregunta;
-        }
-
-        // POST: api/Preguntas
-        // POST: api/Preguntas
-        [HttpPost]
-        public ActionResult<Pregunta> Create(CrearPreguntaDto nuevaPreguntaDto)
-        {
-            // Validar que lleguen los datos requeridos
-            if (
-                nuevaPreguntaDto == null
-                || string.IsNullOrWhiteSpace(nuevaPreguntaDto.Enunciado)
-                || string.IsNullOrWhiteSpace(nuevaPreguntaDto.Tipo)
-            )
-            {
-                return BadRequest("Debe proporcionar enunciado y tipo de la pregunta.");
-            }
-
-            // Validar que Tipo sea "unica" o "multiple" (sin importar mayúsculas/minúsculas)
-            var tipoNormalizado = nuevaPreguntaDto.Tipo.Trim().ToLower();
-            if (tipoNormalizado != "unica" && tipoNormalizado != "multiple")
-                return BadRequest("El tipo debe ser 'unica' o 'multiple'.");
-
-            // Mapear Dto a entidad, asignando Activo automáticamente
-            var preguntaEntidad = new Pregunta
-            {
-                Enunciado = nuevaPreguntaDto.Enunciado,
-                Tipo = tipoNormalizado, // guardamos en minúsculas para consistencia
-                Activa = true,
-            };
-
-            _context.Preguntas.Add(preguntaEntidad);
-            _context.SaveChanges();
-
-            return CreatedAtAction(
-                nameof(GetById),
-                new { IdPregunta = preguntaEntidad.IdPregunta },
-                preguntaEntidad
-            );
         }
 
         [HttpPut("{idPregunta}")]
@@ -89,14 +44,14 @@ namespace APIJuegos.Controllers
 
             // Actualizar solo los campos enviados en el Dto
             if (!string.IsNullOrWhiteSpace(dto.Enunciado))
-                pregunta.Enunciado = dto.Enunciado;
+                pregunta.Enunciado = SanitizeHtmlHelper.Clean(dto.Enunciado);
 
             if (!string.IsNullOrWhiteSpace(dto.Tipo))
             {
                 var tipoNormalizado = dto.Tipo.Trim().ToLower();
                 if (tipoNormalizado != "unica" && tipoNormalizado != "multiple")
                     return BadRequest("El tipo debe ser 'unica' o 'multiple'.");
-                pregunta.Tipo = tipoNormalizado;
+                pregunta.Tipo = SanitizeHtmlHelper.Clean(tipoNormalizado);
             }
 
             if (dto.Activa.HasValue)
@@ -148,7 +103,7 @@ namespace APIJuegos.Controllers
                 // Crear la pregunta
                 var pregunta = new Pregunta
                 {
-                    Enunciado = enunciadoSeguro,
+                    Enunciado = SanitizeHtmlHelper.Clean(enunciadoSeguro),
                     Tipo = dto.Tipo,
                     Activa = dto.Activa,
                 };
@@ -163,9 +118,9 @@ namespace APIJuegos.Controllers
                     var respuesta = new Respuesta
                     {
                         IdPregunta = pregunta.IdPregunta,
-                        Texto = r.Texto,
+                        Texto = SanitizeHtmlHelper.Clean(r.Texto),
                         EsCorrecta = r.EsCorrecta,
-                        Retroalimentacion = r.Retroalimentacion,
+                        Retroalimentacion = SanitizeHtmlHelper.Clean(r.Retroalimentacion),
                     };
                     await _context.Respuestas.AddAsync(respuesta);
                     respuestasGuardadas.Add(respuesta);
@@ -195,7 +150,6 @@ namespace APIJuegos.Controllers
             }
             catch (DbUpdateException)
             {
-                // No revelar información sensible de la base de datos
                 return StatusCode(500, new { mensaje = "Error al guardar en la base de datos." });
             }
             catch (Exception)
@@ -205,11 +159,8 @@ namespace APIJuegos.Controllers
         }
 
         [HttpGet("pregunta/{idPregunta}/con-respuestas")]
-        [AllowAnonymous]
-        [EnableCors("AllowAll")]
-        public ActionResult GetPreguntaConRespuestas(int idPregunta)
+        public ActionResult<object> GetPreguntaConRespuestas(int idPregunta)
         {
-            // Obtener la pregunta y sus respuestas directamente
             var preguntaConRespuestas = _context
                 .Preguntas.Where(p => p.IdPregunta == idPregunta)
                 .Select(p => new
@@ -244,7 +195,7 @@ namespace APIJuegos.Controllers
                 if (pregunta == null)
                     return NotFound(new { mensaje = "Pregunta no encontrada." });
 
-                pregunta.Enunciado = dto.Enunciado;
+                pregunta.Enunciado = SanitizeHtmlHelper.Clean(dto.Enunciado);
                 pregunta.Tipo = dto.Tipo;
                 pregunta.Activa = dto.Activa;
 
@@ -271,16 +222,18 @@ namespace APIJuegos.Controllers
                     if (respuestaExistente != null)
                     {
                         respuestaExistente.EsCorrecta = rDto.EsCorrecta;
-                        respuestaExistente.Retroalimentacion = rDto.Retroalimentacion;
+                        respuestaExistente.Retroalimentacion = SanitizeHtmlHelper.Clean(
+                            rDto.Retroalimentacion
+                        );
                     }
                     else
                     {
                         var nuevaRespuesta = new Respuesta
                         {
                             IdPregunta = idPregunta,
-                            Texto = rDto.Texto,
+                            Texto = SanitizeHtmlHelper.Clean(rDto.Texto),
                             EsCorrecta = rDto.EsCorrecta,
-                            Retroalimentacion = rDto.Retroalimentacion,
+                            Retroalimentacion = SanitizeHtmlHelper.Clean(rDto.Retroalimentacion),
                         };
                         await _context.Respuestas.AddAsync(nuevaRespuesta);
                     }
@@ -295,22 +248,18 @@ namespace APIJuegos.Controllers
 
                 return Ok(new { Pregunta = pregunta, Respuestas = respuestasActualizadas });
             }
-            catch (DbUpdateException dbEx)
+            catch (DbUpdateException)
             {
                 await transaction.RollbackAsync();
                 return StatusCode(
                     500,
-                    new
-                    {
-                        mensaje = "Error al actualizar en la base de datos.",
-                        detalle = dbEx.Message,
-                    }
+                    new { mensaje = "Error al actualizar en la base de datos." }
                 );
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 await transaction.RollbackAsync();
-                return StatusCode(500, new { mensaje = "Error inesperado.", detalle = ex.Message });
+                return StatusCode(500, new { mensaje = "Error inesperado." });
             }
         }
 
@@ -330,9 +279,8 @@ namespace APIJuegos.Controllers
                     new { mensaje = "Estado actualizado correctamente.", Pregunta = pregunta }
                 );
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                // No exponer detalles sensibles, solo un mensaje genérico
                 return StatusCode(
                     500,
                     new { mensaje = "Ocurrió un error al actualizar el estado." }
@@ -340,7 +288,7 @@ namespace APIJuegos.Controllers
             }
         }
 
-        private ActionResult ValidarPreguntaConRespuestas(RecibirPreguntaConRespuestasDto dto)
+        private ActionResult? ValidarPreguntaConRespuestas(RecibirPreguntaConRespuestasDto dto)
         {
             if (dto == null || string.IsNullOrWhiteSpace(dto.Enunciado))
                 return BadRequest(new { mensaje = "La pregunta debe tener un enunciado." });
@@ -376,7 +324,7 @@ namespace APIJuegos.Controllers
                     }
                 );
 
-            return null; // Todo ok
+            return null; // Todo OK
         }
     }
 }

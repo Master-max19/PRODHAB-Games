@@ -21,6 +21,7 @@ public class JuegosProdhabContext : DbContext
     public DbSet<PalabraJuego> PalabraJuegos { get; set; }
     public DbSet<TipoJuego> TipoJuegos { get; set; }
     public DbSet<Rol> Roles { get; set; }
+    public DbSet<CodigoVerificacion> CodigosVerificaciones { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -91,6 +92,13 @@ public class JuegosProdhabContext : DbContext
             entity.HasKey(r => r.IdRol);
             entity.ToTable("Rol");
             entity.Property(r => r.IdRol);
+        });
+
+        modelBuilder.Entity<CodigoVerificacion>(entity =>
+        {
+            entity.HasKey(cv => cv.IdCodigoVerificacion);
+            entity.ToTable("CodigoVerificacion");
+            entity.Property(cv => cv.IdCodigoVerificacion);
         });
     }
 }

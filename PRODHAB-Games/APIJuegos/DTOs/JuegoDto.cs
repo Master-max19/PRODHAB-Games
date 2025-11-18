@@ -1,5 +1,9 @@
 namespace APIJuegos.DTOs
 {
+    /***
+    Utilizado en JuegoController para mostrar únicamente las características del juego y evitar
+    la lista de palabras relaciondas con el juego.
+    */
     public class JuegoDto
     {
         public int IdJuego { get; set; }

@@ -250,7 +250,6 @@ namespace APIJuegos.Controllers
 
             double calificacion = totalPreguntas > 0 ? (totalAciertos / totalPreguntas) * 100 : 0;
 
-            // 5. GUARDAR RESULTADO
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {

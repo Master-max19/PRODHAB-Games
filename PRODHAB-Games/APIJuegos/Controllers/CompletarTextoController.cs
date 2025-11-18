@@ -3,6 +3,7 @@ using System.Net;
 using System.Text.Json;
 using APIJuegos.Data;
 using APIJuegos.DTOs;
+using APIJuegos.Helpers;
 using APIJuegos.Modelos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
@@ -44,7 +45,6 @@ namespace APIJuegos.Controllers
                 if (juego == null)
                     return NotFound(new { exito = false, mensaje = "Juego no encontrado" });
 
-                // Obtener preguntas activas
                 var preguntasBase = await (
                     from pj in _context.PreguntaJuegos
                     join p in _context.Preguntas on pj.IdPregunta equals p.IdPregunta
@@ -65,7 +65,6 @@ namespace APIJuegos.Controllers
 
                 var idsPreguntas = preguntasBase.Select(p => p.IdPregunta).ToList();
 
-                // Obtener todas las respuestas y agrupar por IdPregunta
                 var respuestasMap = (
                     await _context
                         .Respuestas.Where(r => idsPreguntas.Contains(r.IdPregunta))
@@ -75,7 +74,6 @@ namespace APIJuegos.Controllers
                     .GroupBy(r => r.IdPregunta)
                     .ToDictionary(g => g.Key, g => g.Select(r => r.Texto).ToList());
 
-                // Construir lista final de preguntas con sus respuestas
                 var rondas = preguntasBase
                     .Select(p => new
                     {
@@ -139,7 +137,6 @@ namespace APIJuegos.Controllers
 
                 var idsPreguntas = preguntasBase.Select(p => p.IdPregunta).ToList();
 
-                // Obtener las palabras/respuestas para cada pregunta, manejando nulls
                 var todasRespuestas = await _context
                     .Respuestas.Where(r => idsPreguntas.Contains(r.IdPregunta))
                     .Select(r => new
@@ -150,7 +147,6 @@ namespace APIJuegos.Controllers
                     })
                     .ToListAsync();
 
-                // Agrupar por IdPregunta y mapear a RondaCompletarDto
                 var respuestasMap = todasRespuestas
                     .GroupBy(r => r.IdPregunta)
                     .ToDictionary(
@@ -243,7 +239,7 @@ namespace APIJuegos.Controllers
                     }
                 );
 
-            var enunciadoSeguro = dto.Enunciado;
+            var enunciadoSeguro = SanitizeHtmlHelper.Clean(dto.Enunciado);
 
             var pregunta = new Pregunta
             {
@@ -293,6 +289,16 @@ namespace APIJuegos.Controllers
             }
         }
 
+        /**
+         * Endpoint utilizado para crear las opciones (palabras) asociadas a una pregunta
+         * del tipo “completar”. Valida que la pregunta exista, que las palabras no sean
+         * vacías ni contengan espacios, y que no superen los 50 caracteres.
+         *
+         * @param idPregunta Identificador de la pregunta a la cual se agregarán las opciones.
+         * @param dto Objeto con la lista de palabras a registrar.
+         * @return Retorna un resultado indicando si la operación fue exitosa o no.
+         */
+
         [HttpPost("opciones/{idPregunta}")]
         public async Task<ActionResult> CrearPalabras(
             long idPregunta,
@@ -341,9 +347,9 @@ namespace APIJuegos.Controllers
                     new Respuesta
                     {
                         IdPregunta = idPregunta,
-                        Texto = palabra,
-                        EsCorrecta = true, // por defecto
-                        Retroalimentacion = "", // opcional, vacío
+                        Texto = SanitizeHtmlHelper.Clean(palabra),
+                        EsCorrecta = true,
+                        Retroalimentacion = "",
                     }
                 );
             }
@@ -397,7 +403,7 @@ namespace APIJuegos.Controllers
                         }
                     );
 
-                ronda.Enunciado = enunciado;
+                ronda.Enunciado = SanitizeHtmlHelper.Clean(enunciado);
             }
 
             _context.SaveChanges();

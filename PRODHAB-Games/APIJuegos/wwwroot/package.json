@@ -1,0 +1,16 @@
+{
+  "name": "vanillajs",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+  "test": "http-server ./ -p 8080 -o /src/components/admin/login/login.html",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}

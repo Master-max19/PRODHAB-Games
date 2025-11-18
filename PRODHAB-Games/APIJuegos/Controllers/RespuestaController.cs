@@ -4,6 +4,8 @@ using APIJuegos.Modelos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using APIJuegos.Helpers;
+
 
 namespace APIJuegos.Controllers
 {
@@ -44,13 +46,12 @@ namespace APIJuegos.Controllers
             if (nuevaRespuestaDto == null || string.IsNullOrWhiteSpace(nuevaRespuestaDto.Texto))
                 return BadRequest("La respuesta debe tener un texto.");
 
-            // Mapear Dto a entidad, sin asignar IdRespuesta
             var respuestaEntidad = new Respuesta
             {
                 IdPregunta = nuevaRespuestaDto.IdPregunta,
-                Texto = nuevaRespuestaDto.Texto,
+                Texto = SanitizeHtmlHelper.Clean(nuevaRespuestaDto.Texto),
                 EsCorrecta = nuevaRespuestaDto.EsCorrecta,
-                Retroalimentacion = nuevaRespuestaDto.Retroalimentacion,
+                Retroalimentacion = SanitizeHtmlHelper.Clean(nuevaRespuestaDto.Retroalimentacion),
             };
 
             _context.Respuestas.Add(respuestaEntidad);
@@ -72,8 +73,8 @@ namespace APIJuegos.Controllers
                 return NotFound();
 
             respuesta.IdPregunta = respuestaActualizada.IdPregunta;
-            respuesta.Texto = respuestaActualizada.Texto;
-            respuesta.Retroalimentacion = respuestaActualizada.Retroalimentacion;
+            respuesta.Texto = SanitizeHtmlHelper.Clean(respuestaActualizada.Texto);
+            respuesta.Retroalimentacion = SanitizeHtmlHelper.Clean(respuestaActualizada.Retroalimentacion);
 
             _context.SaveChanges();
             return Ok(respuesta);

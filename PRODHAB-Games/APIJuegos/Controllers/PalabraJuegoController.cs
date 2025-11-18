@@ -21,14 +21,6 @@ namespace APIJuegos.Controllers
             _context = context;
         }
 
-        /*        [HttpGet]
-                public async Task<ActionResult<IEnumerable<PalabraJuego>>> GetPalabras()
-                {
-                    return await _context.PalabraJuegos.ToListAsync();
-                }
-        */
-        // GET: api/PalabraJuego/porJuego/5
-
         /**
         Busca las palabras de un juego por medio de su identificador y las devuelve asociadas
         con loss detalles del mismo juego, ya sea descripción, nombre y etc.
@@ -196,7 +188,6 @@ namespace APIJuegos.Controllers
                 }
             );
         }
-
 
         private bool ExistePalabra(int idPalabraJuego)
         {

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Transición entre Componentes</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap");
+    </style>
+  </head>
+<body>
+
+  <script type="module">
+    import { CONFIG_JUEGO_PRODHAB } from "./src/juegosEnvironments.js";
+    import "./src/components/ordena-palabra-component/juego-ordena-letras-component.js";
+
+    // Configurar la URL del JSON
+    CONFIG_JUEGO_PRODHAB.setJsonUrl("juegos.json");
+
+    // Esperar a que el DOM esté listo
+    window.addEventListener("DOMContentLoaded", () => {
+
+      const juegoComponent = document.createElement("juego-ordena-letras-component");
+
+      // Asignar atributos correctamente
+      juegoComponent.setAttribute("video-final-src", "public/video/super_dato_sonrie.webm");
+      juegoComponent.setAttribute("inicio-video-src", "public/video/super_dato_saluda.webm");
+      juegoComponent.setAttribute("id-ordenar", 3); // usar el atributo correcto que espera el componente
+
+      // Agregar al contenedor
+      document.body.appendChild(juegoComponent);
+    });
+  </script>
+</body>
+
+</html>

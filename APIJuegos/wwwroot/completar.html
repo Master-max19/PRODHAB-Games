@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Completar palabra</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        font-family: "Raleway", sans-serif;
+        background: #ffffff;
+      }
+
+      .contenedor {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+      }
+
+      completar-texto-component {
+        width: 80%;
+        max-width: 900px;
+        height: auto;
+      }
+    </style>
+  </head>
+
+  <body>
+    <script type="module">
+      import { CONFIG_JUEGO_PRODHAB } from "./src/juegosEnvironments.js";
+      import "./src/components/completar/completar-texto-component.js";
+      CONFIG_JUEGO_PRODHAB.setJsonUrl("juegos.json");
+
+      const contenedor = document.querySelector(".contenedor");
+
+      // Crear el componente dinámicamente
+      const completar = document.createElement("completar-texto-component");
+
+      // Asignar atributos
+      completar.setAttribute("img-intro", "public/images/superdato_1.png");
+      completar.setAttribute(
+        "webm-final",
+        "public/video/superdato_escribe.webm"
+      );
+      completar.setAttribute(
+        "img-rondas",
+        "public/images/superdato_manos_cintura.png"
+      );
+
+      completar.setAttribute("id-completar", "5");
+      contenedor.appendChild(completar);
+    </script>
+
+    <div class="contenedor"></div>
+  </body>
+</html>

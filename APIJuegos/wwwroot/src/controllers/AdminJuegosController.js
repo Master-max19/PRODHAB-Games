@@ -1,0 +1,323 @@
+// archivo: modules/tabla-juegos/tabla-juegos.js
+// tipo ES Module
+
+import { obtenerJuegosPorTipo, actualizarJuego, crearJuego, eliminarJuego } from "../services/juegosService.js";
+import { openAutoModalGames } from "../util/modalJuegosProdhab.js";
+import { mostrarMensajeModal } from '../util/juegoFunctionUtility.js';
+
+// Estado interno del módulo
+const prodhabJuegosState = {
+    juegoSeleccionado: 0
+};
+
+export function getJuegoSeleccionado() {
+    return prodhabJuegosState.juegoSeleccionado;
+}
+
+export function setJuegoSeleccionado(idJuego) {
+    prodhabJuegosState.juegoSeleccionado = idJuego;
+}
+
+const tipoJuego = Object.freeze({
+    TEST: 1,
+    ORDENAR_PALABRAS: 2,
+    COMPLETAR_TEXTO: 3,
+    SOPA_LETRAS: 4
+});
+
+export async function crearTablaDinamica(idTipoJuego, idContenedor, title) {
+    const contenedor = document.getElementById(idContenedor);
+    if (!contenedor) return;
+    contenedor.innerHTML = "";
+
+    const header = document.createElement("admin-header-component");
+    header.setAttribute("title", title);
+    header.setAttribute("hide-buttons", "");
+    contenedor.appendChild(header);
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "tabla-wrapper";
+    wrapper.id = `wrapper-tabla-${idTipoJuego}`;
+    contenedor.appendChild(wrapper);
+
+    const tabla = document.createElement("simple-table-component");
+    tabla.id = `tabla-juegos-${idTipoJuego}`;
+    tabla.setAttribute("service-id", idTipoJuego);
+    wrapper.appendChild(tabla);
+
+    const columnas = [
+        { key: "idJuego", label: "Identificador" },
+        { key: "nombre", label: "Nombre" },
+        { key: "descripcion", label: "Descripción" },
+        { key: "detalle", label: "Instrucciones" },
+        { key: "activo", label: "Estado" },
+    ];
+
+    const configBase = {
+        columns: columnas,
+        editableColumns: ["nombre", "descripcion", "detalle"],
+        showAdd: true,
+        showEdit: true,
+        showDelete: true,
+        showRefresh: true,
+        externalActions: [
+            { label: "🕹 Prueba", action: "probar", tooltip: "Visualizar el juego." },
+            { label: "👁 Estado", action: "ver-estado", tooltip: "Controla la visibilidad de los juegos." },
+            { label: "⚙ Ajustes", action: "ver", tooltip: "Modificar el juego." }
+        ]
+    };
+
+    function renderResumentActividad(idJuego) {
+        return `<resumen-actividad-component
+            style="margin-bottom: 25px; margin-top: 25px;"
+            id-juego="${idJuego}"
+            label-mes="Actividad del mes actual"
+            label-30dias="Actividad últimos 30 días"
+            label-promedio="Calificación promedio (Últimos 30 días)"
+            tooltip-mes="Cantidad de actividades del mes actual (UTC)"
+            tooltip-30dias="Cantidad de actividades últimos 30 días (UTC)"
+            tooltip-promedio="Calificación promedio de los últimos 30 días (UTC)"
+        ></resumen-actividad-component>`;
+    }
+
+    async function cargarJuegos(idTipoJuego = 1) {
+        try {
+            const data = await obtenerJuegosPorTipo(idTipoJuego);
+            const dataString = data.map(item => ({
+                idJuego: String(item.idJuego ?? ""),
+                idTipoJuego: String(item.idTipoJuego ?? ""),
+                nombre: String(item.nombre ?? item.Nombre ?? ""),
+                descripcion: String(item.descripcion ?? item.Descripcion ?? ""),
+                detalle: String(item.detalle ?? item.Detalle ?? ""),
+                activo: item.activo === true ? 'activo' : 'inactivo'
+            }));
+            tabla.config = configBase;
+            tabla.dataSource = dataString;
+            tabla.errorMessage = "";
+        } catch {
+            tabla.config = configBase;
+            tabla.dataSource = [];
+            tabla.errorMessage = "No hay juegos disponibles.";
+        }
+        tabla._render();
+    }
+
+    await cargarJuegos(idTipoJuego);
+
+    tabla.addEventListener("row-action", async e => {
+        const datos = e.detail.row;
+        const idJuegoSeleccionado = datos.idJuego;
+
+        if (e.detail.action === "probar") {
+            openAutoModalGames(datos.idJuego, datos.idTipoJuego);
+        }
+
+        if (e.detail.action === "ver-estado") {
+            const estadoActual = datos.activo === 'activo';
+            const nuevoEstado = !estadoActual;
+            mostrarMensajeModal(
+                `El estado actual es: ${datos.activo}`,
+                `¿Deseas cambiarlo a: ${nuevoEstado ? 'activo' : 'inactivo'}?`,
+                async () => {
+                    await actualizarJuego(datos.idJuego, { activo: nuevoEstado });
+                    await cargarJuegos(idTipoJuego);
+                }
+            );
+        }
+
+        if (e.detail.action === "ver") {
+            setJuegoSeleccionado(Number(idJuegoSeleccionado));
+
+            if (idTipoJuego === tipoJuego.TEST) {
+                document.getElementById(idContenedor).innerHTML = `    
+            <admin-header-component title="${e.detail.row.nombre}"></admin-header-component>
+            <form-test-component modo="registrar" service-id='${idJuegoSeleccionado}'></form-test-component>
+            <test-viewer-component service-id='${idJuegoSeleccionado}'></test-viewer-component>
+            <table-component id="tabla-rango-evaluacion" style="margin-bottom: 15px; margin-top: 25px;" service-id='${idJuegoSeleccionado}'></table-component>
+                   ${renderResumentActividad(idJuegoSeleccionado)}
+            `;
+                const form = document.querySelector("form-test-component");
+                const viewer = document.querySelector("test-viewer-component");
+                if (form && viewer) {
+                    form.testViewer = viewer;
+                }
+            } else if (idTipoJuego === tipoJuego.ORDENAR_PALABRAS) {
+                document.getElementById(idContenedor).innerHTML = `
+          <admin-header-component
+          title="Ordenar palabras"
+          hide-buttons
+          ></admin-header-component>
+          <admin-palabra-component
+          id="admin-ordenar-palabras"
+          add-button-text="Agregar"
+          edit-button-text="Modificar"
+          delete-button-text="Quitar"
+          add-sub-button-text="Añadir opción"
+          prev-button-text="Atrás"
+          next-button-text="Adelante"
+          confirm-delete-text="¿Eliminar este ítem?"
+          items-per-page-label-text="Elementos por página:"
+          sub-placeholder-text="Añadir una palabra..."
+          save-button-text="Guardar Cambios"
+          cancel-button-text="Cancelar"
+          hide-pagination
+          hide-add-item
+          hide-delete-button
+        ></admin-palabra-component>
+                   ${renderResumentActividad(idJuegoSeleccionado)}
+
+  `;
+            } else if (idTipoJuego === tipoJuego.COMPLETAR_TEXTO) {
+                document.getElementById(
+                    idContenedor).innerHTML = `  <admin-header-component
+          title="Completar texto"
+          hide-buttons
+        ></admin-header-component>
+        <admin-palabra-component
+          id="admin-completar-texto"
+          title="Ajuste de rondas"
+          add-button-text="Agregar"
+          edit-button-text="Modificar"
+          delete-button-text="Quitar"
+          add-sub-button-text="Añadir palabra"
+          prev-button-text="Atrás"
+          next-button-text="Adelante"
+          confirm-delete-text="¿Eliminar este ítem?"
+          items-per-page-label-text="Elementos por página:"
+          sub-placeholder-text="Añadir una palabra..."
+          save-button-text="Guardar Cambios"
+          cancel-button-text="Cancelar"
+          placeholder-text="Crear una nueva ronda..."
+
+   
+        ></admin-palabra-component>
+                   ${renderResumentActividad(idJuegoSeleccionado)}
+`;
+            } else if (idTipoJuego === tipoJuego.SOPA_LETRAS) {
+                document.getElementById(idContenedor).innerHTML = `
+        <admin-header-component
+          title="Sopa de letras"
+          hide-buttons>
+          </admin-header-component>
+          <admin-palabra-component
+          id="admin-palabra-sopa-letras"
+          title="Gestor de Preguntas"
+          add-button-text="Agregar"
+          edit-button-text="Modificar"
+          delete-button-text="Quitar"
+          add-sub-button-text="Añadir palabra"
+          prev-button-text="Atrás"
+          next-button-text="Adelante"
+          confirm-delete-text="¿Eliminar este ítem?"
+          items-per-page-label-text="Elementos por página:"
+          sub-placeholder-text="Añadir opción..."
+          save-button-text="Guardar Cambios"
+          cancel-button-text="Cancelar"
+          hide-pagination
+          hide-add-item
+          hide-delete-button
+        ></admin-palabra-component>
+                   ${renderResumentActividad(idJuegoSeleccionado)}
+
+  `;
+            }
+        }
+    });
+
+    tabla.addEventListener("before-save-row", async e => {
+        e.preventDefault();
+        const { row, newValues } = e.detail;
+
+        if (!newValues.nombre?.trim()) {
+            tabla.errorMessage = "El campo 'nombre' es obligatorio.";
+            tabla._render();
+            return;
+        }
+        if (newValues.nombre.length > 100) {
+            tabla.errorMessage = "El nombre no puede superar los 100 caracteres.";
+            tabla._render();
+            return;
+        }
+        if (newValues.descripcion?.length > 500) {
+            tabla.errorMessage = "La descripción no puede superar los 500 caracteres.";
+            tabla._render();
+            return;
+        }
+        if (newValues.detalle?.length > 500) {
+            tabla.errorMessage = "El detalle no puede superar los 500 caracteres.";
+            tabla._render();
+            return;
+        }
+
+        try {
+            if (row.idJuego && parseInt(row.idJuego) > 0) {
+                await actualizarJuego(row.idJuego, {
+                    idJuego: parseInt(row.idJuego),
+                    nombre: newValues.nombre || row.nombre,
+                    descripcion: newValues.descripcion ?? row.descripcion,
+                    detalle: newValues.detalle ?? row.detalle
+                });
+            } else {
+                const newGame = await crearJuego({
+                    nombre: newValues.nombre,
+                    descripcion: newValues.descripcion || "",
+                    detalle: newValues.detalle || "",
+                    activo: true,
+                    idTipoJuego: idTipoJuego
+                });
+                Object.assign(row, { idJuego: newGame.idJuego });
+            }
+
+            Object.assign(row, newValues);
+            tabla.editingId = null;
+            tabla.errorMessage = "";
+            tabla._render();
+            await cargarJuegos(idTipoJuego);
+
+            tabla.dispatchEvent(new CustomEvent("save-row", {
+                detail: row,
+                bubbles: true,
+                composed: true
+            }));
+        } catch (err) {
+            console.error("Error al guardar:", err);
+            tabla.errorMessage = `Error al guardar: ${err.message}`;
+            tabla._render();
+        }
+    });
+
+    tabla.addEventListener("before-delete-row", async e => {
+        e.preventDefault();
+        const row = e.detail;
+        if (!row.idJuego || parseInt(row.idJuego) <= 0) {
+            tabla.errorMessage = "No se encontró el ID del juego para eliminar.";
+            tabla._render();
+            return;
+        }
+
+        mostrarMensajeModal(
+            "Confirmar eliminación",
+            `¿Seguro que quieres eliminar este juego?`,
+            async () => {
+                try {
+                    await eliminarJuego(row.idJuego);
+                    await cargarJuegos(idTipoJuego);
+
+                    tabla.dispatchEvent(new CustomEvent("delete-row", {
+                        detail: row,
+                        bubbles: true,
+                        composed: true
+                    }));
+                } catch (error) {
+                    console.error("Error al eliminar:", error);
+                    tabla.errorMessage = `Error al eliminar: ${error.message}`;
+                    tabla._render();
+                }
+            }
+        );
+    });
+
+    tabla.addEventListener("refresh-table", async () => {
+        await cargarJuegos(idTipoJuego);
+    });
+}

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Modal Dinámico</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap");
+    </style>
+  </head>
+  <body>
+    <button id="abrirModalBtn">Abrir Modal</button>
+    <script type="module">
+      //    import { openMenuJuegos } from "https://cdn.jsdelivr.net/gh/AlbinJunLiang/prodhabpracticantestemporal@7cfb32e/src/app.js";
+
+      import { openMenuJuegos } from "https://cdn.jsdelivr.net/gh/AlbinJunLiang/prodhabpracticantestemporal/src/app.js";
+      import { CONFIG_JUEGO_PRODHAB } from "https://cdn.jsdelivr.net/gh/AlbinJunLiang/prodhabpracticantestemporal/src/juegosEnvironments.js";
+
+      CONFIG_JUEGO_PRODHAB.setJsonUrl("https://cdn.jsdelivr.net/gh/AlbinJunLiang/prodhabpracticantestemporal/juegos.json");
+
+      const boton = document.getElementById("abrirModalBtn");
+      boton.addEventListener("click", () => {
+        openMenuJuegos();
+      });
+    </script>
+  </body>
+</html>

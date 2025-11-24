@@ -1,0 +1,20 @@
+# Backend
+ApiJuegos/bin/
+ApiJuegos/obj/
+# Frontend
+GUIJuegos/Frontend/bin/
+GUIJuegos/Frontend/obj/
+
+GUIJuegos/vanillaJS/node_modules
+
+APIJuegos/appsettings-copy.json
+adminJuegosEscritorio/dist
+adminJuegosEscritorio/node_modules
+
+.vs/
+*.user
+*.suo
+*.cache
+*.db
+*.log
+APIJuegos/*.txt

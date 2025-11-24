@@ -1,0 +1,408 @@
+{
+  "juegos": [
+    {
+      "juego": {
+        "idJuego": 1,
+        "idTipoJuego": 1,
+        "nombre": "Ciberseguridad.",
+        "detalle": "Preguntas sobre ciberseguridad.",
+        "descripcion": "Instrucciones: Lea cuidadosamente cada pregunta y seleccione la respuesta correcta. En el caso de selección múltiple, puede elegir más de una opción.",
+        "preguntas": [
+          {
+            "pregunta": {
+              "idPregunta": 1,
+              "enunciado": "¿Qué es el phishing?",
+              "tipo": "unica",
+              "activa": true
+            },
+            "respuestas": [
+              {
+                "idRespuesta": 11,
+                "idPregunta": 1,
+                "texto": "Un ataque para robar información haciéndose pasar por alguien confiable",
+                "esCorrecta": true,
+                "retroalimentacion": "Correcto. El phishing busca engañar para obtener datos."
+              },
+              {
+                "idRespuesta": 12,
+                "idPregunta": 1,
+                "texto": "Un tipo de antivirus",
+                "esCorrecta": false,
+                "retroalimentacion": "Incorrecto. El phishing no es una herramienta."
+              },
+              {
+                "idRespuesta": 13,
+                "idPregunta": 1,
+                "texto": "Una VPN",
+                "esCorrecta": false,
+                "retroalimentacion": "No corresponde. Una VPN cifra la conexión."
+              }
+            ]
+          },
+          {
+            "pregunta": {
+              "idPregunta": 2,
+              "enunciado": "¿Qué característica hace una contraseña segura?",
+              "tipo": "unica",
+              "activa": true
+            },
+            "respuestas": [
+              {
+                "idRespuesta": 21,
+                "idPregunta": 2,
+                "texto": "Tener letras, números y símbolos",
+                "esCorrecta": true,
+                "retroalimentacion": "Correcto. La combinación de caracteres aumenta la seguridad."
+              },
+              {
+                "idRespuesta": 22,
+                "idPregunta": 2,
+                "texto": "Ser corta y fácil de recordar",
+                "esCorrecta": false,
+                "retroalimentacion": "Incorrecto. Las contraseñas cortas se adivinan fácilmente."
+              },
+              {
+                "idRespuesta": 23,
+                "idPregunta": 2,
+                "texto": "Usar tu nombre o fecha de nacimiento",
+                "esCorrecta": false,
+                "retroalimentacion": "Es información predecible, por eso es inseguro."
+              }
+            ]
+          },
+          {
+            "pregunta": {
+              "idPregunta": 3,
+              "enunciado": "¿Qué es un firewall?",
+              "tipo": "unica",
+              "activa": true
+            },
+            "respuestas": [
+              {
+                "idRespuesta": 31,
+                "idPregunta": 3,
+                "texto": "Un sistema que filtra conexiones de red",
+                "esCorrecta": true,
+                "retroalimentacion": "Correcto. Filtra tráfico según reglas."
+              },
+              {
+                "idRespuesta": 32,
+                "idPregunta": 3,
+                "texto": "Un programa para editar videos",
+                "esCorrecta": false,
+                "retroalimentacion": "Incorrecto. No está relacionado con multimedia."
+              }
+            ]
+          },
+
+          {
+            "pregunta": {
+              "idPregunta": 4,
+              "enunciado": "Seleccione ejemplos de malware.",
+              "tipo": "multiple",
+              "activa": true
+            },
+            "respuestas": [
+              {
+                "idRespuesta": 41,
+                "idPregunta": 4,
+                "texto": "Troyanos",
+                "esCorrecta": true,
+                "retroalimentacion": "Correcto. Son un tipo de malware."
+              },
+              {
+                "idRespuesta": 42,
+                "idPregunta": 4,
+                "texto": "Ransomware",
+                "esCorrecta": true,
+                "retroalimentacion": "Correcto. Es un malware que cifra archivos."
+              },
+              {
+                "idRespuesta": 43,
+                "idPregunta": 4,
+                "texto": "Rootkits",
+                "esCorrecta": true,
+                "retroalimentacion": "Correcto. Se usan para ocultar actividades maliciosas."
+              },
+              {
+                "idRespuesta": 44,
+                "idPregunta": 4,
+                "texto": "Microsoft Word",
+                "esCorrecta": false,
+                "retroalimentacion": "Incorrecto. Es una aplicación legítima."
+              }
+            ]
+          },
+
+          {
+            "pregunta": {
+              "idPregunta": 5,
+              "enunciado": "¿Qué acciones ayudan a proteger datos personales?",
+              "tipo": "multiple",
+              "activa": true
+            },
+            "respuestas": [
+              {
+                "idRespuesta": 51,
+                "idPregunta": 5,
+                "texto": "Usar contraseñas fuertes",
+                "esCorrecta": true,
+                "retroalimentacion": "Correcto. Mejora la seguridad."
+              },
+              {
+                "idRespuesta": 52,
+                "idPregunta": 5,
+                "texto": "Mantener software actualizado",
+                "esCorrecta": true,
+                "retroalimentacion": "Correcto. Evita vulnerabilidades."
+              },
+              {
+                "idRespuesta": 53,
+                "idPregunta": 5,
+                "texto": "Compartir contraseñas con compañeros de trabajo",
+                "esCorrecta": false,
+                "retroalimentacion": "Incorrecto. Nunca se deben compartir."
+              },
+              {
+                "idRespuesta": 54,
+                "idPregunta": 5,
+                "texto": "Descargar archivos desconocidos",
+                "esCorrecta": false,
+                "retroalimentacion": "Incorrecto. Puede introducir malware."
+              }
+            ]
+          },
+
+          {
+            "pregunta": {
+              "idPregunta": 6,
+              "enunciado": "¿Qué es un ataque de fuerza bruta?",
+              "tipo": "unica",
+              "activa": true
+            },
+            "respuestas": [
+              {
+                "idRespuesta": 61,
+                "idPregunta": 6,
+                "texto": "Intentar adivinar contraseñas probando muchas combinaciones",
+                "esCorrecta": true,
+                "retroalimentacion": "Correcto. Se basa en intentos repetidos."
+              },
+              {
+                "idRespuesta": 62,
+                "idPregunta": 6,
+                "texto": "Un ataque que apaga computadoras",
+                "esCorrecta": false,
+                "retroalimentacion": "Incorrecto. No es su definición."
+              }
+            ]
+          },
+
+          {
+            "pregunta": {
+              "idPregunta": 7,
+              "enunciado": "Seleccione métodos de autenticación segura.",
+              "tipo": "multiple",
+              "activa": true
+            },
+            "respuestas": [
+              {
+                "idRespuesta": 71,
+                "idPregunta": 7,
+                "texto": "Contraseña + código SMS",
+                "esCorrecta": true,
+                "retroalimentacion": "Correcto. Es un tipo de 2FA."
+              },
+              {
+                "idRespuesta": 72,
+                "idPregunta": 7,
+                "texto": "Contraseña + token físico",
+                "esCorrecta": true,
+                "retroalimentacion": "Correcto. Muy seguro."
+              },
+              {
+                "idRespuesta": 73,
+                "idPregunta": 7,
+                "texto": "Compartir credenciales",
+                "esCorrecta": false,
+                "retroalimentacion": "Incorrecto. Debe evitarse."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "juego": {
+        "idJuego": 2,
+        "idTipoJuego": 1,
+        "nombre": "Test de Aritmética",
+        "detalle": "Preguntas básicas de suma, resta, multiplicación y división.",
+        "descripcion": "Responda cuidadósamente cada pregunta. Puede haber preguntas de selección múltiple o única.",
+        "preguntas": [
+          {
+            "pregunta": {
+              "idPregunta": 1,
+              "enunciado": "¿Cuánto es 7 + 5?",
+              "tipo": "unica",
+              "activa": true
+            },
+            "respuestas": [
+              {
+                "idRespuesta": 101,
+                "idPregunta": 1,
+                "texto": "10",
+                "esCorrecta": false,
+                "retroalimentacion": "Incorrecto. 7 + 5 no es 10."
+              },
+              {
+                "idRespuesta": 102,
+                "idPregunta": 1,
+                "texto": "12",
+                "esCorrecta": true,
+                "retroalimentacion": "Correcto. 7 + 5 = 12."
+              },
+              {
+                "idRespuesta": 103,
+                "idPregunta": 1,
+                "texto": "14",
+                "esCorrecta": false,
+                "retroalimentacion": "Incorrecto. 7 + 5 no es 14."
+              }
+            ]
+          },
+          {
+            "pregunta": {
+              "idPregunta": 2,
+              "enunciado": "Seleccione todos los números pares entre 1 y 5.",
+              "tipo": "multiple",
+              "activa": true
+            },
+            "respuestas": [
+              {
+                "idRespuesta": 201,
+                "idPregunta": 2,
+                "texto": "1",
+                "esCorrecta": false,
+                "retroalimentacion": "Incorrecto. 1 no es par."
+              },
+              {
+                "idRespuesta": 202,
+                "idPregunta": 2,
+                "texto": "2",
+                "esCorrecta": true,
+                "retroalimentacion": "Correcto. 2 es par."
+              },
+              {
+                "idRespuesta": 203,
+                "idPregunta": 2,
+                "texto": "3",
+                "esCorrecta": false,
+                "retroalimentacion": "Incorrecto. 3 no es par."
+              },
+              {
+                "idRespuesta": 204,
+                "idPregunta": 2,
+                "texto": "4",
+                "esCorrecta": true,
+                "retroalimentacion": "Correcto. 4 es par."
+              },
+              {
+                "idRespuesta": 205,
+                "idPregunta": 2,
+                "texto": "5",
+                "esCorrecta": false,
+                "retroalimentacion": "Incorrecto. 5 no es par."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "juego": {
+        "idJuego": 3,
+        "idTipoJuego": 2,
+        "nombre": "Juego ordenar palabras",
+        "detalle": "Ley de Protección de la Persona frente al tratamiento de sus datos personales Nº 8968",
+        "descripcion": "Esta ley es de orden público y tiene como objetivo garantizar a cualquier persona, independientemente de su nacionalidad, residencia o domicilio, el respeto a sus derechos fundamentales, concretamente, su derecho a la autodeterminación informativa en relación con su vida o actividad privada y demás derechos de la personalidad, así como la defensa de su libertad e igualdad con respecto al tratamiento automatizado o manual de los datos correspondientes a su persona o bienes.",
+        "palabras": [
+          "LEY",
+          "público",
+          "datos",
+          "tratamiento",
+          "persona",
+          "derecho",
+          "",
+          " ",
+          ".",
+          ","
+        ]
+      }
+    },
+    {
+      "juego": {
+        "idJuego": 4,
+        "idTipoJuego": 4,
+        "nombre": "Sopa de letras",
+        "detalle": "Protección de datos",
+        "descripcion": "La protección de datos consiste en aplicar medidas y buenas prácticas para garantizar que la información personal de las personas se use de forma segura, responsable y solo con su consentimiento.",
+        "palabras": [
+          "PRIVACIDAD",
+          "CONSENTIMIENTO",
+          "PROTECCIÓN",
+          "CUMPLIMIENTO",
+          "PRODHAB",
+          "BIOMETRICOS",
+          "DATOS",
+          "PERSONAL"
+        ]
+      }
+    },
+    {
+      "juego": {
+        "idJuego": 5,
+        "idTipoJuego": 3,
+        "exito": true,
+        "nombre": "Complete los espacios en blanco.",
+        "descripcion": "Ingeniería Social",
+        "detalle": "Conceptos esenciales para reconocer y prevenir ataques basados en engaño humano.",
+        "rondas": [
+          {
+            "texto": "La ingeniería social se basa en aprovechar la confianza, el desconocimiento o la prisa de una persona para obtener datos o acceso. Los atacantes suelen disfrazar sus intenciones mediante conversaciones aparentemente legítimas. Identificar solicitudes inusuales y verificar la identidad del interlocutor ayuda a reducir el riesgo.",
+            "palabras": [
+              "confianza",
+              "persona",
+              "intenciones",
+              "conversaciones",
+              "identificar",
+              "identidad"
+            ]
+          },
+          {
+            "texto": "Una táctica frecuente es la suplantación, donde el atacante se hace pasar por una figura de autoridad, un compañero o un técnico de soporte. Este método busca generar obediencia o urgencia para que la víctima actúe sin cuestionar. Confirmar por un canal oficial antes de compartir información es una medida preventiva clave.",
+            "palabras": [
+              "suplantación",
+              "autoridad",
+              "urgencia",
+              "víctima",
+              "confirmar",
+              "información"
+            ]
+          },
+          {
+            "texto": "El pretexting consiste en construir una historia convincente para justificar la solicitud de datos o permisos. Los atacantes elaboran narrativas que parecen creíbles y apelan a la confianza o al miedo. Mantener una política de verificación constante y limitar la información divulgada reduce significativamente este tipo de ataques.",
+            "palabras": [
+              "pretexting",
+              "historia",
+              "solicitud",
+              "narrativas",
+              "política",
+              "ataques"
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

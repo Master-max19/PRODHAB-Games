@@ -21,9 +21,9 @@ Enlaces de pruebas:
 
 - Sopa de letras: https://albinjunliang.github.io/PRODHAB-Games/sopa-letras.html
 
-- Juego completar texto: https://albinjunliang.github.io/PRODHAB-Games/completar-texto.html
+- Juego completar texto: https://albinjunliang.github.io/PRODHAB-Games/completar.html
 
-- Administrador: https://albinjunliang.github.io/PRODHAB-Games/ordenar-palabras.html
+- Juego ordenar palabras: https://albinjunliang.github.io/PRODHAB-Games/ordenar-palabras.html
 
 ## Índice de Contenido
 

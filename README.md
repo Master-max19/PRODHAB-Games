@@ -11,57 +11,71 @@ Tecnologías:
 - JS, HTML Y CSS
 - NodeJS y ElectronJS (opcional).
 
+Enlaces de pruebas:
+
+- Menú modal de juegos: https://albinjunliang.github.io/PRODHAB-Games/
+
+- Administrador: https://albinjunliang.github.io/PRODHAB-Games/admin.html
+
+- Test: https://albinjunliang.github.io/PRODHAB-Games/test.html
+
+- Sopa de letras: https://albinjunliang.github.io/PRODHAB-Games/sopa-letras.html
+
+- Juego completar texto: https://albinjunliang.github.io/PRODHAB-Games/completar-texto.html
+
+- Administrador: https://albinjunliang.github.io/PRODHAB-Games/ordenar-palabras.html
+
 ## Índice de Contenido
 
 - [Juegos PRODHAB](#juegos-prodhab)
 - [Tecnologías:](#tecnologías)
 - [Prueba básica sin Servicio Backend de un juego TEST.](#prueba-básica-sin-servicio-backend-de-un-juego-test)
-    - [Precondiciones necesarias:](#precondiciones-necesarias)
-    - [Prueba rápida del _test.html_](#prueba-rápida-del-_testhtml_)
-    - [Explicación paso a paso.](#explicación-paso-a-paso)
-        - [1-Importación de módulos.](#1-importación-de-módulos)
-        - [2-Ajustar a prueba sin servidor backend](#2-ajustar-a-prueba-sin-servidor-backend)
-        - [3-Crear el componente Test](#3-crear-el-componente-test)
-        - [4-Ejecutar el servidor y abrir el archivo .html](#4-ejecutar-el-servidor-y-abrir-el-archivo-html)
+  - [Precondiciones necesarias:](#precondiciones-necesarias)
+  - [Prueba rápida del _test.html_](#prueba-rápida-del-_testhtml_)
+  - [Explicación paso a paso.](#explicación-paso-a-paso)
+    - [1-Importación de módulos.](#1-importación-de-módulos)
+    - [2-Ajustar a prueba sin servidor backend](#2-ajustar-a-prueba-sin-servidor-backend)
+    - [3-Crear el componente Test](#3-crear-el-componente-test)
+    - [4-Ejecutar el servidor y abrir el archivo .html](#4-ejecutar-el-servidor-y-abrir-el-archivo-html)
 - [Prueba rápida integración para el menú de juegos.](#prueba-rápida-integración-para-el-menú-de-juegos)
 - [Integración del Menú de Juegos Localmente](#integración-del-menú-de-juegos-localmente)
-    - [Nota sobre el Script (Modo de Prueba)](#nota-sobre-el-script-modo-de-prueba)
-    - [Implementación en JavaScript ES Module](#implementación-en-javascript-es-module)
-    - [Implementación en React.js](#implementación-en-reactjs)
-    - [Implementación en Angular](#implementación-en-angular)
-    - [Implementación ASP.NET Razor Pages.](#implementación-aspnet-razor-pages)
-    - [Implementación ASP.NET Blazor Framework.](#implementación-aspnet-blazor-framework)
+  - [Nota sobre el Script (Modo de Prueba)](#nota-sobre-el-script-modo-de-prueba)
+  - [Implementación en JavaScript ES Module](#implementación-en-javascript-es-module)
+  - [Implementación en React.js](#implementación-en-reactjs)
+  - [Implementación en Angular](#implementación-en-angular)
+  - [Implementación ASP.NET Razor Pages.](#implementación-aspnet-razor-pages)
+  - [Implementación ASP.NET Blazor Framework.](#implementación-aspnet-blazor-framework)
 - [¿Cómo preparar el proyecto y ponerlo en entorno de producción o despliegue?](#cómo-preparar-el-proyecto-y-ponerlo-en-entorno-de-producción-o-despliegue)
-    - [Creación de la base de datos en SQL Server.](#creación-de-la-base-de-datos-en-sql-server)
-        - [1-Crear una base de datos en SQL server](#1-crear-una-base-de-datos-en-sql-server)
-        - [2-Abrir el script de DB_CREATE_DDL.sql y ejecutarlo para crear las tablas.](#2-abrir-el-script-de-db_create_ddlsql-y-ejecutarlo-para-crear-las-tablas)
-        - [3-Abrir el scripts DB_DATA.sql y ejecutar para insertar los datos.](#3-abrir-el-scripts-db_datasql-y-ejecutar-para-insertar-los-datos)
-        - [4-Verificar que las siguientes tablas contienen los datos:](#4-verificar-que-las-siguientes-tablas-contienen-los-datos)
-    - [Configuración de la WEB-API (backend) y variables de entornos en ASP.NET Core.](#configuración-de-la-web-api-backend-y-variables-de-entornos-en-aspnet-core)
-        - [1-Crear el archivo appsettings.json del proyecto, puede copiar y pegar el siguiente archivo:](#1-crear-el-archivo-appsettingsjson-del-proyecto-puede-copiar-y-pegar-el-siguiente-archivo)
-        - [2-Actualizar la cadena de conexión por el que esta en la base de datos de juegosProdhab.](#2-actualizar-la-cadena-de-conexión-por-el-que-esta-en-la-base-de-datos-de-juegosprodhab)
-        - [2-Actualizar la clave secreta para generar los JWT.](#2-actualizar-la-clave-secreta-para-generar-los-jwt)
-        - [3-Configurar el entorno para envío de correos para la recuperación de contraseña.](#3-configurar-el-entorno-para-envío-de-correos-para-la-recuperación-de-contraseña)
-        - [4-Configurar la cuenta del usuario administrador inicial en la aplicación:](#4-configurar-la-cuenta-del-usuario-administrador-inicial-en-la-aplicación)
-        - [5-Configurarar CORS](#5-configurarar-cors)
-        - [6-Ejecutar con el comando dotnet clean y después dotnet build.](#6-ejecutar-con-el-comando-dotnet-clean-y-después-dotnet-build)
-    - [Preparación y ajustes de los archivos estáticos Web (HTML Y JavaScript)](#preparación-y-ajustes-de-los-archivos-estáticos-web-html-y-javascript)
-        - [1-Configurar la URL base de la API.](#1-configurar-la-url-base-de-la-api)
-        - [2-Configurar la uicación específica de imágenes y assets:](#2-configurar-la-uicación-específica-de-imágenes-y-assets)
-        - [3-Mover todos los archivos que está dentro de la carpeta`vanillaJSESModule` a `wwwroot`.](#3-mover-todos-los-archivos-que-está-dentro-de-la-carpetavanillajsesmodule-a-wwwroot)
-    - [Ejecutar o iniciar el proyecto para :](#ejecutar-o-iniciar-el-proyecto-para)
+  - [Creación de la base de datos en SQL Server.](#creación-de-la-base-de-datos-en-sql-server)
+    - [1-Crear una base de datos en SQL server](#1-crear-una-base-de-datos-en-sql-server)
+    - [2-Abrir el script de DB_CREATE_DDL.sql y ejecutarlo para crear las tablas.](#2-abrir-el-script-de-db_create_ddlsql-y-ejecutarlo-para-crear-las-tablas)
+    - [3-Abrir el scripts DB_DATA.sql y ejecutar para insertar los datos.](#3-abrir-el-scripts-db_datasql-y-ejecutar-para-insertar-los-datos)
+    - [4-Verificar que las siguientes tablas contienen los datos:](#4-verificar-que-las-siguientes-tablas-contienen-los-datos)
+  - [Configuración de la WEB-API (backend) y variables de entornos en ASP.NET Core.](#configuración-de-la-web-api-backend-y-variables-de-entornos-en-aspnet-core)
+    - [1-Crear el archivo appsettings.json del proyecto, puede copiar y pegar el siguiente archivo:](#1-crear-el-archivo-appsettingsjson-del-proyecto-puede-copiar-y-pegar-el-siguiente-archivo)
+    - [2-Actualizar la cadena de conexión por el que esta en la base de datos de juegosProdhab.](#2-actualizar-la-cadena-de-conexión-por-el-que-esta-en-la-base-de-datos-de-juegosprodhab)
+    - [2-Actualizar la clave secreta para generar los JWT.](#2-actualizar-la-clave-secreta-para-generar-los-jwt)
+    - [3-Configurar el entorno para envío de correos para la recuperación de contraseña.](#3-configurar-el-entorno-para-envío-de-correos-para-la-recuperación-de-contraseña)
+    - [4-Configurar la cuenta del usuario administrador inicial en la aplicación:](#4-configurar-la-cuenta-del-usuario-administrador-inicial-en-la-aplicación)
+    - [5-Configurarar CORS](#5-configurarar-cors)
+    - [6-Ejecutar con el comando dotnet clean y después dotnet build.](#6-ejecutar-con-el-comando-dotnet-clean-y-después-dotnet-build)
+  - [Preparación y ajustes de los archivos estáticos Web (HTML Y JavaScript)](#preparación-y-ajustes-de-los-archivos-estáticos-web-html-y-javascript)
+    - [1-Configurar la URL base de la API.](#1-configurar-la-url-base-de-la-api)
+    - [2-Configurar la uicación específica de imágenes y assets:](#2-configurar-la-uicación-específica-de-imágenes-y-assets)
+    - [3-Mover todos los archivos que está dentro de la carpeta`vanillaJSESModule` a `wwwroot`.](#3-mover-todos-los-archivos-que-está-dentro-de-la-carpetavanillajsesmodule-a-wwwroot)
+  - [Ejecutar o iniciar el proyecto para :](#ejecutar-o-iniciar-el-proyecto-para)
 - [Desplegar el proyecto en un servidor:](#desplegar-el-proyecto-en-un-servidor)
-    - [1-Compilar en modeo Release el proyecto](#1-compilar-en-modeo-release-el-proyecto)
-    - [2-Ubicar el archivo .dll generado en la nueva carpeta ./publish y ejecutar el siguiente comando dotnet ./publish/APIJuegos.dll para verificar el funcionamiento:](#2-ubicar-el-archivo-dll-generado-en-la-nueva-carpeta-publish-y-ejecutar-el-siguiente-comando-dotnet-publishapijuegosdll-para-verificar-el-funcionamiento)
-    - [Alojar la carpeta ./publish en un servidor](#alojar-la-carpeta-publish-en-un-servidor)
+  - [1-Compilar en modeo Release el proyecto](#1-compilar-en-modeo-release-el-proyecto)
+  - [2-Ubicar el archivo .dll generado en la nueva carpeta ./publish y ejecutar el siguiente comando dotnet ./publish/APIJuegos.dll para verificar el funcionamiento:](#2-ubicar-el-archivo-dll-generado-en-la-nueva-carpeta-publish-y-ejecutar-el-siguiente-comando-dotnet-publishapijuegosdll-para-verificar-el-funcionamiento)
+  - [Alojar la carpeta ./publish en un servidor](#alojar-la-carpeta-publish-en-un-servidor)
 - [Crear el módulo administrador en versión escritorio.](#crear-el-módulo-administrador-en-versión-escritorio)
-    - [Dependencias necesarias](#dependencias-necesarias)
-    - [Archivo package.json](#archivo-packagejson)
-    - [Copiar la carpeta vanillaJSESModule y pegarlo en adminJuegosEscritorio.](#copiar-la-carpeta-vanillajsesmodule-y-pegarlo-en-adminjuegosescritorio)
-    - [Crear el archivo main.js en caso de que no exista y poner lo siguiente:](#crear-el-archivo-mainjs-en-caso-de-que-no-exista-y-poner-lo-siguiente)
-    - [Ejecutar el comando npm start para probar:](#ejecutar-el-comando-npm-start-para-probar)
-    - [Modificar la URL Base de la API para que apunte a tal servidor:](#modificar-la-url-base-de-la-api-para-que-apunte-a-tal-servidor)
-    - [Crear el proyecto en un ejecutable .exe](#crear-el-proyecto-en-un-ejecutable-exe)
+  - [Dependencias necesarias](#dependencias-necesarias)
+  - [Archivo package.json](#archivo-packagejson)
+  - [Copiar la carpeta vanillaJSESModule y pegarlo en adminJuegosEscritorio.](#copiar-la-carpeta-vanillajsesmodule-y-pegarlo-en-adminjuegosescritorio)
+  - [Crear el archivo main.js en caso de que no exista y poner lo siguiente:](#crear-el-archivo-mainjs-en-caso-de-que-no-exista-y-poner-lo-siguiente)
+  - [Ejecutar el comando npm start para probar:](#ejecutar-el-comando-npm-start-para-probar)
+  - [Modificar la URL Base de la API para que apunte a tal servidor:](#modificar-la-url-base-de-la-api-para-que-apunte-a-tal-servidor)
+  - [Crear el proyecto en un ejecutable .exe](#crear-el-proyecto-en-un-ejecutable-exe)
 - [Recomendaciones y futuras mejoras](#recomendaciones-y-futuras-mejoras)
 
 ## Prueba básica sin Servicio Backend de un juego TEST.
@@ -210,11 +224,11 @@ Como sugerencia, se recomienda descargar los archivos originales del repositorio
   <body>
     <button id="abrirModalBtn">Abrir Modal</button>
     <script type="module">
-      import { openMenuJuegos } from "https://cdn.jsdelivr.net/gh/AlbinJunLiang/prodhabpracticantestemporal/src/app.js";
-      import { CONFIG_JUEGO_PRODHAB } from "https://cdn.jsdelivr.net/gh/AlbinJunLiang/prodhabpracticantestemporal/src/juegosEnvironments.js";
+      import { openMenuJuegos } from "https://cdn.jsdelivr.net/gh/Master-max19/PRODHAB-Games/vanillaJSESModule/src/app.js";
+      import { CONFIG_JUEGO_PRODHAB } from "https://cdn.jsdelivr.net/gh/Master-max19/PRODHAB-Games/vanillaJSESModule/src/juegosEnvironments.js";
 
       CONFIG_JUEGO_PRODHAB.setJsonUrl(
-        "https://cdn.jsdelivr.net/gh/AlbinJunLiang/prodhabpracticantestemporal/juegos.json"
+        "https://cdn.jsdelivr.net/gh/Master-max19/PRODHAB-Games/vanillaJSESModule/juegos.json"
       );
 
       const boton = document.getElementById("abrirModalBtn");
@@ -241,10 +255,10 @@ Importar los módulos en el archivo index.html
   <body>
     <div id="root"></div>
     <script type="module">
-      import { openMenuJuegos } from "https://cdn.jsdelivr.net/gh/AlbinJunLiang/prodhabpracticantestemporal/src/app.js";
-      import { CONFIG_JUEGO_PRODHAB } from "https://cdn.jsdelivr.net/gh/AlbinJunLiang/prodhabpracticantestemporal/src/juegosEnvironments.js";
+      import { openMenuJuegos } from "https://cdn.jsdelivr.net/gh/Master-max19/PRODHAB-Games/vanillaJSESModule/src/app.js";
+      import { CONFIG_JUEGO_PRODHAB } from "https://cdn.jsdelivr.net/gh/Master-max19/PRODHAB-Games/vanillaJSESModule/src/juegosEnvironments.js";
       CONFIG_JUEGO_PRODHAB.setJsonUrl(
-        "https://cdn.jsdelivr.net/gh/AlbinJunLiang/prodhabpracticantestemporal/juegos.json"
+        "https://cdn.jsdelivr.net/gh/Master-max19/PRODHAB-Games/vanillaJSESModule/juegos.json"
       );
       window.openMenuJuegos = openMenuJuegos;
     </script>
@@ -308,8 +322,8 @@ Para probar en angular con `jsdelivr` debe importar los módulos en el archivo `
     <app-root></app-root>
 
     <script type="module">
-      import { openMenuJuegos } from "https://cdn.jsdelivr.net/gh/AlbinJunLiang/prodhabpracticantestemporal/src/app.js";
-      import { CONFIG_JUEGO_PRODHAB } from "https://cdn.jsdelivr.net/gh/AlbinJunLiang/prodhabpracticantestemporal/src/juegosEnvironments.js";
+      import { openMenuJuegos } from "https://cdn.jsdelivr.net/gh/Master-max19/PRODHAB-Games/vanillaJSESModule/src/app.js";
+      import { CONFIG_JUEGO_PRODHAB } from "https://cdn.jsdelivr.net/gh/Master-max19/PRODHAB-Games/vanillaJSESModule/src/juegosEnvironments.js";
 
       // los exponemos al window para que Angular pueda usarlos
       window.openMenuJuegos = openMenuJuegos;
@@ -335,7 +349,7 @@ declare const CONFIG_JUEGO_PRODHAB: any;
 export class ModalJuegosComponent {
   ngOnInit() {
     CONFIG_JUEGO_PRODHAB.setJsonUrl(
-      "https://cdn.jsdelivr.net/gh/AlbinJunLiang/prodhabpracticantestemporal/juegos.json"
+      "https://cdn.jsdelivr.net/gh/Master-max19/PRODHAB-Games/vanillaJSESModule/juegos.json"
     );
   }
 
@@ -368,10 +382,10 @@ Crear un archivo .`cshtml` y colocar lo siguiente:
 
 <button id="abrirModalBtn">Abrir Modal</button>
 <script type="module">
-   import { openMenuJuegos } from "https://cdn.jsdelivr.net/gh/AlbinJunLiang/prodhabpracticantestemporal/src/app.js";
-   import { CONFIG_JUEGO_PRODHAB } from "https://cdn.jsdelivr.net/gh/AlbinJunLiang/prodhabpracticantestemporal/src/juegosEnvironments.js";
+   import { openMenuJuegos } from "https://cdn.jsdelivr.net/gh/Master-max19/PRODHAB-Games/vanillaJSESModule/src/app.js";
+   import { CONFIG_JUEGO_PRODHAB } from "https://cdn.jsdelivr.net/gh/Master-max19/PRODHAB-Games/vanillaJSESModule/src/juegosEnvironments.js";
 
-   CONFIG_JUEGO_PRODHAB.setJsonUrl("https://cdn.jsdelivr.net/gh/AlbinJunLiang/prodhabpracticantestemporal/juegos.json");
+   CONFIG_JUEGO_PRODHAB.setJsonUrl("https://cdn.jsdelivr.net/gh/Master-max19/PRODHAB-Games/vanillaJSESModule/juegos.json");
 
    const boton = document.getElementById("abrirModalBtn");
    boton.addEventListener("click", () => {
@@ -386,11 +400,11 @@ Crear un archivo .`cshtml` y colocar lo siguiente:
 Crear un nuevo archivo modal.js en la carpeta `wwwroot` y poner lo siguiente:
 
 ```js
-import { openMenuJuegos } from "https://cdn.jsdelivr.net/gh/AlbinJunLiang/prodhabpracticantestemporal/src/app.js";
-import { CONFIG_JUEGO_PRODHAB } from "https://cdn.jsdelivr.net/gh/AlbinJunLiang/prodhabpracticantestemporal/src/juegosEnvironments.js";
+import { openMenuJuegos } from "https://cdn.jsdelivr.net/gh/Master-max19/PRODHAB-Games/vanillaJSESModule/src/app.js";
+import { CONFIG_JUEGO_PRODHAB } from "https://cdn.jsdelivr.net/gh/Master-max19/PRODHAB-Games/vanillaJSESModule/src/juegosEnvironments.js";
 
 CONFIG_JUEGO_PRODHAB.setJsonUrl(
-  "https://cdn.jsdelivr.net/gh/AlbinJunLiang/prodhabpracticantestemporal/juegos.json"
+  "https://cdn.jsdelivr.net/gh/Master-max19/PRODHAB-Games/vanillaJSESModule/juegos.json"
 );
 
 window.abrirModalJuegos = function () {
@@ -815,46 +829,45 @@ Dentro de la función createWindow debe especificar donde está el archivo admin
 ```javaScript
 win.loadFile(path.join(__dirname, "vanillaJSESModule/admin.html"));
 ```
+
 **main.js**
 
 ```js
-const { app, BrowserWindow } = require('electron');
-const path = require('path');
+const { app, BrowserWindow } = require("electron");
+const path = require("path");
 
 function createWindow() {
   const win = new BrowserWindow({
     width: 1200,
     height: 800,
-    icon: path.join(__dirname, 'assets', 'super.ico'), 
+    icon: path.join(__dirname, "assets", "super.ico"),
     webPreferences: {
       nodeIntegration: true,
     },
   });
 
   // Carga un archivo HTML local
-  win.loadFile(path.join(__dirname, 'vanillaJSESModule/admin.html'));
+  win.loadFile(path.join(__dirname, "vanillaJSESModule/admin.html"));
 }
 
 app.whenReady().then(createWindow);
 
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit();
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") app.quit();
 });
-
 ```
-
 
 ### Ejecutar el comando `npm start` para probar:
 
 ```
 \adminJuegosEscritorio>npm start
 ```
+
 <p align="center">
   <img src="./documentacion/npmdeskstart.png" alt="Prueba de proyecto de escritorio" width="100%">
 </p>
 
 Una vez ejecutado aparecerá la aplicación de escritorio.
-
 
 ### Modificar la URL Base de la API para que apunte a tal servidor:
 
@@ -864,7 +877,6 @@ En caso de que la URL de la api es dinámica o no se haya establecido, puede mod
   <img src="./documentacion/run.png" alt="Cambiar URL" width="100%">
 </p>
 
-
 En el caso de que se desea restablecer la URL Base puede ingresar a las herramientas de desarrollador:
 
 <p align="center">
@@ -872,7 +884,6 @@ En el caso de que se desea restablecer la URL Base puede ingresar a las herramie
 </p>
 
 Ir a applications o aplicaiones y borrar todo el localstorage:
-
 
 <p align="center">
   <img src="./documentacion/delete.png" alt="Cambiar URL" width="80%">
@@ -882,12 +893,12 @@ Clic derecho y borrar todo el localstorage, luego solo debe cerrar y volver abri
 
 ### Crear el proyecto en un ejecutable .exe
 
-
 #### Ejecutar el comando `npm build` para construir:
 
 ```
 \adminJuegosEscritorio>npm build
 ```
+
 Posterior a la ejecución del comando se crea un carpeta `dist` dentro del proyecto y para abrir la aplicación debe hacer doble clic en el `.exe`. Se recomienda no mover el `.exe` y ningún otro archivo que está dentro del `dist`, sin embargo si se puede compartir o mover dicha carpeta en otra ubicación.
 
 ## Recomendaciones y futuras mejoras
@@ -898,14 +909,14 @@ La mayor parte de este proyecto enfrentó varias complicaciones debido a que, in
 
 Se recomienda, para futuras versiones del proyecto, considerar los siguientes puntos:
 
-* Desarrollar o migrar la aplicación al framework utilizado por la página principal.
+- Desarrollar o migrar la aplicación al framework utilizado por la página principal.
 
-* Actualizar el proyecto respetando los principios de código limpio y mejorando la mantenibilidad.
+- Actualizar el proyecto respetando los principios de código limpio y mejorando la mantenibilidad.
 
-* Generar pruebas unitarias en cada elemento o capa del proyecto.
+- Generar pruebas unitarias en cada elemento o capa del proyecto.
 
-* Normalizar la base de datos.
+- Normalizar la base de datos.
 
-* Mejorar la lógica de acceso de datos, de negocio y el uso del ORM.
+- Mejorar la lógica de acceso de datos, de negocio y el uso del ORM.
 
 Gran parte de estas recomendaciones no se lograron debido a los frecuentes cambios y adiciones de nuevos requerimientos, así como a la falta de experiencia inicial.

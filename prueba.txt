@@ -1,0 +1,64 @@
+// Función de prueba para inyectar en el navegador
+
+(function() {
+
+  // Esperar DOM listo (previene 90% de fallos)
+  if (document.readyState !== "complete" && document.readyState !== "interactive") {
+    return document.addEventListener("DOMContentLoaded", arguments.callee);
+  }
+
+  console.log("Script juegos iniciado");
+
+  // --- 1) Encontrar contenedor ---
+  let contenedor = document.querySelector('.redesContainer');
+
+  if (!contenedor) {
+    console.warn("No se encontró .redesContainer, se detiene script.");
+    return;
+  }
+
+  console.log("Contenedor encontrado:", contenedor);
+
+  // --- 2) Quitar duplicados ---
+  const prev = contenedor.querySelectorAll('.juegos-inyectado');
+  prev.forEach(n => n.remove());
+
+  // --- 3) Inyectar CSS una vez ---
+  if (!document.getElementById("juegos-style")) {
+    const style = document.createElement("style");
+    style.id = "juegos-style";
+    style.textContent = `
+      .juegos-inyectado {
+        width: 40px;
+        height: 40px;
+        display: inline-block;
+        cursor: pointer;
+        background-image: url("https://github.com/Master-max19/PRODHAB-Games/blob/main/vanillaJSESModule/public/images/super.png?raw=true");
+        background-size: 70% 70%;
+        background-repeat: no-repeat;
+        background-position: center;
+        border-radius: 6px;
+        margin-left: 10px;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  // --- 4) Crear ícono ---
+  const nuevo = document.createElement("a");
+  nuevo.className = "juegos-inyectado";
+  nuevo.title = "juegos";
+
+  nuevo.addEventListener("click", () => {
+    alert("Hiciste clic en el icono juegos");
+  });
+
+  contenedor.appendChild(nuevo);
+
+  console.log("juegos inyectado correctamente");
+
+})();
+
+
+
+//

@@ -37,7 +37,7 @@
         → instancia única accesible desde todo el proyecto.
 */
 
-const SERVER = "http://localhost:5133";
+const SERVER = "";//Toma en cuenta la raiz del directorio (No hay necesidad de indicar la URL API AL ESTAR EN WWWROOT y asp.net)
 
 const ENVIRONMENTS = {
     development: {
@@ -120,3 +120,5 @@ export class Config {
 export const CONFIG_JUEGO_PRODHAB = new Config();
 
 //CONFIG_JUEGO_PRODHAB.setApiUrl("http://192.XX.XX.XX:5133")
+
+// SI usa setApiUrl y quiere restablecer elimine el localstorage o vuelva a setear el valor por defecto

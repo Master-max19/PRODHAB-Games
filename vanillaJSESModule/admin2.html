@@ -16,10 +16,13 @@
     }
   </style>
   <body>
+    <!--
+    Correrlo en un servidor y ingresar como : http://localhost:8626/admin2.html
+
+    Si no funciona borre el localstorage paara elimianr la configuración de la apiUrl en caso de que exista.
+    -->
     <div id="idContenedorAdmin"></div>
     <script type="module">
-      //       import { inyectarModuloAministradorjuegosPRODHAB } from "https://cdn.jsdelivr.net/gh/AlbinJunLiang/prodhabpracticantestemporal@main/src/app.js";
-
       import { inyectarModuloAministradorjuegosPRODHAB } from "https://cdn.jsdelivr.net/gh/AlbinJunLiang/prodhabpracticantestemporal@main/src/app.js";
       inyectarModuloAministradorjuegosPRODHAB("#idContenedorAdmin");
     </script>

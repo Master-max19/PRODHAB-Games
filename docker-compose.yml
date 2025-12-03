@@ -1,0 +1,41 @@
+services:
+  sqlserver:
+    image: mcr.microsoft.com/azure-sql-edge:latest #   mcr.microsoft.com/mssql/server:2019-latest    (Alternativa más pesada)
+    container_name: sql_edge
+    user: "0:0"
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "StrongPassword123!"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql_data:/var/opt/mssql/data
+      - ./entrypoint.sh:/docker-entrypoint-initdb.d/entrypoint.sh
+      - ./scriptssql:/docker-entrypoint-initdb.d/sql
+    command: >
+      bash -c "chmod +x /docker-entrypoint-initdb.d/entrypoint.sh &&
+               /docker-entrypoint-initdb.d/entrypoint.sh"
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'StrongPassword123!' -Q \"SELECT 1\" || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 30
+      start_period: 180s
+
+  apijuegos:
+    build:
+      context: ./APIJuegos
+      dockerfile: Dockerfile
+    container_name: api_juegos
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    environment:
+      DB_CONNECTION_STRING: "Server=sql_edge,1433;Database=PRODHAB;User Id=sa;Password=StrongPassword123!;TrustServerCertificate=True;"
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    restart: always
+
+volumes:
+  sql_data:

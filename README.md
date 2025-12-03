@@ -25,6 +25,16 @@ Enlaces de pruebas:
 
 - Juego ordenar palabras: https://albinjunliang.github.io/PRODHAB-Games/ordenar-palabras.html
 
+En caso de que desea probar el proyecto en **Docker**:
+- Tener `Docker` instalado y configurado.
+- Debe tener el archivo `Dockerfile` en la carpeta `APIJuegos`.
+- Tener el archivo `entrypoint.sh`, `docker-compose.yml` y la carpeta de los scripts `scriptssql` fuera de APIJuegos o la raíz del proyecto.
+- Mantener el archivo `appsettings.json` como está en el repositorio (Importante tener la ApiKey a 32 bytes o caracteres).
+- Ejecutar el comando desde la raíz del proyecto o la carpeta principal `PRODHAB-Games/` el comando `docker-compose up --build -d`
+- Esperar a que inicialice todos los contenedores.
+- Una vez terminado ir al mavegador e ingresar `http://localhost:8080/test.html` para verificar que si este disponible el proyecto.
+
+
 ## Índice de Contenido
 
 - [Juegos PRODHAB](#juegos-prodhab)
@@ -48,8 +58,8 @@ Enlaces de pruebas:
 - [¿Cómo preparar el proyecto y ponerlo en entorno de producción o despliegue?](#cómo-preparar-el-proyecto-y-ponerlo-en-entorno-de-producción-o-despliegue)
   - [Creación de la base de datos en SQL Server.](#creación-de-la-base-de-datos-en-sql-server)
     - [1-Crear una base de datos en SQL server](#1-crear-una-base-de-datos-en-sql-server)
-    - [2-Abrir el script de DB_CREATE_DDL.sql y ejecutarlo para crear las tablas.](#2-abrir-el-script-de-db_create_ddlsql-y-ejecutarlo-para-crear-las-tablas)
-    - [3-Abrir el scripts DB_DATA.sql y ejecutar para insertar los datos.](#3-abrir-el-scripts-db_datasql-y-ejecutar-para-insertar-los-datos)
+    - [2-Abrir el script de 2-DB_CREATE_DDL.sql y ejecutarlo para crear las tablas.](#2-abrir-el-script-de-db_create_ddlsql-y-ejecutarlo-para-crear-las-tablas)
+    - [3-Abrir el scripts 3-DB_DATA.sql y ejecutar para insertar los datos.](#3-abrir-el-scripts-db_datasql-y-ejecutar-para-insertar-los-datos)
     - [4-Verificar que las siguientes tablas contienen los datos:](#4-verificar-que-las-siguientes-tablas-contienen-los-datos)
   - [Configuración de la WEB-API (backend) y variables de entornos en ASP.NET Core.](#configuración-de-la-web-api-backend-y-variables-de-entornos-en-aspnet-core)
     - [1-Crear el archivo appsettings.json del proyecto, puede copiar y pegar el siguiente archivo:](#1-crear-el-archivo-appsettingsjson-del-proyecto-puede-copiar-y-pegar-el-siguiente-archivo)
@@ -466,7 +476,7 @@ En esta sección se aclara lo básico para poner en ejecución todo el proyecto 
 ### Creación de la base de datos en SQL Server.
 
 - Debe contar con SQL Server 2019 - 2022.
-- Tener los dos scripts `DB_CREATE.sql` y `DB_DATA.sql`.
+- Tener los dos scripts `2-DB_CREATE_DDL.sql` y `3-DB_DATA.sql`.
 
 [Enlace de documentación de microsoft para ejecutar los scripts de creación.](https://learn.microsoft.com/es-es/sql/relational-databases/databases/create-a-database?view=sql-server-ver17)
 
@@ -478,7 +488,7 @@ Puede hacer desde el gestor de base de datos SQL Server Management. También pue
 CREATE DATABASE JuegosProdhab;
 ```
 
-#### 2-Abrir el script de `DB_CREATE_DDL.sql` y ejecutarlo para crear las tablas.
+#### 2-Abrir el script de `2-DB_CREATE_DDL.sql` y ejecutarlo para crear las tablas.
 
 Debe cambiar la priemera línea de instrucción:
 
@@ -486,7 +496,7 @@ Debe cambiar la priemera línea de instrucción:
 
 Por el nombre de la base de datos crea ya sea `JuegosProdhab` o el nombre que le puso y luego ejecutar todo el script para que se cree las tablas
 
-#### 3-Abrir el scripts `DB_DATA.sql` y ejecutar para insertar los datos.
+#### 3-Abrir el scripts `3-DB_DATA.sql` y ejecutar para insertar los datos.
 
 Al igual que en el anterior scripts también se debe indicar la misma base de datos a ejecutar los scripts por `JuegosProdhab` o el nombre de la base de datos:
 
